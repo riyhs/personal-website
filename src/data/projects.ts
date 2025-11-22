@@ -37,7 +37,7 @@ export const spotlightProjects: Project[] = [
         title: 'NutriVision Android App',
         description:
             'Native Android application built with Kotlin. Applied intermediate mobile development principles to create a seamless user experience.',
-        year: '2023',
+        year: '2025',
         thumbnail:
             'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80',
         stack: ['Kotlin', 'Android', 'Jetpack Compose', 'Firebase'],

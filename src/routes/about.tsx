@@ -16,25 +16,29 @@ function AboutPage() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="rounded-[40px] border border-white/10 bg-linear-to-b from-white/10 to-white/0 p-6 text-center"
+          className="rounded-3xl border border-white/10 bg-white/5 p-0 text-center overflow-hidden"
         >
-          <div className="mx-auto h-48 w-48 rounded-[36px] border border-white/20 bg-linear-to-br from-white/40 via-transparent to-transparent p-0.5">
-            <div className="h-full w-full rounded-4xl bg-[url('https://riyaldi.vercel.app/_next/image?url=%2Fimg%2Friyaldi_hasan.webp&w=1920&q=75')] bg-cover bg-center" />
+          <div className="relative overflow-hidden p-4">
+            <div className="mx-auto h-48 w-48 rounded-2xl overflow-hidden">
+              <div className="h-full w-full bg-[url('https://riyaldi.vercel.app/_next/image?url=%2Fimg%2Friyaldi_hasan.webp&w=1920&q=75')] bg-cover bg-center" />
+            </div>
           </div>
-          <h1 className="mt-6 text-golden-xl">Riyaldi Hasan Setiawan</h1>
-          <p className="text-sm uppercase tracking-[0.4em] text-white/60">
-            Computer Science Undergraduate
-          </p>
-          <div className="mt-6 space-y-3 text-sm text-white/75">
-            <p className="inline-flex items-center justify-center gap-2">
-              <MapPin size={16} /> Based in Sukoharjo, Indonesia
+          <div className="p-6 pt-2">
+            <h1 className="text-golden-xl">Riyaldi Hasan Setiawan</h1>
+            <p className="text-sm uppercase tracking-[0.4em] text-white/60">
+              Computer Science Undergraduate
             </p>
-            <p className="inline-flex items-center justify-center gap-2">
-              <GraduationCap size={16} /> Informatics, Universitas Sebelas Maret (UNS)
-            </p>
-            <p className="inline-flex items-center justify-center gap-2">
-              <TrendingUp size={16} /> Specializing in Web, Mobile, and Machine Learning
-            </p>
+            <div className="mt-6 space-y-3 text-sm text-white/75">
+              <p className="flex items-start justify-center gap-2">
+                <MapPin size={16} className="mt-1.5 shrink-0" /> <span>Based in Sukoharjo, Indonesia</span>
+              </p>
+              <p className="flex items-start justify-center gap-2">
+                <GraduationCap size={16} className="mt-1.5 shrink-0" /> <span>Informatics, Universitas Sebelas Maret (UNS)</span>
+              </p>
+              <p className="flex items-start justify-center gap-2">
+                <TrendingUp size={16} className="mt-1.5 shrink-0" /> <span>Specializing in Web, Mobile, and Machine Learning</span>
+              </p>
+            </div>
           </div>
         </motion.div>
 
@@ -60,10 +64,10 @@ function AboutPage() {
             transition={{ delay: 0.2, duration: 0.6 }}
           >
             <p className="text-sm uppercase tracking-[0.4em] text-white/50">Experience</p>
-            <div className="mt-6 space-y-8 border-l border-white/10 pl-8">
+            <div className="mt-6 space-y-8 border-l-2 border-white/10 pl-8">
               {experiences.map((experience) => (
                 <div key={experience.company} className="relative">
-                  <span className="absolute -left-11 mt-1 h-3 w-3 rounded-full bg-white" />
+                  <span className="absolute -left-[39px] top-0 h-3 w-3 rounded-full border-2 border-[rgb(var(--background))] bg-white" />
                   <p className="text-xs uppercase tracking-[0.3em] text-white/60">
                     {experience.period}
                   </p>

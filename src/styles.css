@@ -152,7 +152,7 @@
 @layer components {
   .glass-panel {
     background-color: rgb(var(--background) / 0.55);
-    border: 1px solid rgb(var(--border) / 0.6);
+    /* border: 1px solid rgb(var(--border) / 0.6); */
     box-shadow: var(--shadow-soft);
     backdrop-filter: blur(18px);
   }

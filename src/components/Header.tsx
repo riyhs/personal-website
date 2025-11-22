@@ -2,10 +2,9 @@ import { Link, useRouterState } from '@tanstack/react-router'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   Github,
-  Instagram,
   Linkedin,
   Menu,
-  X,
+  X
 } from 'lucide-react'
 import { useState } from 'react'
 
@@ -20,16 +19,24 @@ const primaryLinks = [
 ]
 
 const socials = [
-  { icon: Github, href: 'https://github.com/riyaldi', label: 'GitHub' },
+  { 
+    icon: Github, 
+    href: 'https://github.com/riyhs', 
+    label: 'GitHub' 
+  },
+  {
+    icon: () => (
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+      </svg>
+    ),
+    href: 'https://twitter.com/riyhs_',
+    label: 'Twitter',
+  },
   {
     icon: Linkedin,
     href: 'https://www.linkedin.com/in/riyaldi',
     label: 'LinkedIn',
-  },
-  {
-    icon: Instagram,
-    href: 'https://instagram.com/riyaldi.codes',
-    label: 'Instagram',
   },
 ]
 
@@ -120,7 +127,7 @@ export default function Header() {
             transition={{ duration: 0.2, ease: 'easeIn' }}
           >
             <div className="mx-auto max-w-6xl ">
-              <div className="flex items-center justify-between px-5 py-4 border-b border-white/10 text-sm">
+              <div className="flex items-center justify-between px-5 py-4 text-sm">
                 <Link to="/" className="flex items-center gap-3" aria-label="Riyaldi home">
                   <div className="h-10 w-10 rounded-2xl bg-white/10 text-white/80 flex items-center justify-center font-black tracking-tight text-lg">
                     R

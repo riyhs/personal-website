@@ -13,17 +13,25 @@ export const Route = createFileRoute('/projects')({
 function ProjectsPage() {
   return (
     <div className="mx-auto max-w-6xl px-5 py-16">
-      <div className="space-y-4 text-center md:text-left">
-        <p className="text-xs uppercase tracking-[0.4em] text-[rgb(var(--foreground))/0.5]">
-          Riyaldi · Projects
-        </p>
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="space-y-4 text-center md:text-left"
+      >
+        <p className="text-xs uppercase tracking-[0.4em] text-white/60">Portfolio</p>
         <h1 className="text-golden-xl">Engineering Ideas into Reality</h1>
-        <p className="text-lg text-[rgb(var(--foreground))/0.75] md:max-w-2xl">
+        <p className="text-lg text-white/70">
           A curated selection of technical challenges solved across Web Development, Machine Learning, and Android Engineering. These projects demonstrate my ability to move from concept to deployed application.
         </p>
-      </div>
+      </motion.div>
 
-      <div className="mt-12 space-y-10">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1, duration: 0.6 }}
+        className="mt-12 space-y-10"
+      >
         {spotlightProjects.map((project, index) => (
           <motion.div
             key={project.title}
@@ -79,7 +87,7 @@ function ProjectsPage() {
             </Card>
           </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   )
 }

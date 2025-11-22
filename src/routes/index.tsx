@@ -1,6 +1,6 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
-import { ArrowUpRight, Github, Linkedin, Zap } from 'lucide-react'
+import { ArrowUpRight, Github, Linkedin, Twitter, Zap } from 'lucide-react'
 import type { ReactNode } from 'react'
 
 import { Button } from '../components/ui/button'
@@ -82,7 +82,7 @@ function HomePage() {
             className="mt-8 flex items-center gap-4 sm:mt-10 sm:gap-6"
           >
             <a
-              href="https://github.com/riyaldi"
+              href="https://github.com/riyhs"
               target="_blank"
               rel="noreferrer"
               className="text-white/60 transition-colors hover:text-white"
@@ -92,7 +92,7 @@ function HomePage() {
               <Github size={24} className="hidden sm:block" />
             </a>
             <a
-              href="https://twitter.com/riyaldi"
+              href="https://twitter.com/riyhs"
               target="_blank"
               rel="noreferrer"
               className="text-white/60 transition-colors hover:text-white"
@@ -127,11 +127,10 @@ function HomePage() {
             </p>
             <h2 className="mt-2 text-golden-xl">Featured Projects</h2>
           </div>
-          <Link
-            to="/projects"
-            className="inline-flex items-center rounded-full border border-white/15 px-6 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/10"
-          >
-            View all work <ArrowUpRight className="ml-2" size={16} />
+          <Link to="/projects" className="w-full md:w-auto">
+            <Button variant="outline" className="w-full rounded-full border-white/20 px-6 text-sm text-white/80 hover:bg-white/10 sm:px-8 sm:text-base md:w-auto">
+              View all work
+            </Button>
           </Link>
         </div>
         <div className="mt-10 grid gap-8 md:grid-cols-3">
