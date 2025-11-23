@@ -6,7 +6,7 @@ export function Card({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
       className={cn(
-  'glow-card glass-panel rounded-3xl border border-[rgb(var(--border))/0.5] p-6 shadow-[0_25px_80px_rgb(0_0_0/0.22)] transition-transform hover:-translate-y-1',
+  'glow-card glass-panel rounded-3xl border border-[rgb(var(--border))/0.5] p-6 shadow-[0_25px_80px_rgb(0_0_0/0.22)]',
         className,
       )}
       {...props}

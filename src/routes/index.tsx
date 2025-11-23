@@ -1,6 +1,6 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
-import { ArrowUpRight, Github, Linkedin, Twitter, Zap, Maximize2 } from 'lucide-react'
+import { ArrowUpRight, Github, Linkedin, Zap } from 'lucide-react'
 import type { ReactNode } from 'react'
 import { useState } from 'react'
 
@@ -224,7 +224,7 @@ function HomePage() {
               to="/blog/$slug"
               params={{ slug: post.slug }}
             >
-              <Card className="group border-white/10 bg-white/5 transition-transform hover:-translate-y-1">
+              <Card className="group border-white/10 bg-white/5">
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div className="flex-1">

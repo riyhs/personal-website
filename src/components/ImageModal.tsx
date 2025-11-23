@@ -28,7 +28,7 @@ export function ImageModal({ isOpen, src, alt, onClose }: ImageModalProps) {
             onClick={onClose}
           >
             <div
-              className="relative max-h-[100vh] max-w-4xl w-full"
+              className="relative max-h-screen max-w-4xl w-full"
               onClick={(e) => e.stopPropagation()}
             >
               <img
