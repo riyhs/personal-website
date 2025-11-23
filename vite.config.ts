@@ -32,7 +32,7 @@ const config = defineConfig({
             themes: {
               dark: 'github-dark-default',
             },
-            defaultColor: false,
+            defaultColor: 'dark',
           },
         ],
       ],
