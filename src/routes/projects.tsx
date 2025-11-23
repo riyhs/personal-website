@@ -1,9 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { ArrowUpRight } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useState } from 'react'
 
 import { Badge } from '../components/ui/badge'
 import { Card } from '../components/ui/card'
+import { ImageModal } from '../components/ImageModal'
 import { spotlightProjects } from '../data/projects'
 
 export const Route = createFileRoute('/projects')({
@@ -11,8 +13,11 @@ export const Route = createFileRoute('/projects')({
 })
 
 function ProjectsPage() {
+  const [selectedImage, setSelectedImage] = useState<{ src: string; alt: string } | null>(null)
+
   return (
-    <div className="mx-auto max-w-6xl px-5 py-16">
+    <>
+      <div className="mx-auto max-w-6xl px-5 py-16">
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -42,12 +47,22 @@ function ProjectsPage() {
             <Card className="border-white/10 bg-white/5 p-0">
               <div className="grid gap-0 md:grid-cols-[1.1fr_0.9fr]">
                 <div className="relative overflow-hidden rounded-3xl p-6">
-                  <img
-                    src={project.thumbnail}
-                    alt={project.title}
-                    className="h-64 w-full rounded-3xl object-cover"
-                    loading="lazy"
-                  />
+                  <div className="relative group">
+                    <img
+                      src={project.thumbnail}
+                      alt={project.title}
+                      className="aspect-video w-full rounded-3xl object-cover"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-black/50 backdrop-blur-xs rounded-3xl opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                    <button
+                      onClick={() => setSelectedImage({ src: project.thumbnail, alt: project.title })}
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex h-12 w-12 items-center justify-center rounded-full bg-white/30 backdrop-blur-md text-white opacity-0 transition-all duration-300 group-hover:opacity-100 hover:bg-white/50 hover:scale-110 z-10"
+                      aria-label="View larger image"
+                    >
+                      <ArrowUpRight size={20} />
+                    </button>
+                  </div>
                   <div className="mt-4 flex items-center justify-between">
                     <div>
                       <p className="text-sm uppercase tracking-[0.3em] text-white/60">
@@ -88,6 +103,13 @@ function ProjectsPage() {
           </motion.div>
         ))}
       </motion.div>
-    </div>
+      </div>
+      <ImageModal
+        isOpen={!!selectedImage}
+        src={selectedImage?.src || ''}
+        alt={selectedImage?.alt || ''}
+        onClose={() => setSelectedImage(null)}
+      />
+    </>
   )
 }

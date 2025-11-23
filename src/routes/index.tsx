@@ -1,11 +1,13 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
-import { ArrowUpRight, Github, Linkedin, Twitter, Zap } from 'lucide-react'
+import { ArrowUpRight, Github, Linkedin, Twitter, Zap, Maximize2 } from 'lucide-react'
 import type { ReactNode } from 'react'
+import { useState } from 'react'
 
 import { Button } from '../components/ui/button'
 import { Badge } from '../components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card'
+import { ImageModal } from '../components/ImageModal'
 import { spotlightProjects } from '../data/projects'
 import { techStack } from '../data/stack'
 import { listPosts } from '../lib/posts'
@@ -34,9 +36,11 @@ function Section({ children, className = '' }: { children: ReactNode; className?
 
 function HomePage() {
   const { projects, posts } = Route.useLoaderData()
+  const [selectedImage, setSelectedImage] = useState<{ src: string; alt: string } | null>(null)
 
   return (
-    <div className="space-y-12 pb-16">
+    <>
+      <div className="space-y-12 pb-16">
       <Section className="flex min-h-[calc(100vh-73px)] items-center justify-center py-10">
         <div className="flex w-full flex-col items-center justify-center text-center">
           <motion.div
@@ -137,12 +141,22 @@ function HomePage() {
           {projects.map((project: typeof spotlightProjects[number]) => (
             <Card key={project.title} className="border-white/10 bg-white/5 p-0 overflow-hidden">
               <div className="relative overflow-hidden p-4">
-                <img
-                  src={project.thumbnail}
-                  alt={project.title}
-                  className="h-48 w-full rounded-2xl object-cover"
-                  loading="lazy"
-                />
+                <div className="relative group">
+                  <img
+                    src={project.thumbnail}
+                    alt={project.title}
+                    className="aspect-video w-full rounded-2xl object-cover"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-black/50 backdrop-blur-xs rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  <button
+                    onClick={() => setSelectedImage({ src: project.thumbnail, alt: project.title })}
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex h-12 w-12 items-center justify-center rounded-full bg-white/30 backdrop-blur-md text-white opacity-0 transition-all duration-300 group-hover:opacity-100 hover:bg-white/50 hover:scale-110 z-10"
+                    aria-label="View larger image"
+                  >
+                    <ArrowUpRight size={20} />
+                  </button>
+                </div>
               </div>
               <div className="p-6 pt-2">
                 <div className="space-y-3">
@@ -231,6 +245,13 @@ function HomePage() {
           ))}
         </div>
       </Section>
-    </div>
+      </div>
+      <ImageModal
+        isOpen={!!selectedImage}
+        src={selectedImage?.src || ''}
+        alt={selectedImage?.alt || ''}
+        onClose={() => setSelectedImage(null)}
+      />
+    </>
   )
 }
