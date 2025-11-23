@@ -30,9 +30,8 @@ COPY package*.json pnpm-lock.yaml* ./
 RUN npm install -g pnpm && pnpm install --prod --frozen-lockfile
 
 # Copy built application from builder
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/public ./public
 COPY --from=builder /app/.output ./.output
+COPY --from=builder /app/public ./public
 
 # Expose port
 EXPOSE 3000
