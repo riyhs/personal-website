@@ -77,7 +77,6 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.DOKPLOY_API_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d '{
-              "image": "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest",
               "tag": "latest"
             }'
 
