@@ -20,7 +20,7 @@ function AboutPage() {
         >
           <div className="relative overflow-hidden p-4">
             <div className="mx-auto h-48 w-48 rounded-2xl overflow-hidden">
-              <div className="h-full w-full bg-[url('/img/riyaldi-hasan.png')] bg-cover bg-center" />
+              <div className="h-full w-full bg-[url('/img/riyaldi-hasan.webp')] bg-cover bg-center" />
             </div>
           </div>
           <div className="p-6 pt-2">

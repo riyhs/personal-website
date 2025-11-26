@@ -28,6 +28,53 @@ export const Route = createRootRoute({
       {
         title: 'Personal Website - Riyaldi',
       },
+      {
+        name: 'description',
+        content: 'Personal portfolio and website of Riyaldi. Undergraduate Computer Science specializing in Android Development, Fullstack Development, and Machine Learning. Explore my projects, blog, and professional journey.',
+      },
+      {
+        name: 'keywords',
+        content: 'Riyaldi, Portfolio, Web Developer, Web Development, Fullstack Development, Android Development, Machine Learning Engineer, Sukoharjo, Surakarta, Personal Website',
+      },
+      {
+        name: 'author',
+        content: 'Riyaldi',
+      },
+      // --- Open Graph / Facebook / LinkedIn ---
+      {
+        property: 'og:title',
+        content: 'Personal Website - Riyaldi',
+      },
+      {
+        property: 'og:description',
+        content: 'Personal portfolio of Riyaldi. View my latest projects and articles.',
+      },
+      {
+        property: 'og:type',
+        content: 'website',
+      },
+      { 
+        property: 'og:image', 
+        content: '/img/website.webp' 
+      }, 
+      
+      // --- Twitter ---
+      {
+        name: 'twitter:card',
+        content: 'summary_large_image',
+      },
+      {
+        name: 'twitter:title',
+        content: 'Personal Website - Riyaldi',
+      },
+      {
+        name: 'twitter:description',
+        content: 'Personal portfolio of Riyaldi. View my latest projects and articles.',
+      },
+      { 
+        name: 'twitter:image', 
+        content: '/img/website.webp' 
+      }, 
     ],
     links: [
       {

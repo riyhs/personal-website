@@ -96,7 +96,7 @@ function HomePage() {
               <Github size={24} className="hidden sm:block" />
             </a>
             <a
-              href="https://twitter.com/riyhs"
+              href="https://twitter.com/riyhs_"
               target="_blank"
               rel="noreferrer"
               className="text-white/60 transition-colors hover:text-white"
