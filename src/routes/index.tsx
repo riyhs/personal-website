@@ -67,11 +67,11 @@ function HomePage() {
                 View Selected Work
               </Button>
             </Link>
-            <Link to="/docs/Riyaldi_Hasan_Setiawan_CV.pdf" target="_blank" rel="noreferrer">
+            <a href="/docs/Riyaldi_Hasan_Setiawan_CV.pdf" target="_blank" rel="noreferrer">
               <Button variant="outline" className="rounded-full border-white/20 px-6 text-sm text-white/80 hover:bg-white/10 sm:px-8 sm:text-base">
                 Download CV
               </Button>
-            </Link>
+            </a>
             <Link to="/about">
               <Button variant="outline" className="rounded-full border-white/20 px-6 text-sm text-white/80 hover:bg-white/10 sm:px-8 sm:text-base">
                 About Me
