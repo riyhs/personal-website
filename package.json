@@ -4,7 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev --port 3000",
-    "build": "vite build",
+    "build": "vite build && node scripts/generate-sitemap.mjs",
+    "build:only": "vite build",
+    "sitemap": "node scripts/generate-sitemap.mjs",
     "serve": "vite preview",
     "test": "vitest run"
   },
