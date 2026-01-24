@@ -9,6 +9,14 @@ import { ImageModal } from '../components/ImageModal'
 import { spotlightProjects } from '../data/projects'
 
 export const Route = createFileRoute('/projects')({
+  head: ({}) => ({
+    links: [
+      {
+        rel: 'canonical',
+        href: 'https://riyaldi.dev/projects',
+      },
+    ],
+  }),
   component: ProjectsPage,
 })
 

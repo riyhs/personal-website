@@ -5,6 +5,14 @@ import { GraduationCap, MapPin, TrendingUp } from 'lucide-react'
 import { experiences } from '../data/experience'
 
 export const Route = createFileRoute('/about')({
+  head: ({ params }) => ({
+    links: [
+      {
+        rel: 'canonical',
+        href: 'https://riyaldi.dev/about',
+      },
+    ],
+  }),
   component: AboutPage,
 })
 

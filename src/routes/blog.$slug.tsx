@@ -6,6 +6,15 @@ import { Badge } from '../components/ui/badge'
 import { findPostBySlug } from '../lib/posts'
 
 export const Route = createFileRoute('/blog/$slug')({
+  head: ({ params }) => ({
+    links: [
+      {
+        rel: 'canonical',
+        href: `https://riyaldi.dev/blog/${params.slug as string}`,
+      },
+    ],
+  }),
+  component: BlogDetailPage,
   loader: ({ params }) => {
     const post = findPostBySlug(params.slug as string)
     if (!post) {
@@ -13,7 +22,6 @@ export const Route = createFileRoute('/blog/$slug')({
     }
     return { slug: post.slug }
   },
-  component: BlogDetailPage,
 })
 
 function BlogDetailPage() {

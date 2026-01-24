@@ -13,6 +13,14 @@ import { techStack } from '../data/stack'
 import { listPosts } from '../lib/posts'
 
 export const Route = createFileRoute('/')({
+  head: ({}) => ({
+    links: [
+      {
+        rel: 'canonical',
+        href: 'https://riyaldi.dev/',
+      },
+    ],
+  }),
   component: HomePage,
   loader: () => {
     const posts = listPosts().slice(0, 2)

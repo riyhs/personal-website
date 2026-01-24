@@ -7,6 +7,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../co
 import { listPosts } from '../lib/posts'
 
 export const Route = createFileRoute('/blog')({
+  head: ({}) => ({
+    links: [
+      {
+        rel: 'canonical',
+        href: 'https://riyaldi.dev/blog',
+      },
+    ],
+  }),
   component: BlogPage,
   loader: () => {
     const posts = listPosts()
