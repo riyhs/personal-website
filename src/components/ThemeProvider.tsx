@@ -26,6 +26,10 @@ const getInitialTheme = (): ThemeMode => {
     return 'dark'
   }
 
+  if (document.documentElement.dataset.theme === 'light') {
+    return 'light'
+  }
+
   const stored = window.localStorage.getItem(STORAGE_KEY) as ThemeMode | null
   if (stored === 'light' || stored === 'dark') {
     return stored
