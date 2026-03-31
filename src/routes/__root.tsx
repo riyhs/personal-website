@@ -53,10 +53,10 @@ export const Route = createRootRoute({
         property: 'og:type',
         content: 'website',
       },
-      { 
-        property: 'og:image', 
-        content: '/img/website.webp' 
-      }, 
+      {
+        property: 'og:image',
+        content: 'https://riyaldi.dev/img/website.webp',
+      },
       
       // --- Twitter ---
       {
@@ -71,10 +71,10 @@ export const Route = createRootRoute({
         name: 'twitter:description',
         content: 'Personal portfolio of Riyaldi. View my latest projects and articles.',
       },
-      { 
-        name: 'twitter:image', 
-        content: '/img/website.webp' 
-      }, 
+      {
+        name: 'twitter:image',
+        content: 'https://riyaldi.dev/img/website.webp',
+      },
     ],
     links: [
       {
@@ -93,7 +93,7 @@ function RootDocument({ children }: { children: ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body suppressHydrationWarning>
         <ThemeProvider>
           <div className="flex min-h-screen flex-col bg-[rgb(var(--background))] text-[rgb(var(--foreground))]">
             <Header />

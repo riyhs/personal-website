@@ -10,6 +10,13 @@ import { spotlightProjects } from '../data/projects'
 
 export const Route = createFileRoute('/projects')({
   head: ({}) => ({
+    meta: [
+      { title: 'Projects - Riyaldi' },
+      { name: 'description', content: 'Selected projects by Riyaldi including P!NGFEST platform, Bangkit ML Capstone, and NutriVision Android app.' },
+      { property: 'og:title', content: 'Projects - Riyaldi' },
+      { property: 'og:description', content: 'Selected projects by Riyaldi in web development, machine learning, and Android.' },
+      { property: 'og:url', content: 'https://riyaldi.dev/projects' },
+    ],
     links: [
       {
         rel: 'canonical',

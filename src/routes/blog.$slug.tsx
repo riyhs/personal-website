@@ -3,14 +3,46 @@ import { motion } from 'framer-motion'
 import { ArrowLeft } from 'lucide-react'
 
 import { Badge } from '../components/ui/badge'
+import { formatLongDate } from '../lib/date'
 import { findPostBySlug } from '../lib/posts'
 
 export const Route = createFileRoute('/blog/$slug')({
-  head: ({ params }) => ({
+  head: ({ loaderData, params }) => ({
+    meta: [
+      { title: `${loaderData.frontmatter.title} - Riyaldi's Blog` },
+      { name: 'description', content: loaderData.frontmatter.excerpt },
+      { property: 'og:title', content: loaderData.frontmatter.title },
+      { property: 'og:description', content: loaderData.frontmatter.excerpt },
+      { property: 'og:url', content: `https://riyaldi.dev/blog/${params.slug as string}` },
+      { property: 'og:type', content: 'article' },
+      { name: 'twitter:title', content: loaderData.frontmatter.title },
+      { name: 'twitter:description', content: loaderData.frontmatter.excerpt },
+    ],
     links: [
       {
         rel: 'canonical',
         href: `https://riyaldi.dev/blog/${params.slug as string}`,
+      },
+    ],
+    scripts: [
+      {
+        type: 'application/ld+json',
+        children: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'BlogPosting',
+          headline: loaderData.frontmatter.title,
+          description: loaderData.frontmatter.excerpt,
+          datePublished: loaderData.frontmatter.date,
+          author: {
+            '@type': 'Person',
+            name: 'Riyaldi Hasan Setiawan',
+            url: 'https://riyaldi.dev',
+          },
+          publisher: {
+            '@type': 'Person',
+            name: 'Riyaldi Hasan Setiawan',
+          },
+        }),
       },
     ],
   }),
@@ -20,7 +52,10 @@ export const Route = createFileRoute('/blog/$slug')({
     if (!post) {
       throw new Error('Post not found')
     }
-    return { slug: post.slug }
+    return {
+      slug: post.slug,
+      frontmatter: post.frontmatter,
+    }
   },
 })
 
@@ -55,11 +90,7 @@ function BlogDetailPage() {
         className="mt-8 space-y-6"
       >
         <p className="text-xs uppercase tracking-[0.4em] text-white/60">
-          {new Date(post.frontmatter.date).toLocaleDateString(undefined, {
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric',
-          })}
+          {formatLongDate(post.frontmatter.date)}
         </p>
         <h1 className="text-golden-xl">{post.frontmatter.title}</h1>
         <p className="text-lg text-white/75">{post.frontmatter.excerpt}</p>

@@ -8,16 +8,57 @@ import { Button } from '../components/ui/button'
 import { Badge } from '../components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card'
 import { ImageModal } from '../components/ImageModal'
+import { formatShortDate } from '../lib/date'
 import { spotlightProjects } from '../data/projects'
 import { techStack } from '../data/stack'
 import { listPosts } from '../lib/posts'
 
 export const Route = createFileRoute('/')({
-  head: ({}) => ({
+  head: () => ({
+    meta: [
+      { title: 'Riyaldi - Computer Science Student & Machine Learning Engineer' },
+      { name: 'description', content: 'Personal portfolio of Riyaldi Hasan Setiawan. Computer Science undergraduate specializing in Android Development, Fullstack Development, and Machine Learning.' },
+      { property: 'og:title', content: 'Riyaldi - Computer Science Student & Machine Learning Engineer' },
+      { property: 'og:description', content: 'Personal portfolio of Riyaldi. Explore my projects, blog, and professional journey.' },
+      { property: 'og:url', content: 'https://riyaldi.dev/' },
+      { property: 'og:type', content: 'website' },
+    ],
     links: [
       {
         rel: 'canonical',
         href: 'https://riyaldi.dev/',
+      },
+    ],
+    scripts: [
+      {
+        type: 'application/ld+json',
+        children: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@graph': [
+            {
+              '@type': 'WebSite',
+              name: 'Riyaldi - Personal Website',
+              url: 'https://riyaldi.dev',
+              description: 'Personal portfolio and website of Riyaldi Hasan Setiawan.',
+            },
+            {
+              '@type': 'Person',
+              name: 'Riyaldi Hasan Setiawan',
+              url: 'https://riyaldi.dev',
+              jobTitle: 'Computer Science Student & Machine Learning Engineer',
+              sameAs: [
+                'https://github.com/riyhs',
+                'https://twitter.com/riyhs_',
+                'https://www.linkedin.com/in/riyaldi',
+              ],
+              image: 'https://riyaldi.dev/img/riyaldi-hasan.webp',
+              alumniOf: {
+                '@type': 'CollegeOrUniversity',
+                name: 'Universitas Sebelas Maret',
+              },
+            },
+          ],
+        }),
       },
     ],
   }),
@@ -237,11 +278,7 @@ function HomePage() {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <p className="text-sm uppercase tracking-[0.3em] text-white/60">
-                        {new Date(post.frontmatter.date).toLocaleDateString(undefined, {
-                          month: 'short',
-                          day: 'numeric',
-                          year: 'numeric',
-                        })}
+                        {formatShortDate(post.frontmatter.date)}
                       </p>
                       <CardTitle className="mt-2">{post.frontmatter.title}</CardTitle>
                     </div>

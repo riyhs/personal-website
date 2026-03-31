@@ -17,8 +17,8 @@ const OUTPUT_PATH = join(__dirname, '..', 'public', 'sitemap.xml');
 const staticRoutes = [
     { path: '/', priority: 1.0, changefreq: 'daily' },
     { path: '/about', priority: 0.8, changefreq: 'monthly' },
-    { path: '/projects', priority: 0.9, changefreq: 'weekly' },
-    { path: '/blog', priority: 0.9, changefreq: 'weekly' },
+    { path: '/projects', priority: 0.8, changefreq: 'monthly' },
+    { path: '/blog', priority: 0.7, changefreq: 'weekly' },
 ];
 
 // Function to get all blog posts

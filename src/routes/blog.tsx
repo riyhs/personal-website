@@ -4,10 +4,18 @@ import { ArrowRight } from 'lucide-react'
 
 import { Badge } from '../components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card'
+import { formatShortDate } from '../lib/date'
 import { listPosts } from '../lib/posts'
 
 export const Route = createFileRoute('/blog')({
-  head: ({}) => ({
+  head: () => ({
+    meta: [
+      { title: 'Blog - Riyaldi' },
+      { name: 'description', content: 'Articles and notes on software development, machine learning, and technology by Riyaldi.' },
+      { property: 'og:title', content: 'Blog - Riyaldi' },
+      { property: 'og:description', content: 'Articles and notes on software development, machine learning, and technology.' },
+      { property: 'og:url', content: 'https://riyaldi.dev/blog' },
+    ],
     links: [
       {
         rel: 'canonical',
@@ -70,11 +78,7 @@ function BlogPage() {
             <CardHeader className="gap-4 border-b border-white/5 p-6 md:flex md:items-center md:justify-between">
               <div>
                 <p className="text-xs uppercase tracking-[0.3em] text-white/50">
-                  {new Date(post.frontmatter.date).toLocaleDateString(undefined, {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric',
-                  })}
+                  {formatShortDate(post.frontmatter.date)}
                 </p>
                 <CardTitle className="mt-3 text-3xl">{post.frontmatter.title}</CardTitle>
                 <CardDescription>{post.frontmatter.excerpt}</CardDescription>

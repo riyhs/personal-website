@@ -6,6 +6,13 @@ import { experiences } from '../data/experience'
 
 export const Route = createFileRoute('/about')({
   head: () => ({
+    meta: [
+      { title: 'About - Riyaldi Hasan Setiawan' },
+      { name: 'description', content: 'Learn about Riyaldi Hasan Setiawan - Computer Science student at Universitas Sebelas Maret, Machine Learning Engineer, and Fullstack Developer based in Sukoharjo, Indonesia.' },
+      { property: 'og:title', content: 'About - Riyaldi Hasan Setiawan' },
+      { property: 'og:description', content: 'Learn about Riyaldi - CS student, ML Engineer, and Fullstack Developer.' },
+      { property: 'og:url', content: 'https://riyaldi.dev/about' },
+    ],
     links: [
       {
         rel: 'canonical',
