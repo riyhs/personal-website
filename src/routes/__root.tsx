@@ -1,6 +1,7 @@
 import {
   HeadContent,
   Scripts,
+  ScriptOnce,
   createRootRoute,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
@@ -53,10 +54,10 @@ export const Route = createRootRoute({
         property: 'og:type',
         content: 'website',
       },
-      { 
-        property: 'og:image', 
-        content: '/img/website.webp' 
-      }, 
+      {
+        property: 'og:image',
+        content: 'https://riyaldi.dev/img/website.webp',
+      },
       
       // --- Twitter ---
       {
@@ -71,10 +72,10 @@ export const Route = createRootRoute({
         name: 'twitter:description',
         content: 'Personal portfolio of Riyaldi. View my latest projects and articles.',
       },
-      { 
-        name: 'twitter:image', 
-        content: '/img/website.webp' 
-      }, 
+      {
+        name: 'twitter:image',
+        content: 'https://riyaldi.dev/img/website.webp',
+      },
     ],
     links: [
       {
@@ -89,11 +90,12 @@ export const Route = createRootRoute({
 
 function RootDocument({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+      <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body suppressHydrationWarning>
+        <ScriptOnce>{`(function(){try{var t=localStorage.getItem('riyaldi.theme')||'dark';var r=t==='auto'?(matchMedia('(prefers-color-scheme:light)').matches?'light':'dark'):t;document.documentElement.style.colorScheme=r;if(r==='light')document.documentElement.dataset.theme='light'}catch(e){}})()`}</ScriptOnce>
         <ThemeProvider>
           <div className="flex min-h-screen flex-col bg-[rgb(var(--background))] text-[rgb(var(--foreground))]">
             <Header />

@@ -8,6 +8,7 @@ import { Button } from '../components/ui/button'
 import { Badge } from '../components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card'
 import { ImageModal } from '../components/ImageModal'
+import { formatShortDate } from '../lib/date'
 import { spotlightProjects } from '../data/projects'
 import { techStack } from '../data/stack'
 import { listPosts } from '../lib/posts'
@@ -237,11 +238,7 @@ function HomePage() {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <p className="text-sm uppercase tracking-[0.3em] text-white/60">
-                        {new Date(post.frontmatter.date).toLocaleDateString(undefined, {
-                          month: 'short',
-                          day: 'numeric',
-                          year: 'numeric',
-                        })}
+                        {formatShortDate(post.frontmatter.date)}
                       </p>
                       <CardTitle className="mt-2">{post.frontmatter.title}</CardTitle>
                     </div>

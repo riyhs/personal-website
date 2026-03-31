@@ -4,6 +4,7 @@ import { ArrowRight } from 'lucide-react'
 
 import { Badge } from '../components/ui/badge'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card'
+import { formatShortDate } from '../lib/date'
 import { listPosts } from '../lib/posts'
 
 export const Route = createFileRoute('/blog')({
@@ -70,11 +71,7 @@ function BlogPage() {
             <CardHeader className="gap-4 border-b border-white/5 p-6 md:flex md:items-center md:justify-between">
               <div>
                 <p className="text-xs uppercase tracking-[0.3em] text-white/50">
-                  {new Date(post.frontmatter.date).toLocaleDateString(undefined, {
-                    month: 'short',
-                    day: 'numeric',
-                    year: 'numeric',
-                  })}
+                  {formatShortDate(post.frontmatter.date)}
                 </p>
                 <CardTitle className="mt-3 text-3xl">{post.frontmatter.title}</CardTitle>
                 <CardDescription>{post.frontmatter.excerpt}</CardDescription>

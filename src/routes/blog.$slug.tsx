@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import { ArrowLeft } from 'lucide-react'
 
 import { Badge } from '../components/ui/badge'
+import { formatLongDate } from '../lib/date'
 import { findPostBySlug } from '../lib/posts'
 
 export const Route = createFileRoute('/blog/$slug')({
@@ -55,11 +56,7 @@ function BlogDetailPage() {
         className="mt-8 space-y-6"
       >
         <p className="text-xs uppercase tracking-[0.4em] text-white/60">
-          {new Date(post.frontmatter.date).toLocaleDateString(undefined, {
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric',
-          })}
+          {formatLongDate(post.frontmatter.date)}
         </p>
         <h1 className="text-golden-xl">{post.frontmatter.title}</h1>
         <p className="text-lg text-white/75">{post.frontmatter.excerpt}</p>
