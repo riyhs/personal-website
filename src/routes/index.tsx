@@ -134,9 +134,8 @@ function HomePage() {
                 transition={{ duration: 0.6, ease: "easeOut" }}
               >
                 <h1 className="text-4xl font-semibold leading-none tracking-tight sm:text-5xl md:text-6xl lg:text-hero">
-                  I'm{" "}
-                  <span className="bg-linear-to-b from-white via-white/90 to-white/50 bg-clip-text text-transparent">
-                    Riyaldi
+                  <span className="bg-linear-to-b from-white via-white/100 to-white/70 bg-clip-text text-transparent">
+                    I'm Riyaldi
                   </span>
                 </h1>
                 <p className="mx-auto mt-6 max-w-2xl text-base text-[rgb(var(--foreground))/0.75] sm:text-lg md:text-xl lg:text-2xl">
