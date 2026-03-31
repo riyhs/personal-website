@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "@fontsource/plus-jakarta-sans/latin.css";
 
 @theme {
   --font-sans: "Plus Jakarta Sans", "Inter", "Segoe UI", system-ui,
@@ -44,6 +45,29 @@
       rgba(250, 250, 250, 0.14),
       transparent 55%),
     radial-gradient(circle at 80% 0%, rgba(161, 161, 170, 0.18), transparent 45%);
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --background: 250 250 250;
+  --foreground: 9 9 11;
+  --card: 244 244 245;
+  --card-foreground: 15 15 18;
+  --popover: 250 250 250;
+  --popover-foreground: 9 9 11;
+  --primary: 9 9 11;
+  --primary-foreground: 250 250 250;
+  --secondary: 228 228 231;
+  --secondary-foreground: 15 15 18;
+  --muted: 228 228 231;
+  --muted-foreground: 113 113 122;
+  --accent: 228 228 231;
+  --accent-foreground: 9 9 11;
+  --destructive: 220 38 38;
+  --destructive-foreground: 250 250 250;
+  --border: 212 212 216;
+  --input: 212 212 216;
+  --ring: 9 9 11;
 }
 
 @layer base {

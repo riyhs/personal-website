@@ -1,7 +1,3 @@
 # FAILURES
-> Format: `## [DATE] [title] | file: X | error: Y | tried: A, B | hypothesis: Z`
-> Tag `[NEEDS-PLANNING]` for architectural issues. User reviews and routes to appropriate session.
 
-## To resolve failures
-Open new session, paste:
-"Read AGENTS.md + .agent/CONTEXT.md + this file. Resolve each ACTIVE failure. Write solutions clearly so they can be implemented."
+## 2026-03-31 TanStack CLI doc lookup | file: n/a | error: `npx @tanstack/cli search-docs` resolved as a missing npm script in this shell | tried: `search-docs` for react-start, react-router, vite | hypothesis: the local `rtk` wrapper / npm resolution path does not expose TanStack CLI directly here, so use web docs or another invocation path instead

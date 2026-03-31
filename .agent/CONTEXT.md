@@ -5,14 +5,14 @@
 **Name:** personal-website | **Stack:** TanStack Start + React 19 + Tailwind v4 | **Repo:** riyaldi.dev
 
 ## State
-**Status:** Phase 1 FOUC fix FAILED — issue remains unresolved
+**Status:** CSS fix complete and verified — Docker prod build serves styles correctly
 **Branch:** experiment | **Worktree:** personal-website
-**Last completed:** Docker prod build passes, but FOUC persists at runtime
-**In progress:** FOUC root cause investigation — missing light theme CSS overrides
-**Next:** Add `[data-theme="light"]` color vars to `src/styles.css`, inline critical theme CSS in `<head>`
+**Last completed:** Fixed CSS 404 in Docker prod builds (replaced `?url` import with side-effect import), verified with Playwright tests, documented fix in lessons.md, cleaned up temp files
+**In progress:** None — ready for commit and merge
+**Next:** Commit all changes on experiment branch, then merge to main when ready
 
 ## Blockers
-FOUC remains unresolved. `src/styles.css` has NO `[data-theme="light"]` overrides — only `:root` dark vars. ScriptOnce sets `dataset.theme` and `style.colorScheme` but CSS has nothing to act on. The visual flash occurs between SSR paint and CSS load.
+None.
 
 ## Active worktrees
 | Name | Path | Status |
@@ -26,7 +26,7 @@ FOUC remains unresolved. `src/styles.css` has NO `[data-theme="light"]` override
 | 2026-03-31 | Deterministic UTC date formatting | Avoid SSR/client locale drift in hydration |
 | 2026-03-31 | ScriptOnce for theme bootstrap | Reduce FOUC before hydration |
 | 2026-03-31 | ThemeProvider initialState='dark' | Match SSR during hydration, sync from DOM in useEffect |
-| 2026-03-31 | FOUC fix attempt FAILED | Missing light theme CSS overrides — `dataset.theme` has no CSS to act on |
+| 2026-03-31 | Replace `?url` CSS import with side-effect import | `?url` produces different hashes in client vs SSR environments on Linux, causing 404. Side-effect import lets TanStack Start manifest handle `<link>` injection from client bundle |
 
 ---
 _Updated: 2026-03-31

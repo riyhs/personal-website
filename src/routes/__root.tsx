@@ -8,13 +8,11 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { type ReactNode } from 'react'
 
-import '@fontsource/plus-jakarta-sans/latin.css'
-
 import Header from '../components/Header'
 import { Footer } from '../components/Footer'
 import { ThemeProvider } from '../components/ThemeProvider'
 
-import appCss from '../styles.css?url'
+import '../styles.css'
 
 export const Route = createRootRoute({
   head: () => ({
@@ -77,12 +75,7 @@ export const Route = createRootRoute({
         content: 'https://riyaldi.dev/img/website.webp',
       },
     ],
-    links: [
-      {
-        rel: 'stylesheet',
-        href: appCss,
-      },
-    ],
+    links: [],
   }),
 
   shellComponent: RootDocument,
@@ -95,7 +88,7 @@ function RootDocument({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body suppressHydrationWarning>
-        <ScriptOnce>{`(function(){try{var t=localStorage.getItem('riyaldi.theme')||'dark';var r=t==='auto'?(matchMedia('(prefers-color-scheme:light)').matches?'light':'dark'):t;document.documentElement.dataset.theme=r;document.documentElement.style.colorScheme=r}catch(e){}})()`}</ScriptOnce>
+        <ScriptOnce>{`(function(){try{var t=localStorage.getItem('riyaldi.theme')||'dark';var r=t==='auto'?(matchMedia('(prefers-color-scheme:light)').matches?'light':'dark'):t;document.documentElement.classList.add(r);document.documentElement.dataset.theme=r;document.documentElement.style.colorScheme=r}catch(e){}})()`}</ScriptOnce>
         <ThemeProvider>
           <div className="flex min-h-screen flex-col bg-[rgb(var(--background))] text-[rgb(var(--foreground))]">
             <Header />

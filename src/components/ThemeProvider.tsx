@@ -28,6 +28,8 @@ const syncDomTheme = (mode: ThemeMode) => {
   }
 
   const root = document.documentElement
+  root.classList.remove('dark', 'light')
+  root.classList.add(mode)
   root.dataset.theme = mode
   root.style.colorScheme = mode
 }
