@@ -4,6 +4,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from 'react'
@@ -21,46 +22,31 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | null>(null)
 
-const getInitialTheme = (): ThemeMode => {
-  if (typeof window === 'undefined') {
-    return 'dark'
-  }
-
-  if (document.documentElement.dataset.theme === 'light') {
-    return 'light'
-  }
-
-  const stored = window.localStorage.getItem(STORAGE_KEY) as ThemeMode | null
-  if (stored === 'light' || stored === 'dark') {
-    return stored
-  }
-
-  if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-    return 'light'
-  }
-
-  return 'dark'
-}
-
 const syncDomTheme = (mode: ThemeMode) => {
   if (typeof document === 'undefined') {
     return
   }
 
   const root = document.documentElement
-  if (mode === 'light') {
-    root.dataset.theme = 'light'
-  } else {
-    root.removeAttribute('data-theme')
-  }
-
+  root.dataset.theme = mode
   root.style.colorScheme = mode
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<ThemeMode>(() => getInitialTheme())
+  const [theme, setThemeState] = useState<ThemeMode>('dark')
+  const isFirstRender = useRef(true)
 
   useEffect(() => {
+    const domTheme = document.documentElement.dataset.theme
+    const resolved: ThemeMode = domTheme === 'light' ? 'light' : 'dark'
+    setThemeState(resolved)
+  }, [])
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false
+      return
+    }
     syncDomTheme(theme)
   }, [theme])
 
