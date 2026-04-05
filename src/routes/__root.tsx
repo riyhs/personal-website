@@ -3,83 +3,87 @@ import {
   Scripts,
   ScriptOnce,
   createRootRoute,
-} from '@tanstack/react-router'
-import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
-import { TanStackDevtools } from '@tanstack/react-devtools'
-import { type ReactNode } from 'react'
+} from "@tanstack/react-router";
+import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { TanStackDevtools } from "@tanstack/react-devtools";
+import { type ReactNode } from "react";
 
-import Header from '../components/Header'
-import { Footer } from '../components/Footer'
-import { ThemeProvider } from '../components/ThemeProvider'
+import Header from "../components/Header";
+import { Footer } from "../components/Footer";
+import { ThemeProvider } from "../components/ThemeProvider";
 
-import '../styles.css'
+import "../styles.css";
 
 export const Route = createRootRoute({
   head: () => ({
     meta: [
       {
-        charSet: 'utf-8',
+        charSet: "utf-8",
       },
       {
-        name: 'viewport',
-        content: 'width=device-width, initial-scale=1',
+        name: "viewport",
+        content: "width=device-width, initial-scale=1",
       },
       {
-        title: 'Personal Website - Riyaldi',
+        title: "Riyaldi - Software Engineer",
       },
       {
-        name: 'description',
-        content: 'Personal portfolio and website of Riyaldi. Undergraduate Computer Science specializing in Android Development, Fullstack Development, and Machine Learning. Explore my projects, blog, and professional journey.',
+        name: "description",
+        content:
+          "Personal portfolio and website of Riyaldi. Undergraduate Computer Science specializing in Android Development, Fullstack Development, and Machine Learning. Explore my projects, blog, and professional journey.",
       },
       {
-        name: 'keywords',
-        content: 'Riyaldi, Portfolio, Web Developer, Web Development, Fullstack Development, Android Development, Machine Learning Engineer, Sukoharjo, Surakarta, Personal Website',
+        name: "keywords",
+        content:
+          "Riyaldi, Riyaldi Hasan, Riyaldi Hasan Setiawan, Portfolio, Web Developer, Web Development, Fullstack Development, Android Development, Machine Learning Engineer, Sukoharjo, Surakarta, Personal Website",
       },
       {
-        name: 'author',
-        content: 'Riyaldi',
+        name: "author",
+        content: "Riyaldi",
       },
       // --- Open Graph / Facebook / LinkedIn ---
       {
-        property: 'og:title',
-        content: 'Personal Website - Riyaldi',
+        property: "og:title",
+        content: "Riyaldi - Software Engineer",
       },
       {
-        property: 'og:description',
-        content: 'Personal portfolio of Riyaldi. View my latest projects and articles.',
+        property: "og:description",
+        content:
+          "Personal portfolio of Riyaldi. View my latest projects and articles.",
       },
       {
-        property: 'og:type',
-        content: 'website',
+        property: "og:type",
+        content: "website",
       },
       {
-        property: 'og:image',
-        content: 'https://riyaldi.dev/img/website.webp',
+        property: "og:image",
+        content: "https://riyaldi.dev/img/website.webp",
       },
-      
+
       // --- Twitter ---
       {
-        name: 'twitter:card',
-        content: 'summary_large_image',
+        name: "twitter:card",
+        content: "summary_large_image",
       },
       {
-        name: 'twitter:title',
-        content: 'Personal Website - Riyaldi',
+        name: "twitter:title",
+        content: "Riyaldi - Software Engineer",
       },
       {
-        name: 'twitter:description',
-        content: 'Personal portfolio of Riyaldi. View my latest projects and articles.',
+        name: "twitter:description",
+        content:
+          "Personal portfolio of Riyaldi. View my latest projects and articles.",
       },
       {
-        name: 'twitter:image',
-        content: 'https://riyaldi.dev/img/website.webp',
+        name: "twitter:image",
+        content: "https://riyaldi.dev/img/website.webp",
       },
     ],
     links: [],
   }),
 
   shellComponent: RootDocument,
-})
+});
 
 function RootDocument({ children }: { children: ReactNode }) {
   return (
@@ -92,18 +96,16 @@ function RootDocument({ children }: { children: ReactNode }) {
         <ThemeProvider>
           <div className="flex min-h-screen flex-col bg-[rgb(var(--background))] text-[rgb(var(--foreground))]">
             <Header />
-            <main className="flex-1">
-              {children}
-            </main>
+            <main className="flex-1">{children}</main>
             <Footer />
           </div>
           <TanStackDevtools
             config={{
-              position: 'bottom-right',
+              position: "bottom-right",
             }}
             plugins={[
               {
-                name: 'Tanstack Router',
+                name: "Tanstack Router",
                 render: <TanStackRouterDevtoolsPanel />,
               },
             ]}
@@ -112,5 +114,5 @@ function RootDocument({ children }: { children: ReactNode }) {
         </ThemeProvider>
       </body>
     </html>
-  )
+  );
 }

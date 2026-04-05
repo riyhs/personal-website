@@ -24,7 +24,7 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       {
-        title: "Riyaldi - Computer Science Student & Machine Learning Engineer",
+        title: "Riyaldi - Software Engineer",
       },
       {
         name: "description",
@@ -33,8 +33,7 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content:
-          "Riyaldi - Computer Science Student & Machine Learning Engineer",
+        content: "Riyaldi - Software Engineer",
       },
       {
         property: "og:description",
@@ -67,7 +66,7 @@ export const Route = createFileRoute("/")({
               "@type": "Person",
               name: "Riyaldi Hasan Setiawan",
               url: "https://riyaldi.dev",
-              jobTitle: "Computer Science Student & Machine Learning Engineer",
+              jobTitle: "Software Engineer",
               sameAs: [
                 "https://github.com/riyhs",
                 "https://twitter.com/riyhs_",
