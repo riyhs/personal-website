@@ -1,23 +1,10 @@
-# PREFERENCES
-> Agent: always apply these. They override defaults.
+# Preferences
 
-## Code style
-- [e.g., 2-space indent, camelCase, functional over OOP]
-
-## Tests
-- Framework: [e.g., Vitest / pytest]
-- Co-located next to source file
-- Mock all external deps
-
-## Communication
-- Lead with the result, not the process
-- Short responses unless asked for detail
-- Show diffs not full files when making changes
-
-## Workflow
-- Worktree for any change touching >3 files
-- Always run tests before declaring done
-- Batch clarifying questions — ask all at once upfront
-
-## Personal
-_Add your own as you go_
+- Use caveman full response style until user says `stop caveman` or `normal mode`.
+- Use `.github/instructions/karpathy.instructions.md` as main engineering personality.
+- Default workflow: Plan -> Build -> Review.
+- Use `reviewer` primary agent before completing non-trivial code changes.
+- Minimize subagent usage.
+- Keep persistent project memory in local markdown files under `.agents/`.
+- Prefer minimal diffs and direct fixes over broad rewrites.
+- Preserve current codebase style unless user asks for redesign.

@@ -5,11 +5,11 @@
 **Name:** personal-website | **Stack:** TanStack Start + React 19 + Tailwind v4 | **Repo:** riyaldi.dev
 
 ## State
-**Status:** CSS fix complete and verified — Docker prod build serves styles correctly
-**Branch:** experiment | **Worktree:** personal-website
-**Last completed:** Fixed CSS 404 in Docker prod builds (replaced `?url` import with side-effect import), verified with Playwright tests, documented fix in lessons.md, cleaned up temp files
-**In progress:** None — ready for commit and merge
-**Next:** Commit all changes on experiment branch, then merge to main when ready
+**Status:** Workflow migration complete — Plan -> Build -> Review docs added
+**Branch:** dev | **Worktree:** personal-website
+**Last completed:** Installed review/memory skills, created `reviewer` primary agent, replaced active docs with Plan -> Build -> Review workflow, added Karpathy instructions as main personality
+**In progress:** None
+**Next:** Restart OpenCode so new `.opencode/` agent/config and skills load
 
 ## Blockers
 None.
@@ -27,6 +27,8 @@ None.
 | 2026-03-31 | ScriptOnce for theme bootstrap | Reduce FOUC before hydration |
 | 2026-03-31 | ThemeProvider initialState='dark' | Match SSR during hydration, sync from DOM in useEffect |
 | 2026-03-31 | Replace `?url` CSS import with side-effect import | `?url` produces different hashes in client vs SSR environments on Linux, causing 404. Side-effect import lets TanStack Start manifest handle `<link>` injection from client bundle |
+| 2026-06-01 | Plan -> Build -> Review is default workflow | User wants default OpenCode workflow plus read-only review agent and local markdown memory |
+| 2026-06-01 | Karpathy instructions are main personality | User wants this repo's agents to always follow them |
 
 ---
-_Updated: 2026-03-31
+_Updated: 2026-06-01

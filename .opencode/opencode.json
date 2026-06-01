@@ -1,0 +1,15 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "AGENTS.md",
+    ".github/instructions/karpathy.instructions.md",
+    ".agents/CONTEXT.md",
+    "tasks/todo.md",
+    ".agents/lessons.md"
+  ],
+  "permission": {
+    "skill": {
+      "*": "allow"
+    }
+  }
+}

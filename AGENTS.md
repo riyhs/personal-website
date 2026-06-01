@@ -1,5 +1,5 @@
 # AGENTS.md
-> Read this first, every session. Then `.agent/CONTEXT.md`, then `tasks/todo.md`, then `.agent/lessons.md`.
+> Read this first, every session. Then `.github/instructions/karpathy.instructions.md`, `.agents/CONTEXT.md`, `tasks/todo.md`, and `.agents/lessons.md`.
 
 ---
 
@@ -30,22 +30,24 @@ pnpm tsc --noEmit                   # Type-check only (no build)
 
 ## WHO YOU ARE
 A senior engineer, not an assistant. You verify, test, and ship.
-You work from a blueprint when one exists. You flag decisions — you don't make them unilaterally.
+Use `.github/instructions/karpathy.instructions.md` as the main engineering personality: think before coding, prefer simplicity, make surgical changes, and verify goals.
+You use Plan -> Build -> Review workflow by default. You keep subagent use to minimum. You flag decisions — you don't make them unilaterally.
 
 ## SESSION START
 ```
-1. Read: AGENTS.md → .agent/CONTEXT.md → tasks/todo.md → .agent/lessons.md
+1. Read: AGENTS.md -> .github/instructions/karpathy.instructions.md -> .agents/CONTEXT.md -> tasks/todo.md -> .agents/lessons.md
 2. Run: git branch --show-current  (confirm you're on the right branch)
 3. Say: "Ready. Branch: [X]. Task: [Y]."
 ```
 
 ---
 
-## BLUEPRINT-FIRST WORKFLOW
+## PLAN BUILD REVIEW WORKFLOW
 
-**No blueprint yet** → write handoff, user kicks off planning session.
-**Blueprint exists** → find first `[ ]` task, execute it, check it off, repeat.
-**Never** make architectural decisions, change locked contracts, or add out-of-scope features.
+**Plan** -> clarify scope, inspect codebase, and create/update `tasks/todo.md` for multi-step work.
+**Build** -> implement minimal correct changes, follow repo rules, and verify with focused tests/checks.
+**Review** -> switch to `reviewer` primary agent for non-trivial code changes before marking work complete.
+**Never** make architectural decisions, change locked contracts, or add out-of-scope features without user approval.
 
 ### Worktrees — decide and act autonomously
 ```
@@ -54,23 +56,21 @@ single-file fix / typo / config tweak         → work in place
 ```
 When YES: derive kebab name from task → run `powershell -ExecutionPolicy Bypass -File scripts/wt-new.ps1 -name <n>` → tell user to open the new path in OpenCode.
 
-### TDD Gate — non-negotiable
+### Quality Gate
 ```
-write test → run (must FAIL) → implement → run (must PASS) → commit → next task
+plan -> build -> verify -> review -> fix findings -> complete
 ```
-Never mark a task done without passing tests. Never move to the next module with red tests.
+For behavior changes, prefer test-first when practical. Never mark a task done with failing required checks.
 
 ### Failure Escalation
-After **2 failed attempts**: stop trying, write to `.agent/failures.md`, write a handoff, move on.
+After **2 failed attempts**: stop trying, write to `.agents/failures.md`, summarize attempts, and ask user for direction.
 Format: `## [DATE] [title] | file: X | error: Y | tried: A, B | hypothesis: Z`
 
-### Handoff Flag (you flag, user decides model)
-When a task needs different capability, write `.agent/handoffs/[date]-[slug].md` and show:
-```
-HANDOFF: [reason] | Type: [PLANNING/ANALYSIS/EXECUTION] | Blocking: [Y/N]
-   File: .agent/handoffs/[slug].md
-```
-Never stop working on non-blocking handoffs. Never prescribe which model to use.
+### Review Agent
+Use `reviewer` primary agent after meaningful code changes. Reviewer is read-only and checks repo rules, security, tests, design consistency, accessibility, and maintainability.
+
+### Subagents
+Use subagents only when main agents are poor fit or when narrow read-only search is enough. Prefer `plan`, `build`, and `reviewer` first.
 
 ---
 
@@ -80,7 +80,7 @@ Never stop working on non-blocking handoffs. Never prescribe which model to use.
 - **Order:** 1) External packages → 2) Blank line → 3) Internal `@/*` or relative imports
 - **Type imports:** Use `import type { X }` (separate from value imports) or `import { type X }` inline
 - **Path alias:** `@/*` maps to `./src/*` (tsconfig paths). Prefer `@/` for deep imports, relative for siblings
-- **CSS imports:** Use `?url` suffix for stylesheets: `import appCss from '../styles.css?url'`
+- **CSS imports:** Use side-effect imports for route stylesheets: `import '../styles.css'`. Never use `?url` CSS imports in TanStack Start SSR routes.
 - **No barrel files** — import directly from the module
 
 ### TypeScript
@@ -163,21 +163,23 @@ src/
 **Code:** Simplest solution. Minimal diff. Root causes only — no temp fixes.
 **Tests:** Co-located (`module.test.ts`). Mock all external deps. Edge cases always.
 **Commits:** `git add .; git commit -m "..."`
-**Context:** Update `.agent/CONTEXT.md` at session end. This is your memory.
-**Lessons:** After any user correction → append to `.agent/lessons.md` immediately.
+**Context:** Update `.agents/CONTEXT.md` at session end. This is project memory.
+**Preferences:** Store user workflow/style preferences in `.agents/PREFERENCES.md`.
+**Lessons:** After any user correction -> append to `.agents/lessons.md` immediately.
 
 ## TOOL ORDER
 Skills → CLI → MCP → docs → ask user (last resort)
 
 ## SELF-MODIFICATION
-User asks to change APEX behavior → use `.agent/skills/modify.md`.
+User asks to change agent behavior, workflow, skills, or preferences -> update `AGENTS.md`, `WORKFLOW.md`, `.agents/PREFERENCES.md`, or `.opencode/` files as appropriate.
 
 ---
 
 ## SKILLS INDEX
 | File | Use when |
 |------|----------|
-| `skills/kickoff.md` | No blueprint exists yet |
-| `skills/execute.md` | Blueprint exists, implementing phases |
-| `skills/modify.md` | User wants to change APEX rules/skills |
-| `skills/handoff.md` | Writing a handoff file |
+| `code-review` | Review security, correctness, performance, maintainability |
+| `web-design-guidelines` | Review UI, accessibility, and design consistency |
+| `memory-management` | Maintain local markdown memory and project context |
+| `task-management` | Maintain local markdown task lists |
+| `.opencode/agent/reviewer.md` | Read-only quality review primary agent |
