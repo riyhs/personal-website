@@ -13,7 +13,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
-import { CosmicSynapseCanvas } from "../components/ui/neurons-hero";
 import { ImageModal } from "../components/ImageModal";
 import { formatShortDate } from "../lib/date";
 import { spotlightProjects } from "../data/projects";
@@ -122,7 +121,6 @@ function HomePage() {
       <div className="space-y-12 pb-16">
         <div className="relative min-h-[calc(100dvh-73px)] overflow-hidden">
           <div className="absolute inset-0">
-            <CosmicSynapseCanvas />
             <div className="absolute inset-0 bg-gradient-to-t from-[rgb(var(--background))] via-[rgb(var(--background))]/70 to-transparent z-10"></div>
           </div>
           <Section className="relative z-20 flex min-h-[calc(100dvh-73px)] items-center justify-center py-10">
