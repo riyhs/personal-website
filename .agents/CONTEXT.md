@@ -5,9 +5,9 @@
 **Name:** personal-website | **Stack:** TanStack Start + React 19 + Tailwind v4 | **Repo:** riyaldi.dev
 
 ## State
-**Status:** About page rebuilt as single-column editorial dossier
+**Status:** Production build fixed while preserving devtools UX
 **Branch:** dev | **Worktree:** personal-website
-**Last completed:** Aligned About header behavior with Projects/Blog and shortened Projects header description
+**Last completed:** Replaced TanStack devtools Vite stripping path with dev-only AppDevtools wrapper
 **In progress:** None
 **Next:** None
 
@@ -39,6 +39,7 @@ None.
 | 2026-06-07 | Standardize opacity tokens: `text-[rgb(var(--foreground))/N]` | CSS-variable-based tokens are themeable; hardcoded `text-white/N` breaks in light mode |
 | 2026-06-07 | Reframe DESIGN.md as current-state inventory | User asked for no suggestions; keep design doc factual and reflective of existing codebase |
 | 2026-06-07 | About page uses single-column editorial dossier layout | User disliked left-card/right-main split and wanted no separate identity facts/image block |
+| 2026-06-07 | Keep `@tanstack/react-devtools` but remove `@tanstack/devtools-vite` | Preserve development devtools shell while avoiding production `removeDevtoolsOnBuild` transform that broke Router code splitting |
 
 ---
 _Updated: 2026-06-07

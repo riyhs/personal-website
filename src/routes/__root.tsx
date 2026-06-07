@@ -5,11 +5,10 @@ import {
   ScriptOnce,
   createRootRoute,
 } from "@tanstack/react-router";
-import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
-import { TanStackDevtools } from "@tanstack/react-devtools";
 import { MotionConfig } from "framer-motion";
 import { type ReactNode } from "react";
 
+import { AppDevtools } from "../components/AppDevtools";
 import Header from "../components/Header";
 import { Footer } from "../components/Footer";
 import { NotFound } from "../components/NotFound";
@@ -101,19 +100,7 @@ function RootDocument({ children }: { children: ReactNode }) {
         <ThemeProvider>
           <MotionConfig reducedMotion="user">{children}</MotionConfig>
         </ThemeProvider>
-        {import.meta.env.DEV && (
-          <TanStackDevtools
-            config={{
-              position: "bottom-right",
-            }}
-            plugins={[
-              {
-                name: "Tanstack Router",
-                render: <TanStackRouterDevtoolsPanel />,
-              },
-            ]}
-          />
-        )}
+        <AppDevtools />
         <Scripts />
       </body>
     </html>

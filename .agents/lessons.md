@@ -91,3 +91,14 @@ Replace all `text-white/N` with `text-[rgb(var(--foreground))/N]` across pages. 
 
 ### Rule
 Never use `text-white/N` for theme-aware text. Use `text-[rgb(var(--foreground))/N]`. Reserve `text-white` only for dark-mode-only contexts like gradient hero text.
+
+## 2026-06-07 TanStack Devtools packages -> Do not remove devtools packages without preserving dev UX
+
+### Problem
+Removing `@tanstack/react-devtools` while fixing production build breakage removed the general TanStack Devtools shell the user still expects in development.
+
+### Fix
+Keep `@tanstack/react-devtools` for the development UI. Avoid `@tanstack/devtools-vite` unless its production stripping behavior is explicitly wanted and verified, because that transform can conflict with TanStack Router code splitting.
+
+### Rule
+When fixing production devtools build issues, preserve development devtools UX. Prefer a dev-only component guarded by `import.meta.env.DEV` over deleting devtools packages broadly.
