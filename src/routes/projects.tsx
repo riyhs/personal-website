@@ -65,7 +65,7 @@ function ProjectsPage() {
         <p className="text-xs uppercase tracking-[0.4em] text-[rgb(var(--foreground))/0.5]">Portfolio</p>
         <h1 className="text-golden-xl">Engineering Ideas into Reality</h1>
         <p className="text-lg text-[rgb(var(--foreground))/0.75]">
-          A curated selection of technical challenges solved across Web Development, Machine Learning, and Android Engineering. These projects demonstrate my ability to move from concept to deployed application.
+          A curated selection of web, machine learning, and Android projects built from concept to deployed application.
         </p>
       </motion.div>
 

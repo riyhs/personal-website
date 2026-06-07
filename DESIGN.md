@@ -58,7 +58,7 @@
 - Main shell uses a vertical app frame with `Header`, `main`, and `Footer`.
 - Most pages use `mx-auto max-w-6xl px-5 py-16`.
 - Home page uses stacked full-width sections.
-- About page uses a two-column layout on larger screens.
+- About page uses a single-column editorial layout.
 - Projects page uses a split media/details card layout.
 - Blog index uses stacked cards.
 - Blog detail uses `max-w-3xl` prose layout.
@@ -115,8 +115,8 @@
 
 ### About
 
-- Profile card with portrait and location/education/specialization facts.
-- Bio copy.
+- One-sentence bio statement.
+- Grouped skills section.
 - Experience timeline sourced from `src/data/experience.ts`.
 
 ## Current Accessibility And Interaction Behavior

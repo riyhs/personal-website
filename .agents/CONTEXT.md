@@ -5,9 +5,9 @@
 **Name:** personal-website | **Stack:** TanStack Start + React 19 + Tailwind v4 | **Repo:** riyaldi.dev
 
 ## State
-**Status:** DESIGN.md rewritten as current-state inventory for existing site
+**Status:** About page rebuilt as single-column editorial dossier
 **Branch:** dev | **Worktree:** personal-website
-**Last completed:** Replaced DESIGN.md with factual current-state reference of existing site
+**Last completed:** Aligned About header behavior with Projects/Blog and shortened Projects header description
 **In progress:** None
 **Next:** None
 
@@ -38,6 +38,7 @@ None.
 | 2026-06-07 | Extract `TwitterIcon` shared component | Eliminate duplicate inline SVG across Header and index.tsx; single source of truth |
 | 2026-06-07 | Standardize opacity tokens: `text-[rgb(var(--foreground))/N]` | CSS-variable-based tokens are themeable; hardcoded `text-white/N` breaks in light mode |
 | 2026-06-07 | Reframe DESIGN.md as current-state inventory | User asked for no suggestions; keep design doc factual and reflective of existing codebase |
+| 2026-06-07 | About page uses single-column editorial dossier layout | User disliked left-card/right-main split and wanted no separate identity facts/image block |
 
 ---
 _Updated: 2026-06-07
