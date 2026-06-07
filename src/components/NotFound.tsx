@@ -2,6 +2,9 @@ import { Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { ArrowLeft } from 'lucide-react'
 
+import { getButtonClasses } from './ui/button'
+import { cn } from '../lib/utils'
+
 export function NotFound() {
   return (
     <div className="flex min-h-[calc(100dvh-73px)] items-center justify-center px-5">
@@ -18,10 +21,7 @@ export function NotFound() {
         <p className="mt-4 text-lg text-[rgb(var(--foreground))/0.7]">
           The page you're looking for doesn't exist or has been moved.
         </p>
-        <Link
-          to="/"
-          className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-[rgb(var(--foreground))] text-[rgb(var(--background))] px-6 py-2 text-sm font-semibold shadow-2xl shadow-black/25 transition-all hover:bg-[rgb(var(--foreground))]/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-[rgb(var(--background))]"
-        >
+        <Link to="/" className={cn(getButtonClasses(), 'mt-8')}>
           <ArrowLeft size={16} aria-hidden="true" /> Back to Home
         </Link>
       </motion.div>

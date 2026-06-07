@@ -74,9 +74,9 @@ function BlogPage() {
             transition={{ duration: 0.6 }}
             className="space-y-4 text-center md:text-left"
           >
-            <p className="text-xs uppercase tracking-[0.4em] text-white/60">Journal</p>
+            <p className="text-xs uppercase tracking-[0.4em] text-[rgb(var(--foreground))/0.5]">Journal</p>
             <h1 className="text-golden-xl">Notes on algorithms, learning, and code</h1>
-            <p className="text-lg text-white/70">
+            <p className="text-lg text-[rgb(var(--foreground))/0.75]">
               A collection of technical essays, project debriefs, and learnings from my journey in software engineering.
             </p>
           </motion.div>

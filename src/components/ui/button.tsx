@@ -21,6 +21,17 @@ const sizeClasses: Record<ButtonSize, string> = {
   lg: 'px-5 py-2.5 text-lg',
 }
 
+export function getButtonClasses(
+  variant: ButtonVariant = 'default',
+  size: ButtonSize = 'md',
+) {
+  return cn(
+    'inline-flex items-center justify-center rounded-full font-semibold transition-colors transition-shadow duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-[rgb(var(--background))]',
+    variantClasses[variant],
+    sizeClasses[size],
+  )
+}
+
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant
   size?: ButtonSize
@@ -31,12 +42,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         ref={ref}
-        className={cn(
-          'inline-flex items-center justify-center rounded-full font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-[rgb(var(--background))]',
-          variantClasses[variant],
-          sizeClasses[size],
-          className,
-        )}
+        className={cn(getButtonClasses(variant, size), className)}
         {...props}
       />
     )

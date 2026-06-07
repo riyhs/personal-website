@@ -16,3 +16,8 @@
 - [x] PHASE FINAL: Build verification + CONTEXT.md update
 - [x] Replace legacy workflow with Plan -> Build -> Review workflow
 - [x] Workflow migration verified by read-only review
+- [x] Remove duplicate `routerPlugin()` from vite.config.ts — fix `const hot` declaration error
+- [x] Add `notFoundComponent` to root route + create NotFound component
+- [x] Full Web Interface Guidelines audit — 24 findings fixed across 4 tiers
+- [x] Fix `overscroll-behavior-contain` → `overscroll-contain` in ImageModal
+- [x] Update AGENTS.md with new rules (button nesting, opacity tokens, MotionConfig, devtools guard)

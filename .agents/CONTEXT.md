@@ -7,9 +7,9 @@
 ## State
 **Status:** Workflow migration complete — Plan -> Build -> Review docs added
 **Branch:** dev | **Worktree:** personal-website
-**Last completed:** Added `notFoundComponent` to root route and created `NotFound` component — eliminates `notFoundError` warnings when unmatched paths are requested
+**Last completed:** Full Web Interface Guidelines audit — fixed 24 findings across 4 tiers (invalid HTML, accessibility, CLS, consistency, efficiency, typography)
 **In progress:** None
-**Next:** Restart dev server to verify no more notFound warnings; visit /nonexistent to confirm styled 404 renders
+**Next:** Build + run Docker to verify site renders correctly in production
 
 ## Blockers
 None.
@@ -32,6 +32,11 @@ None.
 | 2026-06-01 | Disable TanStack router-plugin code-splitter HMR injection | Installed plugin can emit duplicate `const hot` bindings during dev reference compile for blog route; Vite React HMR still handles updates |
 | 2026-06-07 | Remove duplicate `routerPlugin()` from vite.config.ts | TanStack Start internally installs router-plugin via `tanStackStartRouter()`; extra `routerPlugin()` injected duplicate `const hot` declarations across all routes |
 | 2026-06-07 | Add `notFoundComponent` to root route | TanStack Router warns when unmatched paths trigger `notFoundError` with no component configured; `NotFound` component styled to match site design |
+| 2026-06-07 | Extract `getButtonClasses()` helper | Reuse button visual classes across `<Link>` styled as buttons — eliminates invalid HTML (button inside a) nesting |
+| 2026-06-07 | `<MotionConfig reducedMotion="user">` in RootDocument | Framer Motion globally respects `prefers-reduced-motion` OS setting — blocks transform animations, preserves opacity |
+| 2026-06-07 | Guard TanStack Devtools with `import.meta.env.DEV` | `<TanStackDevtools>` doesn't auto-strip in prod; `<TanStackRouterDevtools>` does. Wrap both to prevent prod bundle bloat |
+| 2026-06-07 | Extract `TwitterIcon` shared component | Eliminate duplicate inline SVG across Header and index.tsx; single source of truth |
+| 2026-06-07 | Standardize opacity tokens: `text-[rgb(var(--foreground))/N]` | CSS-variable-based tokens are themeable; hardcoded `text-white/N` breaks in light mode |
 
 ---
 _Updated: 2026-06-07

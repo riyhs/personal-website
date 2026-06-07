@@ -58,7 +58,13 @@ function AboutPage() {
         >
           <div className="relative overflow-hidden p-4">
             <div className="mx-auto h-48 w-48 rounded-2xl overflow-hidden">
-              <div className="h-full w-full bg-[url('/img/riyaldi-hasan.webp')] bg-cover bg-center" />
+              <img
+                src="/img/riyaldi-hasan.webp"
+                alt="Riyaldi Hasan Setiawan"
+                width={192}
+                height={192}
+                className="h-full w-full object-cover"
+              />
             </div>
           </div>
           <div className="p-6 pt-2">
@@ -68,13 +74,13 @@ function AboutPage() {
             </p>
             <div className="mt-6 space-y-3 text-sm text-white/75">
               <p className="flex items-start justify-center gap-2">
-                <MapPin size={16} className="mt-1.5 shrink-0" /> <span>Based in Sukoharjo, Indonesia</span>
+                <MapPin size={16} className="mt-1.5 shrink-0" aria-hidden="true" /> <span>Based in Sukoharjo, Indonesia</span>
               </p>
               <p className="flex items-start justify-center gap-2">
-                <GraduationCap size={16} className="mt-1.5 shrink-0" /> <span>Informatics, Universitas Sebelas Maret (UNS)</span>
+                <GraduationCap size={16} className="mt-1.5 shrink-0" aria-hidden="true" /> <span>Informatics, Universitas Sebelas Maret (UNS)</span>
               </p>
               <p className="flex items-start justify-center gap-2">
-                <TrendingUp size={16} className="mt-1.5 shrink-0" /> <span>Specializing in Web, Mobile, and Machine Learning</span>
+                <TrendingUp size={16} className="mt-1.5 shrink-0" aria-hidden="true" /> <span>Specializing in Web, Mobile, and Machine Learning</span>
               </p>
             </div>
           </div>
@@ -87,11 +93,11 @@ function AboutPage() {
             transition={{ delay: 0.1, duration: 0.6 }}
             className="space-y-5"
           >
-            <p className="text-sm uppercase tracking-[0.4em] text-white/50">Bio</p>
-            <p className="text-lg text-white/80">
+            <p className="text-sm uppercase tracking-[0.4em] text-[rgb(var(--foreground))/0.5]">Bio</p>
+            <p className="text-lg text-[rgb(var(--foreground))/0.75]">
               I build intelligent applications where algorithms meet real-world utility. My focus lies in Machine Learning, Android Development, and Scalable Web Systems. I thrive on solving hard logic problems.
             </p>
-            <p className="text-lg text-white/70">
+            <p className="text-lg text-[rgb(var(--foreground))/0.75]">
               Beyond writing code, I am deeply invested in education. I have mentored over 25 students in Machine Learning fundamentals and actively contribute to the developer community through teaching and facilitation.
             </p>
           </motion.div>
@@ -101,7 +107,7 @@ function AboutPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.6 }}
           >
-            <p className="text-sm uppercase tracking-[0.4em] text-white/50">Experience</p>
+            <p className="text-sm uppercase tracking-[0.4em] text-[rgb(var(--foreground))/0.5]">Experience</p>
             <div className="mt-6 space-y-8 border-l-2 border-white/10 pl-8">
               {experiences.map((experience) => (
                 <div key={experience.company} className="relative">

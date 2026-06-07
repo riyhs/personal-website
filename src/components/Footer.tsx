@@ -37,7 +37,7 @@ export function Footer() {
           <div className="flex flex-wrap gap-4 text-sm text-[rgb(var(--foreground))]">
             <span className="inline-flex items-center gap-2">
               <Mail size={16} />
-              <a href="mailto:riyaldi.dev@gmail.com" target="_blank">riyaldi.dev@gmail.com</a>
+              <a href="mailto:riyaldi.dev@gmail.com" className="underline-offset-2 hover:underline">riyaldi.dev@gmail.com</a>
             </span>
             <span className="inline-flex items-center gap-2">
               <MapPin size={16} />Sukoharjo, Indonesia

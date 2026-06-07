@@ -47,3 +47,47 @@ Add `notFoundComponent` to `createRootRoute()` in `src/routes/__root.tsx`. Creat
 
 ### Rule
 Always configure `notFoundComponent` on the root route in TanStack Router projects to suppress warnings and provide a styled 404 experience.
+
+## 2026-06-07 Nested <button> inside <a> -> Never wrap Button inside Link
+
+### Problem
+`<Link to="/"><Button>...</Button></Link>` renders `<a><button>...</button></a>` which is invalid HTML — interactive elements must not be nested.
+
+### Fix
+Extract `getButtonClasses()` from `Button` component, then style `<Link>` or `<a>` directly with `cn(getButtonClasses(), className)`. Same visual result, valid HTML.
+
+### Rule
+Never nest `<Button>` inside `<Link>` or `<a>`. Either style the `<Link>`/`<a>` directly as a button, or use `<button>` with `router.navigate()`.
+
+## 2026-06-07 Framer Motion reduced motion -> Use MotionConfig at root level
+
+### Problem
+9+ `motion.div` instances across pages had no `prefers-reduced-motion` guard. Each would need `useReducedMotion()` hook individually.
+
+### Fix
+Wrap app children in `<MotionConfig reducedMotion="user">` in `RootDocument`. Framer Motion blocks transform animations (x, y, scale, rotate) but preserves opacity animations. Single config, all children.
+
+### Rule
+Always add `<MotionConfig reducedMotion="user">` at the document root in Framer Motion projects. Never add per-component reduced-motion guards — use the global config.
+
+## 2026-06-07 TanStack Devtools in production -> Guard with import.meta.env.DEV
+
+### Problem
+`<TanStackDevtools>` (general devtools wrapper) doesn't auto-strip in production. `<TanStackRouterDevtools>` does. Without guard, devtools bundle ships to prod.
+
+### Fix
+Wrap `<TanStackDevtools>` in `{import.meta.env.DEV && (...)}` condition in `__root.tsx`.
+
+### Rule
+Always guard `<TanStackDevtools>` with `import.meta.env.DEV`. `<TanStackRouterDevtools>` auto-strips — no guard needed for it.
+
+## 2026-06-07 CSS variable opacity tokens -> Always use `text-[rgb(var(--foreground))/N]` not `text-white/N`
+
+### Problem
+Hardcoded `text-white/70` breaks in light mode — white text on white background. CSS-variable-based `text-[rgb(var(--foreground))/0.7]` adapts to theme.
+
+### Fix
+Replace all `text-white/N` with `text-[rgb(var(--foreground))/N]` across pages. Standardize section labels to 0.5, body text to 0.75.
+
+### Rule
+Never use `text-white/N` for theme-aware text. Use `text-[rgb(var(--foreground))/N]`. Reserve `text-white` only for dark-mode-only contexts like gradient hero text.

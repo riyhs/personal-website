@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
 import { TanStackDevtools } from "@tanstack/react-devtools";
+import { MotionConfig } from "framer-motion";
 import { type ReactNode } from "react";
 
 import Header from "../components/Header";
@@ -67,6 +68,8 @@ export const Route = createRootRoute({
       { rel: "apple-touch-icon", href: "/logo192.png" },
       { rel: "manifest", href: "/manifest.json" },
       { rel: "canonical", href: "https://riyaldi.dev" },
+      { rel: "preconnect", href: "https://github.com" },
+      { rel: "preconnect", href: "https://www.linkedin.com" },
     ],
   }),
 
@@ -95,18 +98,22 @@ function RootDocument({ children }: { children: ReactNode }) {
       </head>
       <body suppressHydrationWarning>
         <ScriptOnce>{`(function(){try{var t=localStorage.getItem('riyaldi.theme')||'dark';var r=t==='auto'?(matchMedia('(prefers-color-scheme:light)').matches?'light':'dark'):t;document.documentElement.classList.add(r);document.documentElement.dataset.theme=r;document.documentElement.style.colorScheme=r}catch(e){}})()`}</ScriptOnce>
-        <ThemeProvider>{children}</ThemeProvider>
-        <TanStackDevtools
-          config={{
-            position: "bottom-right",
-          }}
-          plugins={[
-            {
-              name: "Tanstack Router",
-              render: <TanStackRouterDevtoolsPanel />,
-            },
-          ]}
-        />
+        <ThemeProvider>
+          <MotionConfig reducedMotion="user">{children}</MotionConfig>
+        </ThemeProvider>
+        {import.meta.env.DEV && (
+          <TanStackDevtools
+            config={{
+              position: "bottom-right",
+            }}
+            plugins={[
+              {
+                name: "Tanstack Router",
+                render: <TanStackRouterDevtoolsPanel />,
+              },
+            ]}
+          />
+        )}
         <Scripts />
       </body>
     </html>

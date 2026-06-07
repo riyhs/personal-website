@@ -4,7 +4,9 @@ import { ArrowUpRight, Github, Linkedin, Zap } from "lucide-react";
 import type { ReactNode } from "react";
 import { useState } from "react";
 
-import { Button } from "../components/ui/button";
+import { getButtonClasses } from "../components/ui/button";
+import { TwitterIcon } from "../components/ui/TwitterIcon";
+import { cn } from "../lib/utils";
 import { Badge } from "../components/ui/badge";
 import {
   Card,
@@ -192,30 +194,34 @@ function HomePage() {
                 transition={{ delay: 0.1, duration: 0.6 }}
                 className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:mt-10 sm:gap-4"
               >
-                <Link to="/projects">
-                  <Button className="rounded-full px-6 text-sm sm:px-8 sm:text-base">
-                    View Selected Work
-                  </Button>
+                <Link
+                  to="/projects"
+                  className={cn(
+                    getButtonClasses(),
+                    "px-6 text-sm sm:px-8 sm:text-base",
+                  )}
+                >
+                  View Selected Work
                 </Link>
                 <a
                   href="/docs/Riyaldi_Hasan_Setiawan_CV.pdf"
                   target="_blank"
                   rel="noreferrer"
+                  className={cn(
+                    getButtonClasses("outline"),
+                    "border-white/20 px-6 text-sm text-white/80 hover:bg-white/10 sm:px-8 sm:text-base",
+                  )}
                 >
-                  <Button
-                    variant="outline"
-                    className="rounded-full border-white/20 px-6 text-sm text-white/80 hover:bg-white/10 sm:px-8 sm:text-base"
-                  >
-                    Download CV
-                  </Button>
+                  Download CV
                 </a>
-                <Link to="/about">
-                  <Button
-                    variant="outline"
-                    className="rounded-full border-white/20 px-6 text-sm text-white/80 hover:bg-white/10 sm:px-8 sm:text-base"
-                  >
-                    About Me
-                  </Button>
+                <Link
+                  to="/about"
+                  className={cn(
+                    getButtonClasses("outline"),
+                    "border-white/20 px-6 text-sm text-white/80 hover:bg-white/10 sm:px-8 sm:text-base",
+                  )}
+                >
+                  About Me
                 </Link>
               </motion.div>
 
@@ -232,8 +238,7 @@ function HomePage() {
                   className="text-white/60 transition-colors hover:text-white"
                   aria-label="GitHub"
                 >
-                  <Github size={20} className="sm:hidden" />
-                  <Github size={24} className="hidden sm:block" />
+                  <Github className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />
                 </a>
                 <a
                   href="https://twitter.com/riyhs_"
@@ -242,24 +247,7 @@ function HomePage() {
                   className="text-white/60 transition-colors hover:text-white"
                   aria-label="Twitter"
                 >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="sm:hidden"
-                  >
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                  </svg>
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="hidden sm:block"
-                  >
-                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                  </svg>
+                  <TwitterIcon className="h-5 w-5 sm:h-6 sm:w-6" />
                 </a>
                 <a
                   href="https://www.linkedin.com/in/riyaldi"
@@ -268,8 +256,7 @@ function HomePage() {
                   className="text-white/60 transition-colors hover:text-white"
                   aria-label="LinkedIn"
                 >
-                  <Linkedin size={20} className="sm:hidden" />
-                  <Linkedin size={24} className="hidden sm:block" />
+                  <Linkedin className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />
                 </a>
               </motion.div>
             </div>
@@ -284,13 +271,14 @@ function HomePage() {
               </p>
               <h2 className="mt-2 text-golden-xl">Featured Projects</h2>
             </div>
-            <Link to="/projects" className="w-full md:w-auto">
-              <Button
-                variant="outline"
-                className="w-full rounded-full border-white/20 px-6 text-sm text-white/80 hover:bg-white/10 sm:px-8 sm:text-base md:w-auto"
-              >
-                View all work
-              </Button>
+            <Link
+              to="/projects"
+              className={cn(
+                getButtonClasses("outline"),
+                "w-full border-white/20 px-6 text-sm text-white/80 hover:bg-white/10 sm:px-8 sm:text-base md:w-auto",
+              )}
+            >
+              View all work
             </Link>
           </div>
           <div className="mt-10 grid gap-8 md:grid-cols-3">
@@ -304,6 +292,8 @@ function HomePage() {
                     <img
                       src={project.thumbnail}
                       alt={project.title}
+                      width={640}
+                      height={360}
                       className="aspect-video w-full rounded-2xl object-cover"
                       loading="lazy"
                     />

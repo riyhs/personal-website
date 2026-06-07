@@ -24,7 +24,7 @@ export function ImageModal({ isOpen, src, alt, onClose }: ImageModalProps) {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center p-4 overscroll-contain"
             onClick={onClose}
           >
             <div

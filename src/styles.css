@@ -274,11 +274,13 @@
   .text-golden-lg {
     font-size: var(--text-lg);
     line-height: 1.2;
+    text-wrap: balance;
   }
 
   .text-golden-xl {
     font-size: var(--text-xl);
     line-height: 1.15;
+    text-wrap: balance;
   }
 
   .text-hero {
