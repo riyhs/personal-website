@@ -5,11 +5,11 @@
 **Name:** personal-website | **Stack:** TanStack Start + React 19 + Tailwind v4 | **Repo:** riyaldi.dev
 
 ## State
-**Status:** Workflow migration complete — Plan -> Build -> Review docs added
+**Status:** DESIGN.md added — Technical Editorial / Algorithmic Craft direction defined
 **Branch:** dev | **Worktree:** personal-website
-**Last completed:** Full Web Interface Guidelines audit — fixed 24 findings across 4 tiers (invalid HTML, accessibility, CLS, consistency, efficiency, typography)
+**Last completed:** Created DESIGN.md with current design audit, anti-AI-slop rules, typography/layout direction, about-page redesign plan, and Web Interface Guidelines backlog
 **In progress:** None
-**Next:** Build + run Docker to verify site renders correctly in production
+**Next:** Implement Phase 1 design foundations from DESIGN.md, then rebuild About page editorial layout
 
 ## Blockers
 None.
@@ -37,6 +37,7 @@ None.
 | 2026-06-07 | Guard TanStack Devtools with `import.meta.env.DEV` | `<TanStackDevtools>` doesn't auto-strip in prod; `<TanStackRouterDevtools>` does. Wrap both to prevent prod bundle bloat |
 | 2026-06-07 | Extract `TwitterIcon` shared component | Eliminate duplicate inline SVG across Header and index.tsx; single source of truth |
 | 2026-06-07 | Standardize opacity tokens: `text-[rgb(var(--foreground))/N]` | CSS-variable-based tokens are themeable; hardcoded `text-white/N` breaks in light mode |
+| 2026-06-07 | Adopt Technical Editorial / Algorithmic Craft design direction | Avoid generic AI-slop portfolio patterns; prioritize editorial typography, strict grid, proof-driven layout, and one restrained technical motion motif |
 
 ---
 _Updated: 2026-06-07
