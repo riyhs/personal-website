@@ -10,11 +10,34 @@ import { listPosts } from '../lib/posts'
 export const Route = createFileRoute('/blog')({
   head: () => ({
     meta: [
-      { title: 'Blog - Riyaldi' },
-      { name: 'description', content: 'Articles and notes on software development, machine learning, and technology by Riyaldi.' },
-      { property: 'og:title', content: 'Blog - Riyaldi' },
-      { property: 'og:description', content: 'Articles and notes on software development, machine learning, and technology.' },
+      { title: 'Blog - Riyaldi Hasan Setiawan' },
+      {
+        name: 'description',
+        content:
+          'Articles and notes on software development, machine learning, and technology by Riyaldi Hasan Setiawan (Riyaldi).',
+      },
+      {
+        name: 'keywords',
+        content:
+          'Riyaldi Hasan blog, Riyaldi blog, software engineering blog, machine learning articles, technology notes',
+      },
+      { property: 'og:title', content: 'Blog - Riyaldi Hasan Setiawan' },
+      {
+        property: 'og:description',
+        content:
+          'Articles and notes on software development, machine learning, and technology by Riyaldi Hasan Setiawan.',
+      },
       { property: 'og:url', content: 'https://riyaldi.dev/blog' },
+      { property: 'og:type', content: 'website' },
+      { property: 'og:image', content: 'https://riyaldi.dev/img/website.webp' },
+      { property: 'og:image:alt', content: 'Blog - Riyaldi Hasan Setiawan' },
+      { name: 'twitter:title', content: 'Blog - Riyaldi Hasan Setiawan' },
+      {
+        name: 'twitter:description',
+        content:
+          'Articles and notes on software development, machine learning, and technology by Riyaldi Hasan Setiawan.',
+      },
+      { name: 'twitter:image', content: 'https://riyaldi.dev/img/website.webp' },
     ],
     links: [
       {

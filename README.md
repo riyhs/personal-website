@@ -70,17 +70,17 @@ Starts the dev server on `http://localhost:3000`.
 
 ## Scripts
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Dev server on port 3000 (SSR via Nitro) |
-| `pnpm build` | Production build + generate sitemap |
-| `pnpm build:only` | Vite build only (no sitemap) |
-| `pnpm sitemap` | Generate sitemap only |
-| `pnpm serve` | Preview production build |
-| `pnpm test` | Run Vitest tests |
-| `pnpm vitest run <file>` | Run single test file |
-| `pnpm vitest --watch` | Watch mode |
-| `pnpm tsc --noEmit` | Type-check only |
+| Command                  | Description                             |
+| ------------------------ | --------------------------------------- |
+| `pnpm dev`               | Dev server on port 3000 (SSR via Nitro) |
+| `pnpm build`             | Production build + generate sitemap     |
+| `pnpm build:only`        | Vite build only (no sitemap)            |
+| `pnpm sitemap`           | Generate sitemap only                   |
+| `pnpm serve`             | Preview production build                |
+| `pnpm test`              | Run Vitest tests                        |
+| `pnpm vitest run <file>` | Run single test file                    |
+| `pnpm vitest --watch`    | Watch mode                              |
+| `pnpm tsc --noEmit`      | Type-check only                         |
 
 ## Testing
 
@@ -135,6 +135,6 @@ Built image served via `.output/server/index.mjs` with health checks on port 300
 `@/*` maps to `./src/*` — use for internal imports:
 
 ```tsx
-import { cn } from '@/lib/utils'
-import { Header } from '@/components/Header'
+import { cn } from "@/lib/utils";
+import { Header } from "@/components/Header";
 ```

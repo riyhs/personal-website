@@ -23,24 +23,40 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       {
-        title: "Riyaldi - Software Engineer",
+        title:
+          "Riyaldi Hasan - Software Engineer & Personal Portfolio (riyaldi.dev)",
       },
       {
         name: "description",
         content:
-          "Personal portfolio of Riyaldi Hasan Setiawan. Computer Science undergraduate specializing in Android Development, Fullstack Development, and Machine Learning.",
+          "Riyaldi (Riyaldi Hasan Setiawan) — Software Engineer and Computer Science undergraduate at Universitas Sebelas Maret. Personal portfolio of Riyaldi Hasan featuring projects, blog, and professional journey in web, Android, and machine learning.",
+      },
+      {
+        name: "keywords",
+        content:
+          "Riyaldi, Riyaldi Hasan, Riyaldi Hasan Setiawan, riyhs, riyaldi.dev, Software Engineer, Personal Portfolio, Web Developer, Fullstack Developer, Android Developer, Machine Learning Engineer, Universitas Sebelas Maret, Sukoharjo",
       },
       {
         property: "og:title",
-        content: "Riyaldi - Software Engineer",
+        content:
+          "Riyaldi Hasan - Software Engineer & Personal Portfolio (riyaldi.dev)",
       },
       {
         property: "og:description",
         content:
-          "Personal portfolio of Riyaldi. Explore my projects, blog, and professional journey.",
+          "Riyaldi (Riyaldi Hasan Setiawan) — Software Engineer and CS undergraduate. Personal portfolio of Riyaldi Hasan based in Sukoharjo, Indonesia.",
       },
       { property: "og:url", content: "https://riyaldi.dev/" },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "https://riyaldi.dev/img/website.webp" },
+      { property: "og:image:alt", content: "Riyaldi Hasan Setiawan" },
+      { name: "twitter:title", content: "Riyaldi Hasan - Software Engineer" },
+      {
+        name: "twitter:description",
+        content:
+          "Riyaldi (Riyaldi Hasan Setiawan) — Software Engineer and CS undergraduate. Personal portfolio of Riyaldi Hasan.",
+      },
+      { name: "twitter:image", content: "https://riyaldi.dev/img/website.webp" },
     ],
     links: [
       {
@@ -56,26 +72,54 @@ export const Route = createFileRoute("/")({
           "@graph": [
             {
               "@type": "WebSite",
-              name: "Riyaldi - Personal Website",
+              name: "Riyaldi Hasan - Personal Website",
+              alternateName: [
+                "Riyaldi",
+                "Riyaldi Hasan",
+                "Riyaldi Hasan Setiawan",
+                "riyhs",
+              ],
               url: "https://riyaldi.dev",
               description:
-                "Personal portfolio and website of Riyaldi Hasan Setiawan.",
+                "Personal portfolio and website of Riyaldi Hasan Setiawan, Software Engineer.",
+              inLanguage: "en-US",
+              publisher: {
+                "@type": "Person",
+                name: "Riyaldi Hasan Setiawan",
+                url: "https://riyaldi.dev",
+              },
             },
             {
               "@type": "Person",
+              "@id": "https://riyaldi.dev/#person",
               name: "Riyaldi Hasan Setiawan",
+              alternateName: ["Riyaldi", "Riyaldi Hasan", "riyhs"],
               url: "https://riyaldi.dev",
               jobTitle: "Software Engineer",
+              description:
+                "Riyaldi Hasan Setiawan is a Software Engineer and Computer Science undergraduate at Universitas Sebelas Maret, specializing in Web, Android, and Machine Learning.",
               sameAs: [
                 "https://github.com/riyhs",
                 "https://twitter.com/riyhs_",
                 "https://www.linkedin.com/in/riyaldi",
               ],
               image: "https://riyaldi.dev/img/riyaldi-hasan.webp",
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: "Sukoharjo",
+                addressCountry: "ID",
+              },
               alumniOf: {
                 "@type": "CollegeOrUniversity",
                 name: "Universitas Sebelas Maret",
               },
+              knowsAbout: [
+                "Software Engineering",
+                "Web Development",
+                "Android Development",
+                "Fullstack Development",
+                "Machine Learning",
+              ],
             },
           ],
         }),

@@ -6,6 +6,7 @@
 
 ## DONE
 
+- [x] Fix TanStack Router dev code-splitter duplicate `hot` declaration on blog detail route
 - [x] Read legacy workflow files, understand codebase
 - [x] Update AGENTS.md with code style guidelines
 - [x] Write old project roadmap

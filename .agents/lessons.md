@@ -19,3 +19,31 @@ Use regular side-effect CSS imports, for example `import '../styles.css'`, and l
 
 ### Rule
 Never use `?url` CSS imports in TanStack Start SSR routes. Use side-effect imports and framework manifest injection.
+
+## 2026-06-07 Duplicate `const hot` declaration -> Never install routerPlugin() alongside tanstackStart()
+
+### Problem
+`[plugin:tanstack-router:code-splitter:compile-reference-file] Duplicate declaration "hot"` in dev mode on route files. The error persisted despite setting `codeSplittingOptions: { addHmr: false }`.
+
+### Root Cause
+TanStack Start internally installs router-plugin code-splitters via `tanStackStartRouter()` in `start-plugin-core`. These create separate code-splitter instances for client (`addHmr: true`) and server (`addHmr: false`) environments. The user's top-level `routerPlugin()` in `vite.config.ts` created a second HMR injector that also adds `const hot = import.meta.hot`. Both inject into the same route files, causing duplicate declarations.
+
+### Fix
+Remove the top-level `routerPlugin()` from `vite.config.ts`. TanStack Start's `tanstackStart()` plugin manages its own router plugins internally.
+
+### Rule
+Never install `routerPlugin()` separately alongside `tanstackStart()`. TanStack Start handles router code-splitting, generation, and HMR via its own internal plugin instances.
+
+## 2026-06-07 notFoundError warnings -> Always configure notFoundComponent on root route
+
+### Problem
+`Warning: A notFoundError was encountered on the route with ID "__root__", but a notFoundComponent option was not configured, nor was a router level defaultNotFoundComponent configured.` appears multiple times during dev when any unmatched path is requested.
+
+### Root Cause
+TanStack Router v1 warns when a `notFoundError` is thrown but no route in the tree has a `notFoundComponent` configured. The router checks up the tree to the root route (`__root__`) looking for one and warns if none is found.
+
+### Fix
+Add `notFoundComponent` to `createRootRoute()` in `src/routes/__root.tsx`. Create a `NotFound` component matching the site's design (motion transitions, golden headings, "Back to Home" link).
+
+### Rule
+Always configure `notFoundComponent` on the root route in TanStack Router projects to suppress warnings and provide a styled 404 experience.

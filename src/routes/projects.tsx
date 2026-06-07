@@ -9,13 +9,36 @@ import { ImageModal } from '../components/ImageModal'
 import { spotlightProjects } from '../data/projects'
 
 export const Route = createFileRoute('/projects')({
-  head: ({}) => ({
+  head: () => ({
     meta: [
-      { title: 'Projects - Riyaldi' },
-      { name: 'description', content: 'Selected projects by Riyaldi including P!NGFEST platform, Bangkit ML Capstone, and NutriVision Android app.' },
-      { property: 'og:title', content: 'Projects - Riyaldi' },
-      { property: 'og:description', content: 'Selected projects by Riyaldi in web development, machine learning, and Android.' },
+      { title: 'Projects by Riyaldi Hasan Setiawan' },
+      {
+        name: 'description',
+        content:
+          'Selected projects by Riyaldi Hasan Setiawan (Riyaldi) including P!NGFEST platform, Bangkit ML Capstone, and NutriVision Android app.',
+      },
+      {
+        name: 'keywords',
+        content:
+          'Riyaldi Hasan projects, Riyaldi projects, P!NGFEST, Bangkit, NutriVision, Android, Machine Learning, Web Development',
+      },
+      { property: 'og:title', content: 'Projects by Riyaldi Hasan Setiawan' },
+      {
+        property: 'og:description',
+        content:
+          'Selected projects by Riyaldi Hasan Setiawan in web development, machine learning, and Android.',
+      },
       { property: 'og:url', content: 'https://riyaldi.dev/projects' },
+      { property: 'og:type', content: 'website' },
+      { property: 'og:image', content: 'https://riyaldi.dev/img/website.webp' },
+      { property: 'og:image:alt', content: 'Projects by Riyaldi Hasan Setiawan' },
+      { name: 'twitter:title', content: 'Projects by Riyaldi Hasan Setiawan' },
+      {
+        name: 'twitter:description',
+        content:
+          'Selected projects by Riyaldi Hasan Setiawan in web, ML, and Android.',
+      },
+      { name: 'twitter:image', content: 'https://riyaldi.dev/img/website.webp' },
     ],
     links: [
       {

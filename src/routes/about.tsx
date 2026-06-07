@@ -7,11 +7,34 @@ import { experiences } from '../data/experience'
 export const Route = createFileRoute('/about')({
   head: () => ({
     meta: [
-      { title: 'About - Riyaldi Hasan Setiawan' },
-      { name: 'description', content: 'Learn about Riyaldi Hasan Setiawan - Computer Science student at Universitas Sebelas Maret, Machine Learning Engineer, and Fullstack Developer based in Sukoharjo, Indonesia.' },
-      { property: 'og:title', content: 'About - Riyaldi Hasan Setiawan' },
-      { property: 'og:description', content: 'Learn about Riyaldi - CS student, ML Engineer, and Fullstack Developer.' },
+      { title: 'About Riyaldi Hasan Setiawan - Software Engineer' },
+      {
+        name: 'description',
+        content:
+          'About Riyaldi Hasan Setiawan (Riyaldi) — Computer Science student at Universitas Sebelas Maret, Machine Learning Engineer, and Fullstack Developer based in Sukoharjo, Indonesia.',
+      },
+      {
+        name: 'keywords',
+        content:
+          'About Riyaldi, Riyaldi Hasan, Riyaldi Hasan Setiawan, Software Engineer, Machine Learning Engineer, Fullstack Developer, Universitas Sebelas Maret, Sukoharjo',
+      },
+      { property: 'og:title', content: 'About Riyaldi Hasan Setiawan' },
+      {
+        property: 'og:description',
+        content:
+          'About Riyaldi Hasan Setiawan (Riyaldi) — CS student, ML Engineer, and Fullstack Developer.',
+      },
       { property: 'og:url', content: 'https://riyaldi.dev/about' },
+      { property: 'og:type', content: 'profile' },
+      { property: 'og:image', content: 'https://riyaldi.dev/img/riyaldi-hasan.webp' },
+      { property: 'og:image:alt', content: 'Riyaldi Hasan Setiawan' },
+      { name: 'twitter:title', content: 'About Riyaldi Hasan Setiawan' },
+      {
+        name: 'twitter:description',
+        content:
+          'About Riyaldi Hasan Setiawan — CS student, ML Engineer, and Fullstack Developer.',
+      },
+      { name: 'twitter:image', content: 'https://riyaldi.dev/img/riyaldi-hasan.webp' },
     ],
     links: [
       {

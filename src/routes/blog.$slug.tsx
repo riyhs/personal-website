@@ -7,45 +7,71 @@ import { formatLongDate } from '../lib/date'
 import { findPostBySlug } from '../lib/posts'
 
 export const Route = createFileRoute('/blog/$slug')({
-  head: ({ loaderData, params }) => ({
-    meta: [
-      { title: `${loaderData.frontmatter.title} - Riyaldi's Blog` },
-      { name: 'description', content: loaderData.frontmatter.excerpt },
-      { property: 'og:title', content: loaderData.frontmatter.title },
-      { property: 'og:description', content: loaderData.frontmatter.excerpt },
-      { property: 'og:url', content: `https://riyaldi.dev/blog/${params.slug as string}` },
-      { property: 'og:type', content: 'article' },
-      { name: 'twitter:title', content: loaderData.frontmatter.title },
-      { name: 'twitter:description', content: loaderData.frontmatter.excerpt },
-    ],
-    links: [
-      {
-        rel: 'canonical',
-        href: `https://riyaldi.dev/blog/${params.slug as string}`,
-      },
-    ],
-    scripts: [
-      {
-        type: 'application/ld+json',
-        children: JSON.stringify({
-          '@context': 'https://schema.org',
-          '@type': 'BlogPosting',
-          headline: loaderData.frontmatter.title,
-          description: loaderData.frontmatter.excerpt,
-          datePublished: loaderData.frontmatter.date,
-          author: {
-            '@type': 'Person',
-            name: 'Riyaldi Hasan Setiawan',
-            url: 'https://riyaldi.dev',
-          },
-          publisher: {
-            '@type': 'Person',
-            name: 'Riyaldi Hasan Setiawan',
-          },
-        }),
-      },
-    ],
-  }),
+  codeSplitGroupings: [['loader', 'component']],
+  head: ({ loaderData, params }) => {
+    const data = loaderData as unknown as {
+      slug: string
+      frontmatter: {
+        title: string
+        excerpt: string
+        date: string
+        tags: string[]
+      }
+    }
+    return {
+      meta: [
+        { title: `${data.frontmatter.title} - Riyaldi Hasan Setiawan's Blog` },
+        { name: 'description', content: data.frontmatter.excerpt },
+        {
+          name: 'keywords',
+          content: `Riyaldi Hasan blog, Riyaldi, ${data.frontmatter.tags.join(', ')}`,
+        },
+        { property: 'og:title', content: data.frontmatter.title },
+        { property: 'og:description', content: data.frontmatter.excerpt },
+        { property: 'og:url', content: `https://riyaldi.dev/blog/${params.slug as string}` },
+        { property: 'og:type', content: 'article' },
+        { property: 'og:image', content: 'https://riyaldi.dev/img/website.webp' },
+        { property: 'og:image:alt', content: data.frontmatter.title },
+        { name: 'twitter:title', content: data.frontmatter.title },
+        { name: 'twitter:description', content: data.frontmatter.excerpt },
+        { name: 'twitter:image', content: 'https://riyaldi.dev/img/website.webp' },
+      ],
+      links: [
+        {
+          rel: 'canonical',
+          href: `https://riyaldi.dev/blog/${params.slug as string}`,
+        },
+      ],
+      scripts: [
+        {
+          type: 'application/ld+json',
+          children: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BlogPosting',
+            headline: data.frontmatter.title,
+            description: data.frontmatter.excerpt,
+            datePublished: data.frontmatter.date,
+            keywords: data.frontmatter.tags.join(', '),
+            author: {
+              '@type': 'Person',
+              name: 'Riyaldi Hasan Setiawan',
+              alternateName: ['Riyaldi', 'Riyaldi Hasan', 'riyhs'],
+              url: 'https://riyaldi.dev',
+            },
+            publisher: {
+              '@type': 'Person',
+              name: 'Riyaldi Hasan Setiawan',
+              url: 'https://riyaldi.dev',
+            },
+            mainEntityOfPage: {
+              '@type': 'WebPage',
+              '@id': `https://riyaldi.dev/blog/${params.slug as string}`,
+            },
+          }),
+        },
+      ],
+    }
+  },
   component: BlogDetailPage,
   loader: ({ params }) => {
     const post = findPostBySlug(params.slug as string)
@@ -60,7 +86,7 @@ export const Route = createFileRoute('/blog/$slug')({
 })
 
 function BlogDetailPage() {
-  const { slug } = Route.useLoaderData()
+  const { slug } = Route.useLoaderData() as unknown as { slug: string }
   const post = findPostBySlug(slug)
 
   if (!post) {
