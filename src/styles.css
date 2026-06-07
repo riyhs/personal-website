@@ -2,8 +2,9 @@
 @import "@fontsource/plus-jakarta-sans/latin.css";
 
 @theme {
-  --font-sans: "Plus Jakarta Sans", "Inter", "Segoe UI", system-ui,
-    -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans:
+    "Plus Jakarta Sans", "Inter", "Segoe UI", system-ui, -apple-system,
+    BlinkMacSystemFont, sans-serif;
 
   --text-md: 1rem;
   --text-lg: 1.618rem;
@@ -22,7 +23,7 @@
 :root {
   color-scheme: dark;
   font-size: 16px;
-  --background: 9 9 11;
+  --background: 15 12 18;
   --foreground: 250 250 250;
   --card: 15 15 18;
   --card-foreground: 244 244 245;
@@ -41,10 +42,17 @@
   --border: 39 39 42;
   --input: 63 63 70;
   --ring: 250 250 250;
-  --glow-soft: radial-gradient(circle at 30% 20%,
+  --glow-soft:
+    radial-gradient(
+      circle at 30% 20%,
       rgba(250, 250, 250, 0.14),
-      transparent 55%),
-    radial-gradient(circle at 80% 0%, rgba(161, 161, 170, 0.18), transparent 45%);
+      transparent 55%
+    ),
+    radial-gradient(
+      circle at 80% 0%,
+      rgba(161, 161, 170, 0.18),
+      transparent 45%
+    );
 }
 
 [data-theme="light"] {
@@ -71,7 +79,6 @@
 }
 
 @layer base {
-
   *,
   *::before,
   *::after {
@@ -93,7 +100,9 @@
     color: rgb(var(--foreground));
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    transition: background-color 300ms ease, color 300ms ease;
+    transition:
+      background-color 300ms ease,
+      color 300ms ease;
     background-image: var(--glow-soft);
     background-attachment: fixed;
   }
@@ -191,7 +200,7 @@
     background: transparent;
     padding: 0;
     border-radius: 0;
-    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
     font-size: 0.9rem;
     line-height: 1.5;
     color: #c9d1d9;
@@ -228,7 +237,7 @@
     margin: 2rem 0;
   }
 
-  .mdx-content blockquote>p {
+  .mdx-content blockquote > p {
     margin: 0.5rem 0;
   }
 
@@ -257,10 +266,12 @@
     inset: -1px;
     border-radius: inherit;
     z-index: -1;
-    background: radial-gradient(circle,
-        rgba(14, 106, 253, 0.15),
-        rgba(14, 106, 253, 0.05) 100%,
-        transparent 100%);
+    background: radial-gradient(
+      circle,
+      rgba(14, 106, 253, 0.15),
+      rgba(14, 106, 253, 0.05) 100%,
+      transparent 100%
+    );
     opacity: 0;
     transition: opacity 300ms ease;
   }

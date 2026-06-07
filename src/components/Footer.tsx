@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { ArrowUpRight, Mail, MapPin } from 'lucide-react'
+import { Mail, MapPin } from 'lucide-react'
 
 const footerLinks = [
   {
@@ -55,13 +55,9 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     to={link.href}
-                    className="group inline-flex items-center gap-2 text-sm text-[rgb(var(--foreground))/0.75] transition-colors hover:text-[rgb(var(--foreground))]"
+                    className="inline-flex items-center text-sm text-[rgb(var(--foreground))/0.75] transition-colors hover:text-[rgb(var(--foreground))]"
                   >
                     {link.label}
-                    <ArrowUpRight
-                      size={14}
-                      className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1"
-                    />
                   </Link>
                 </li>
               ))}
