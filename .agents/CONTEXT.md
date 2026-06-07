@@ -5,11 +5,11 @@
 **Name:** personal-website | **Stack:** TanStack Start + React 19 + Tailwind v4 | **Repo:** riyaldi.dev
 
 ## State
-**Status:** DESIGN.md added — Technical Editorial / Algorithmic Craft direction defined
+**Status:** DESIGN.md rewritten as current-state inventory for existing site
 **Branch:** dev | **Worktree:** personal-website
-**Last completed:** Created DESIGN.md with current design audit, anti-AI-slop rules, typography/layout direction, about-page redesign plan, and Web Interface Guidelines backlog
+**Last completed:** Replaced DESIGN.md with factual current-state reference of existing site
 **In progress:** None
-**Next:** Implement Phase 1 design foundations from DESIGN.md, then rebuild About page editorial layout
+**Next:** None
 
 ## Blockers
 None.
@@ -37,7 +37,7 @@ None.
 | 2026-06-07 | Guard TanStack Devtools with `import.meta.env.DEV` | `<TanStackDevtools>` doesn't auto-strip in prod; `<TanStackRouterDevtools>` does. Wrap both to prevent prod bundle bloat |
 | 2026-06-07 | Extract `TwitterIcon` shared component | Eliminate duplicate inline SVG across Header and index.tsx; single source of truth |
 | 2026-06-07 | Standardize opacity tokens: `text-[rgb(var(--foreground))/N]` | CSS-variable-based tokens are themeable; hardcoded `text-white/N` breaks in light mode |
-| 2026-06-07 | Adopt Technical Editorial / Algorithmic Craft design direction | Avoid generic AI-slop portfolio patterns; prioritize editorial typography, strict grid, proof-driven layout, and one restrained technical motion motif |
+| 2026-06-07 | Reframe DESIGN.md as current-state inventory | User asked for no suggestions; keep design doc factual and reflective of existing codebase |
 
 ---
 _Updated: 2026-06-07
