@@ -96,7 +96,7 @@
   }
 
   body {
-    min-height: 100vh;
+    min-height: 100svh;
     margin: 0;
     font-family: var(--font-sans);
     background-color: rgb(var(--background));
@@ -281,6 +281,21 @@
 
   .glow-card:hover::after {
     opacity: 1;
+  }
+}
+
+@supports (-moz-appearance: none) {
+  @media (pointer: coarse) {
+    .glass-panel {
+      backdrop-filter: none;
+      background-color: rgb(var(--background) / 0.85);
+    }
+
+    header.sticky[class*="backdrop-blur"],
+    header div[class*="backdrop-blur"][class*="fixed"] {
+      backdrop-filter: none;
+      background-color: rgb(var(--background) / 0.85);
+    }
   }
 }
 

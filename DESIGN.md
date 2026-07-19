@@ -66,9 +66,23 @@
 ## Motion
 
 - Root wraps children in `MotionConfig reducedMotion="user"`.
-- Pages use `framer-motion` entrance animations with opacity and `y` offset.
-- Header mobile menu uses `AnimatePresence` and `motion.div`.
-- Image modal uses `AnimatePresence` and scale/opacity transitions.
+- Root `RootComponent` wraps `<Outlet />` in `AnimatePresence mode="wait"` with a 150ms fade transition keyed on pathname for route-level page transitions.
+- Shared animation tokens in `src/styles.css` `@theme`:
+  - `--ease-out: cubic-bezier(0.23, 1, 0.32, 1)` — strong ease-out for UI entrances.
+  - `--ease-in-out: cubic-bezier(0.77, 0, 0.175, 1)` — strong ease-in-out for on-screen movement.
+- Shared animation configs in `src/lib/animation.ts`:
+  - `fadeUp` — `{ opacity: 0, y: 32 }` → `{ opacity: 1, y: 0 }`, 600ms `EASE_OUT`.
+  - `fadeOnly` — `{ opacity: 0 }` → `{ opacity: 1 }`, 600ms `EASE_OUT`.
+  - `modalContent` — `{ opacity: 0, scale: 0.93 }` → `{ opacity: 1, scale: 1 }`, 250ms `EASE_OUT`.
+  - `stagger(index, baseMs)` — returns `{ delay, duration: 0.5, ease: EASE_OUT }` for staggered list entrances.
+  - `EASE_OUT` / `EASE_IN_OUT` — exported cubic-bezier arrays for Framer Motion props.
+- All page-level `motion.div` entrances use `fadeUp`/`fadeOnly`/`stagger` from `animation.ts` — no inline easing values.
+- Header mobile menu uses `AnimatePresence` with `clip-path: inset()` reveal (compositor-only, no layout-thrashing `height` animation), 200ms `EASE_OUT`.
+- Mobile menu link block staggers in with `opacity` + `y: -20`, 300ms `EASE_OUT`.
+- Image modal uses `fadeOnly` for backdrop and `modalContent` for the image container — `scale(0.93)` instead of `scale(0.9)` for physicality.
+- Project card overlay buttons use `transition-opacity transition-transform` (never `transition-all`).
+- `Button` base class includes `transition-transform active:scale-[0.97]` for press feedback.
+- Blog post list staggers each card at 60ms intervals.
 
 ## Components
 
@@ -132,6 +146,7 @@
 ## Source Files
 
 - `src/styles.css`
+- `src/lib/animation.ts`
 - `src/routes/__root.tsx`
 - `src/routes/index.tsx`
 - `src/routes/projects.tsx`

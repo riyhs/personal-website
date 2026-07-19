@@ -167,11 +167,11 @@ function HomePage() {
   return (
     <>
       <div className="space-y-12 pb-16">
-        <div className="relative min-h-[calc(100dvh-73px)] overflow-hidden">
+        <div className="relative min-h-[calc(100svh-73px)] overflow-hidden">
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-gradient-to-t from-[rgb(var(--background))] via-[rgb(var(--background))]/70 to-transparent z-10"></div>
           </div>
-          <Section className="relative z-20 flex min-h-[calc(100dvh-73px)] items-center justify-center py-10">
+          <Section className="relative z-20 flex min-h-[calc(100svh-73px)] items-center justify-center py-10">
             <div className="flex w-full flex-col items-center justify-center text-center">
               <motion.div
                 initial={fadeUp.initial}

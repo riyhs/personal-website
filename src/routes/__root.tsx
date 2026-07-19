@@ -84,7 +84,7 @@ function RootComponent() {
   const key = useRouterState({ select: (s) => s.location.pathname })
 
   return (
-    <div className="flex min-h-screen flex-col bg-[rgb(var(--background))] text-[rgb(var(--foreground))]">
+    <div className="flex min-h-svh flex-col bg-[rgb(var(--background))] text-[rgb(var(--foreground))]">
       <Header />
       <main className="flex-1">
         <AnimatePresence mode="wait">

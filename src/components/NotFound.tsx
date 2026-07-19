@@ -9,7 +9,7 @@ import { cn } from '../lib/utils'
 
 export function NotFound() {
   return (
-    <div className="flex min-h-[calc(100dvh-73px)] items-center justify-center px-5">
+    <div className="flex min-h-[calc(100svh-73px)] items-center justify-center px-5">
       <motion.div
         initial={fadeUp.initial}
         animate={fadeUp.animate}
