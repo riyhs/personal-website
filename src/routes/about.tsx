@@ -73,7 +73,7 @@ const skillGroups = [
 
 function AboutPage() {
   return (
-    <div className="mx-auto max-w-4xl px-5 py-16">
+    <div className="mx-auto max-w-6xl px-5 py-16">
       <div className="space-y-14">
         <motion.section
           initial={{ opacity: 0, y: 40 }}
