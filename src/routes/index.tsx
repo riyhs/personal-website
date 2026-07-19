@@ -1,6 +1,8 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Github, Linkedin, Zap } from "lucide-react";
+
+import { fadeUp, fadeOnly } from "../lib/animation";
 import type { ReactNode } from "react";
 import { useState } from "react";
 
@@ -172,9 +174,9 @@ function HomePage() {
           <Section className="relative z-20 flex min-h-[calc(100dvh-73px)] items-center justify-center py-10">
             <div className="flex w-full flex-col items-center justify-center text-center">
               <motion.div
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
+                initial={fadeUp.initial}
+                animate={fadeUp.animate}
+                transition={fadeUp.transition}
               >
                 <h1 className="text-4xl font-semibold leading-none tracking-tight sm:text-5xl md:text-6xl lg:text-hero">
                   <span className="bg-linear-to-b from-white via-white/100 to-white/70 bg-clip-text text-transparent">
@@ -189,9 +191,9 @@ function HomePage() {
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0, y: 32 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1, duration: 0.6 }}
+                initial={fadeUp.initial}
+                animate={fadeUp.animate}
+                transition={{ ...fadeUp.transition, delay: 0.1 }}
                 className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:mt-10 sm:gap-4"
               >
                 <Link
@@ -226,9 +228,9 @@ function HomePage() {
               </motion.div>
 
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3, duration: 0.6 }}
+                initial={fadeOnly.initial}
+                animate={fadeOnly.animate}
+                transition={{ ...fadeOnly.transition, delay: 0.3 }}
                 className="mt-8 flex items-center gap-4 sm:mt-10 sm:gap-6"
               >
                 <a
@@ -305,7 +307,7 @@ function HomePage() {
                           alt: project.title,
                         })
                       }
-                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex h-12 w-12 items-center justify-center rounded-full bg-white/30 backdrop-blur-md text-white opacity-0 transition-all duration-300 group-hover:opacity-100 hover:bg-white/50 hover:scale-110 z-10"
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex h-12 w-12 items-center justify-center rounded-full bg-white/30 backdrop-blur-md text-white opacity-0 transition-opacity transition-transform duration-300 group-hover:opacity-100 hover:bg-white/50 hover:scale-110 z-10"
                       aria-label="View larger image"
                     >
                       <ArrowUpRight size={20} />

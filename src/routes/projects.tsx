@@ -1,6 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { ArrowUpRight } from 'lucide-react'
 import { motion } from 'framer-motion'
+
+import { fadeUp, stagger } from '../lib/animation'
 import { useState } from 'react'
 
 import { Badge } from '../components/ui/badge'
@@ -57,9 +59,9 @@ function ProjectsPage() {
     <>
       <div className="mx-auto max-w-6xl px-5 py-16">
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        initial={fadeUp.initial}
+        animate={fadeUp.animate}
+        transition={fadeUp.transition}
         className="space-y-4 text-center md:text-left"
       >
         <p className="text-xs uppercase tracking-[0.4em] text-[rgb(var(--foreground))/0.5]">Portfolio</p>
@@ -70,17 +72,17 @@ function ProjectsPage() {
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1, duration: 0.6 }}
+        initial={fadeUp.initial}
+        animate={fadeUp.animate}
+        transition={{ ...fadeUp.transition, delay: 0.1 }}
         className="mt-12 space-y-10"
       >
         {spotlightProjects.map((project, index) => (
           <motion.div
             key={project.title}
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.08, duration: 0.5, ease: 'easeOut' }}
+            initial={fadeUp.initial}
+            animate={fadeUp.animate}
+            transition={stagger(index, 80)}
           >
             <Card className="border-white/10 bg-white/5 p-0">
               <div className="grid gap-0 md:grid-cols-[1.1fr_0.9fr]">

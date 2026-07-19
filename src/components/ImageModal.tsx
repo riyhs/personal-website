@@ -1,6 +1,8 @@
 import { X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
+import { fadeOnly, modalContent } from '../lib/animation'
+
 interface ImageModalProps {
   isOpen: boolean
   src: string
@@ -14,16 +16,17 @@ export function ImageModal({ isOpen, src, alt, onClose }: ImageModalProps) {
       {isOpen && (
         <>
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={fadeOnly.initial}
+            animate={fadeOnly.animate}
+            exit={fadeOnly.initial}
             onClick={onClose}
             className="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm"
           />
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
+            initial={modalContent.initial}
+            animate={modalContent.animate}
+            exit={modalContent.exit}
+            transition={modalContent.transition}
             className="fixed inset-0 z-50 flex items-center justify-center p-4 overscroll-contain"
             onClick={onClose}
           >

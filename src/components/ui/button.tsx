@@ -26,7 +26,7 @@ export function getButtonClasses(
   size: ButtonSize = 'md',
 ) {
   return cn(
-    'inline-flex items-center justify-center rounded-full font-semibold transition-colors transition-shadow duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-[rgb(var(--background))]',
+    'inline-flex items-center justify-center rounded-full font-semibold transition-colors transition-shadow transition-transform duration-150 active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-[rgb(var(--background))]',
     variantClasses[variant],
     sizeClasses[size],
   )

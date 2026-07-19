@@ -1,6 +1,8 @@
 ﻿import { createFileRoute } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 
+import { fadeUp } from '../lib/animation'
+
 import { Badge } from '../components/ui/badge'
 import { experiences } from '../data/experience'
 
@@ -76,9 +78,9 @@ function AboutPage() {
     <div className="mx-auto max-w-6xl px-5 py-16">
       <div className="space-y-14">
         <motion.section
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          initial={fadeUp.initial}
+          animate={fadeUp.animate}
+          transition={fadeUp.transition}
           className="space-y-4 text-center md:text-left"
         >
           <div className="space-y-4">
@@ -93,9 +95,9 @@ function AboutPage() {
         </motion.section>
 
         <motion.section
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1, duration: 0.6 }}
+          initial={fadeUp.initial}
+          animate={fadeUp.animate}
+          transition={{ ...fadeUp.transition, delay: 0.1 }}
           className="space-y-6 border-t border-white/10 pt-10"
         >
           <div className="space-y-2">
@@ -130,9 +132,9 @@ function AboutPage() {
         </motion.section>
 
         <motion.section
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
+          initial={fadeUp.initial}
+          animate={fadeUp.animate}
+          transition={{ ...fadeUp.transition, delay: 0.2 }}
           className="border-t border-white/10 pt-10"
         >
           <p className="text-sm uppercase tracking-[0.4em] text-[rgb(var(--foreground))/0.5]">

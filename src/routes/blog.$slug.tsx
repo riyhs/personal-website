@@ -1,5 +1,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
+
+import { fadeUp } from '../lib/animation'
 import { ArrowLeft } from 'lucide-react'
 
 import { Badge } from '../components/ui/badge'
@@ -97,9 +99,9 @@ function BlogDetailPage() {
   return (
     <article className="mx-auto max-w-3xl px-5 py-16">
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        initial={fadeUp.initial}
+        animate={fadeUp.animate}
+        transition={fadeUp.transition}
       >
         <Link
           to="/blog"
@@ -110,9 +112,9 @@ function BlogDetailPage() {
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1, duration: 0.6 }}
+        initial={fadeUp.initial}
+        animate={fadeUp.animate}
+        transition={{ ...fadeUp.transition, delay: 0.1 }}
         className="mt-8 space-y-6"
       >
         <p className="text-xs uppercase tracking-[0.4em] text-white/60">
@@ -130,9 +132,9 @@ function BlogDetailPage() {
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2, duration: 0.6 }}
+        initial={fadeUp.initial}
+        animate={fadeUp.animate}
+        transition={{ ...fadeUp.transition, delay: 0.2 }}
         className="mdx-content mt-12"
       >
         <Content />

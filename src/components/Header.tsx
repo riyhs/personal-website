@@ -11,6 +11,7 @@ import { useState } from 'react'
 import { Button } from './ui/button'
 import { TwitterIcon } from './ui/TwitterIcon'
 import { cn } from '../lib/utils'
+import { EASE_OUT } from '../lib/animation'
 
 const primaryLinks = [
   { label: 'Home', href: '/' },
@@ -118,10 +119,10 @@ export default function Header() {
         {isOpen && (
           <motion.div
             className="fixed inset-x-0 top-0 border-b border-white/10 bg-[rgb(var(--background))]/50 backdrop-blur-xl shadow-lg glass-panel overflow-hidden"
-            initial={{ height: 'auto', opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2, ease: 'easeIn' }}
+            initial={{ clipPath: 'inset(0 0 100% 0)', opacity: 0 }}
+            animate={{ clipPath: 'inset(0 0 0% 0)', opacity: 1 }}
+            exit={{ clipPath: 'inset(0 0 100% 0)', opacity: 0 }}
+            transition={{ duration: 0.2, ease: EASE_OUT }}
           >
             <div className="mx-auto max-w-6xl ">
               <div className="flex items-center justify-between px-5 py-4 text-sm">

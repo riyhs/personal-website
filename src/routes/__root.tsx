@@ -4,8 +4,9 @@ import {
   Scripts,
   ScriptOnce,
   createRootRoute,
+  useRouterState,
 } from "@tanstack/react-router";
-import { MotionConfig } from "framer-motion";
+import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import { type ReactNode } from "react";
 
 import { AppDevtools } from "../components/AppDevtools";
@@ -13,6 +14,8 @@ import Header from "../components/Header";
 import { Footer } from "../components/Footer";
 import { NotFound } from "../components/NotFound";
 import { ThemeProvider } from "../components/ThemeProvider";
+
+import { EASE_OUT } from "../lib/animation";
 
 import "../styles.css";
 
@@ -78,11 +81,23 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
+  const key = useRouterState({ select: (s) => s.location.pathname })
+
   return (
     <div className="flex min-h-screen flex-col bg-[rgb(var(--background))] text-[rgb(var(--foreground))]">
       <Header />
       <main className="flex-1">
-        <Outlet />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={key}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15, ease: EASE_OUT }}
+          >
+            <Outlet />
+          </motion.div>
+        </AnimatePresence>
       </main>
       <Footer />
     </div>

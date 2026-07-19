@@ -2,6 +2,8 @@ import { Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { ArrowLeft } from 'lucide-react'
 
+import { fadeUp } from '../lib/animation'
+
 import { getButtonClasses } from './ui/button'
 import { cn } from '../lib/utils'
 
@@ -9,9 +11,9 @@ export function NotFound() {
   return (
     <div className="flex min-h-[calc(100dvh-73px)] items-center justify-center px-5">
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        initial={fadeUp.initial}
+        animate={fadeUp.animate}
+        transition={fadeUp.transition}
         className="text-center"
       >
         <p className="text-xs uppercase tracking-[0.4em] text-[rgb(var(--foreground))/0.5]">

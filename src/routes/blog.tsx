@@ -1,5 +1,7 @@
 import { Link, Outlet, createFileRoute, useMatches } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
+
+import { fadeUp, stagger } from '../lib/animation'
 import { ArrowRight } from 'lucide-react'
 
 import { Badge } from '../components/ui/badge'
@@ -69,9 +71,9 @@ function BlogPage() {
       {!isDetailPage && (
         <div className="mx-auto max-w-6xl px-5 py-16">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            initial={fadeUp.initial}
+            animate={fadeUp.animate}
+            transition={fadeUp.transition}
             className="space-y-4 text-center md:text-left"
           >
             <p className="text-xs uppercase tracking-[0.4em] text-[rgb(var(--foreground))/0.5]">Journal</p>
@@ -82,9 +84,9 @@ function BlogPage() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.6 }}
+            initial={fadeUp.initial}
+            animate={fadeUp.animate}
+            transition={{ ...fadeUp.transition, delay: 0.1 }}
             className="mt-12 space-y-8"
           >
         {posts.map((post: {
@@ -96,8 +98,14 @@ function BlogPage() {
             tags: string[]
             readingTime: string
           }
-        }) => (
-          <Card key={post.slug} className="border-white/10 bg-white/5 p-0">
+        }, index) => (
+          <motion.div
+            key={post.slug}
+            initial={fadeUp.initial}
+            animate={fadeUp.animate}
+            transition={stagger(index, 60)}
+          >
+          <Card className="border-white/10 bg-white/5 p-0">
             <CardHeader className="gap-4 border-b border-white/5 p-6 md:flex md:items-center md:justify-between">
               <div>
                 <p className="text-xs uppercase tracking-[0.3em] text-white/50">
@@ -126,6 +134,7 @@ function BlogPage() {
               </Link>
             </CardContent>
           </Card>
+          </motion.div>
         ))}
       </motion.div>
     </div>
