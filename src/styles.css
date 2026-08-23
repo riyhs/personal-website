@@ -255,7 +255,9 @@
     background-color: rgb(var(--background) / 0.55);
     /* border: 1px solid rgb(var(--border) / 0.6); */
     box-shadow: var(--shadow-soft);
-    backdrop-filter: blur(18px);
+    /* Keep persistent-surface blur <= 12px (fetchz.vercel.app ceiling for
+       smooth Firefox mobile). Currently 8px per user preference. */
+    backdrop-filter: blur(8px);
   }
 
   .glow-card {
@@ -281,21 +283,6 @@
 
   .glow-card:hover::after {
     opacity: 1;
-  }
-}
-
-@supports (-moz-appearance: none) {
-  @media (pointer: coarse) {
-    .glass-panel {
-      backdrop-filter: none;
-      background-color: rgb(var(--background) / 0.85);
-    }
-
-    header.sticky[class*="backdrop-blur"],
-    header div[class*="backdrop-blur"][class*="fixed"] {
-      backdrop-filter: none;
-      background-color: rgb(var(--background) / 0.85);
-    }
   }
 }
 

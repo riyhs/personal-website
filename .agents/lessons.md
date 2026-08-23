@@ -102,3 +102,17 @@ Keep `@tanstack/react-devtools` for the development UI. Avoid `@tanstack/devtool
 
 ### Rule
 When fixing production devtools build issues, preserve development devtools UX. Prefer a dev-only component guarded by `import.meta.env.DEV` over deleting devtools packages broadly.
+
+## 2026-08-23 Removed blur for Firefox when user wanted fetchz-like smoothness -> Copy the reference site's parameters first
+
+### Problem
+User asked how fetchz.vercel.app keeps background blur smooth in Firefox and wanted the same here. Agent's first fix disabled backdrop-filter for Firefox entirely; user corrected: they want working blur, not removal.
+
+### Root Cause
+Our blurred surfaces used larger radii than the reference (glass-panel 18px, sticky header 24px vs fetchz's uniform 12px). Radius x area is what makes Gecko's per-frame re-filtering jank, not backdrop-filter itself.
+
+### Fix
+.glass-panel blur went 18px -> 12px, header blur 24px -> 12px (now 8px); deleted the Firefox-only fallback block entirely.
+
+### Rule
+When a reference site does an effect smoothly, measure and copy its concrete parameters (radii, layer count, what sits behind) before adding browser-detection fallbacks.

@@ -21,3 +21,5 @@
 - [x] Full Web Interface Guidelines audit — 24 findings fixed across 4 tiers
 - [x] Fix `overscroll-behavior-contain` → `overscroll-contain` in ImageModal
 - [x] Update AGENTS.md with new rules (button nesting, opacity tokens, MotionConfig, devtools guard)
+- [x] Remove backdrop blur in Firefox (widen `@supports (-moz-appearance:none)` fallback in styles.css to all form factors + all blurred surfaces)
+- [x] Replace Firefox blur removal with fetchz-style tuning (12px radii, kill switch deleted)

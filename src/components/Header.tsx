@@ -75,7 +75,7 @@ export default function Header() {
   return (
     <header className={cn(
       "sticky top-0 z-50 border-b border-white/10",
-      !isOpen && "backdrop-blur-sm md:backdrop-blur-xl bg-[rgb(var(--background))]/55 shadow-[var(--shadow-soft)]"
+      !isOpen && "backdrop-blur-sm bg-[rgb(var(--background))]/55 shadow-[var(--shadow-soft)]"
     )}>
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 text-sm">
         <Link to="/" className="flex items-center gap-3" aria-label="Riyaldi home">
@@ -118,7 +118,7 @@ export default function Header() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed inset-x-0 top-0 border-b border-white/10 bg-[rgb(var(--background))]/50 backdrop-blur-sm md:backdrop-blur-xl shadow-lg overflow-hidden"
+            className="fixed inset-x-0 top-0 border-b border-white/10 bg-[rgb(var(--background))]/50 backdrop-blur-sm shadow-lg overflow-hidden"
             initial={{ clipPath: 'inset(0 0 100% 0)', opacity: 0 }}
             animate={{ clipPath: 'inset(0 0 0% 0)', opacity: 1 }}
             exit={{ clipPath: 'inset(0 0 100% 0)', opacity: 0 }}

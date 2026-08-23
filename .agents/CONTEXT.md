@@ -5,9 +5,9 @@
 **Name:** personal-website | **Stack:** TanStack Start + React 19 + Tailwind v4 | **Repo:** riyaldi.dev
 
 ## State
-**Status:** Production build fixed while preserving devtools UX
-**Branch:** dev | **Worktree:** personal-website
-**Last completed:** Replaced TanStack devtools Vite stripping path with dev-only AppDevtools wrapper
+**Status:** Firefox-wide backdrop-blur fallback shipped
+**Branch:** fix-ui | **Worktree:** personal-website
+**Last completed:** Disabled backdrop-filter in all Firefox via `@supports (-moz-appearance:none)` block in src/styles.css
 **In progress:** None
 **Next:** None
 
@@ -40,6 +40,7 @@ None.
 | 2026-06-07 | Reframe DESIGN.md as current-state inventory | User asked for no suggestions; keep design doc factual and reflective of existing codebase |
 | 2026-06-07 | About page uses single-column editorial dossier layout | User disliked left-card/right-main split and wanted no separate identity facts/image block |
 | 2026-06-07 | Keep `@tanstack/react-devtools` but remove `@tanstack/devtools-vite` | Preserve development devtools shell while avoiding production `removeDevtoolsOnBuild` transform that broke Router code splitting |
+| 2026-08-23 | Match fetchz blur recipe: ≤12px radius on persistent blurred surfaces, tint carries opacity, no Firefox sniffing | Gecko re-filters backdrop every scroll frame; cost scales with radius × area. fetchz.vercel.app proves 12px + translucent fills stays smooth incl. Firefox mobile. Earlier kill-switch approach reverted same day |
 
 ---
-_Updated: 2026-06-07
+_Updated: 2026-08-23
