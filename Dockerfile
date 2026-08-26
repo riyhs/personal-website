@@ -6,8 +6,8 @@ WORKDIR /app
 # Copy package files
 COPY package*.json pnpm-lock.yaml* ./
 
-# Install dependencies
-RUN npm install -g pnpm && pnpm install --frozen-lockfile
+# Install dependencies (corepack honors packageManager in package.json)
+RUN corepack enable && pnpm install --frozen-lockfile
 
 # Copy source code
 COPY . .
@@ -26,8 +26,8 @@ RUN apk add --no-cache dumb-init
 # Copy package files
 COPY package*.json pnpm-lock.yaml* ./
 
-# Install production dependencies only
-RUN npm install -g pnpm && pnpm install --prod --frozen-lockfile
+# Install production dependencies only (corepack honors packageManager in package.json)
+RUN corepack enable && pnpm install --prod --frozen-lockfile
 
 # Copy built application from builder
 COPY --from=builder /app/.output ./.output
