@@ -112,7 +112,7 @@ User asked how fetchz.vercel.app keeps background blur smooth in Firefox and wan
 Our blurred surfaces used larger radii than the reference (glass-panel 18px, sticky header 24px vs fetchz's uniform 12px). Radius x area is what makes Gecko's per-frame re-filtering jank, not backdrop-filter itself.
 
 ### Fix
-.glass-panel blur went 18px -> 12px, header blur 24px -> 12px (now 8px); deleted the Firefox-only fallback block entirely.
+.glass-panel blur went 18px -> 12px, header blur 24px -> 12px (now 8px); deleted the Firefox only fallback block entirely.
 
 ### Rule
 When a reference site does an effect smoothly, measure and copy its concrete parameters (radii, layer count, what sits behind) before adding browser-detection fallbacks.
