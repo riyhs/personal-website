@@ -65,8 +65,7 @@ export const Route = createRootRoute({
       { name: "twitter:creator", content: "@riyhs_" },
     ],
     links: [
-      { rel: "icon", href: "/favicon.ico" },
-      { rel: "icon", type: "image/png", sizes: "32x32", href: "/logo192.png" },
+      { rel: "icon", type: "image/png", sizes: "128x128", href: "/favicon.png" },
       { rel: "apple-touch-icon", href: "/logo192.png" },
       { rel: "manifest", href: "/manifest.json" },
       { rel: "canonical", href: "https://riyaldi.dev" },
