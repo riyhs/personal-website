@@ -8,7 +8,9 @@
     "build:only": "vite build",
     "sitemap": "node scripts/generate-sitemap.mjs",
     "serve": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "browser:live": "tsx scripts/live-browser.ts"
   },
   "dependencies": {
     "@fontsource/plus-jakarta-sans": "^5.3.0",
