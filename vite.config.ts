@@ -10,9 +10,11 @@ import rehypeShiki from '@shikijs/rehype'
 import remarkFrontmatter from 'remark-frontmatter'
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter'
 
+const isTest = Boolean(process.env.VITEST)
+
 const config = defineConfig({
   plugins: [
-    nitro(),
+    !isTest && nitro(),
     // this is the plugin that enables path aliases
     viteTsConfigPaths({
       projects: ['./tsconfig.json'],
@@ -35,10 +37,14 @@ const config = defineConfig({
       ],
     }),
     tailwindcss(),
-    tanstackStart(),
+    !isTest && tanstackStart(),
     viteReact(),
-  ],
+  ].filter(Boolean),
+  resolve: {
+    dedupe: ['react', 'react-dom'],
+  },
   test: {
+    environment: 'jsdom',
     exclude: [
       '**/node_modules/**',
       '**/dist/**',

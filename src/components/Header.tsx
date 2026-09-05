@@ -6,7 +6,7 @@ import {
   Menu,
   X
 } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { Button } from './ui/button'
 import { TwitterIcon } from './ui/TwitterIcon'
@@ -41,6 +41,15 @@ const socials = [
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const activePath = useRouterState({ select: (state) => state.location.pathname })
+  useEffect(() => {
+    if (!isOpen) return
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsOpen(false)
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen])
+
 
   const renderLinks = (variant: 'desktop' | 'mobile') => (
     <ul
@@ -73,85 +82,61 @@ export default function Header() {
   )
 
   return (
-    <header className={cn(
-      "sticky top-0 z-50 border-b border-white/10",
-      !isOpen && "backdrop-blur-sm bg-[rgb(var(--background))]/55 shadow-[var(--shadow-soft)]"
-    )}>
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 text-sm">
-        <Link to="/" className="flex items-center gap-3" aria-label="Riyaldi home">
-          <div className="h-10 w-10 rounded-2xl bg-white/10 text-white/80 flex items-center justify-center font-black tracking-tight text-lg">
-            R
-          </div>
-          <div>
-            <p className="text-lg font-semibold text-[rgb(var(--foreground))]">Riyaldi</p>
-          </div>
-        </Link>
+    <header className="sticky top-0 z-50 h-[73px]">
+      <div className="absolute inset-x-0 top-0 w-full backdrop-blur-sm bg-[rgb(var(--background))]/55 border-b border-white/10 shadow-[var(--shadow-soft)]">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 text-sm">
+          <Link to="/" className="flex items-center gap-3" aria-label="Riyaldi home">
+            <div className="h-10 w-10 rounded-2xl bg-white/10 text-white/80 flex items-center justify-center font-black tracking-tight text-lg">
+              R
+            </div>
+            <div>
+              <p className="text-lg font-semibold text-[rgb(var(--foreground))]">Riyaldi</p>
+            </div>
+          </Link>
 
-        <div className="hidden lg:flex flex-1 justify-center">{renderLinks('desktop')}</div>
+          <div className="hidden lg:flex flex-1 justify-center">{renderLinks('desktop')}</div>
 
-        <div className="hidden lg:flex items-center gap-3">
-          {socials.map((social) => (
-            <a
-              key={social.href}
-              href={social.href}
-              target="_blank"
-              rel="noreferrer"
-              aria-label={social.label}
-              className="rounded-full border border-white/10 bg-white/5 p-2 text-white/80 transition-colors hover:bg-white/15"
-            >
-              <social.icon size={16} />
-            </a>
-          ))}
+          <div className="hidden lg:flex items-center gap-3">
+            {socials.map((social) => (
+              <a
+                key={social.href}
+                href={social.href}
+                target="_blank"
+                rel="noreferrer"
+                aria-label={social.label}
+                className="rounded-full border border-white/10 bg-white/5 p-2 text-white/80 transition-colors hover:bg-white/15"
+              >
+                <social.icon size={16} />
+              </a>
+            ))}
+          </div>
+
+          <Button
+            variant="ghost"
+            size="sm"
+            className="lg:hidden rounded-2xl"
+            aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={isOpen}
+            aria-controls="mobile-navigation"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? <X size={20} /> : <Menu size={20} />}
+          </Button>
         </div>
 
-        <Button
-          variant="ghost"
-          size="sm"
-          className="lg:hidden rounded-2xl"
-          aria-label="Open navigation menu"
-          onClick={() => setIsOpen(true)}
-        >
-          <Menu size={20} />
-        </Button>
-      </div>
-
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            className="fixed inset-x-0 top-0 border-b border-white/10 bg-[rgb(var(--background))]/50 backdrop-blur-sm shadow-lg overflow-hidden"
-            initial={{ clipPath: 'inset(0 0 100% 0)', opacity: 0 }}
-            animate={{ clipPath: 'inset(0 0 0% 0)', opacity: 1 }}
-            exit={{ clipPath: 'inset(0 0 100% 0)', opacity: 0 }}
-            transition={{ duration: 0.2, ease: EASE_OUT }}
-          >
-            <div className="mx-auto max-w-6xl ">
-              <div className="flex items-center justify-between px-5 py-4 text-sm">
-                <Link to="/" className="flex items-center gap-3" aria-label="Riyaldi home">
-                  <div className="h-10 w-10 rounded-2xl bg-white/10 text-white/80 flex items-center justify-center font-black tracking-tight text-lg">
-                    R
-                  </div>
-                  <div>
-                    <p className="text-lg font-semibold text-[rgb(var(--foreground))]">Riyaldi</p>
-                  </div>
-                </Link>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setIsOpen(false)}
-                  aria-label="Close navigation menu"
-                  className="rounded-2xl"
-                >
-                  <X size={20} />
-                </Button>
-              </div>
-              <motion.div 
-                className="pt-8 space-y-8 mx-5 mb-8"
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1, duration: 0.3 }}
-              >
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              id="mobile-navigation"
+              className="overflow-hidden lg:hidden"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2, ease: EASE_OUT }}
+            >
+              <div className="mx-auto max-w-6xl pt-2 pb-8 space-y-6 px-5">
                 {renderLinks('mobile')}
-                <div className="flex justify-center gap-4">
+                <div className="flex justify-center gap-4 pt-2">
                   {socials.map((social) => (
                     <a
                       key={social.href}
@@ -165,11 +150,11 @@ export default function Header() {
                     </a>
                   ))}
                 </div>
-              </motion.div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </header>
   )
 }
