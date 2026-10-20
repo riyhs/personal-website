@@ -8,6 +8,18 @@ export type Experience = {
 
 export const experiences: Experience[] = [
     {
+        role: 'Software Engineer Intern',
+        company: 'Takodam',
+        period: 'APR 2026 — SEP 2026',
+        summary:
+            'Built ProCost, a multi-tenant procurement and supply-chain platform used daily in warehouse operations, shipping 20+ modules on Django REST Framework and React/TypeScript.',
+        impact: [
+            'Shipped goods delivery end to end, including a six-stage state machine from draft to done.',
+            'Delivered stock entry types (transfer, inbound conversion, downgrade, waste), picking and packing validation, rack replenishment, and stock opname.',
+            'Worked in two-week sprints with PR-based review, 498 commits over six months.',
+        ],
+    },
+    {
         role: 'Machine Learning Cohort',
         company: 'Bangkit Academy (Google, GoTo, Traveloka)',
         period: 'SEP 2024 — DEC 2024',

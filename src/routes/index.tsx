@@ -184,9 +184,9 @@ function HomePage() {
                   </span>
                 </h1>
                 <p className="mx-auto mt-6 max-w-2xl text-base text-[rgb(var(--foreground))/0.75] sm:text-lg md:text-xl lg:text-2xl">
-                  Computer Science Undergraduate & Machine Learning Engineer. I
-                  combine algorithmic excellence with practical full-stack
-                  development to build intelligent applications.
+                  Computer Science Undergraduate & Software Engineer. I combine
+                  algorithmic excellence with practical full-stack development
+                  to build intelligent applications.
                 </p>
               </motion.div>
 
