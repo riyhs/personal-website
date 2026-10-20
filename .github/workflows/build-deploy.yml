@@ -73,7 +73,7 @@ jobs:
     steps:
       - name: Deploy Web App
         run: |
-          curl -X 'POST' \
+          curl -sS --fail-with-body -w '\nHTTP status: %{http_code}\n' -X 'POST' \
             "${{ secrets.DOKPLOY_URL }}/api/application.deploy" \
             -H 'accept: application/json' \
             -H "x-api-key: ${{ secrets.DOKPLOY_API_TOKEN }}" \
