@@ -7,6 +7,12 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      debug_body:
+        description: "Print the Dokploy response body (public repo: debugging only)"
+        type: boolean
+        default: false
 
 env:
   REGISTRY: ghcr.io
@@ -73,12 +79,29 @@ jobs:
     steps:
       - name: Deploy Web App
         run: |
-          curl -sS --fail-with-body -w '\nHTTP status: %{http_code}\n' -X 'POST' \
+          body_file=$(mktemp)
+          status=$(curl -sS -o "$body_file" -w '%{http_code}' -X 'POST' \
             "${{ secrets.DOKPLOY_URL }}/api/application.deploy" \
             -H 'accept: application/json' \
             -H "x-api-key: ${{ secrets.DOKPLOY_API_TOKEN }}" \
             -H 'Content-Type: application/json' \
-            -d '{"applicationId": "${{ secrets.DOKPLOY_APPLICATION_ID }}"}'
+            -d '{"applicationId": "${{ secrets.DOKPLOY_APPLICATION_ID }}"}')
+          echo "Dokploy HTTP status: $status"
+          case "$status" in
+            2*)
+              echo "Deploy request accepted by Dokploy."
+              ;;
+            *)
+              echo "Dokploy rejected the deploy request (HTTP $status)." >&2
+              echo "Response body suppressed by default because this repository is public." >&2
+              if [ "${{ inputs.debug_body }}" = "true" ]; then
+                echo "--- response body (debug, truncated to 2000 bytes) ---" >&2
+                head -c 2000 "$body_file" >&2
+                echo >&2
+              fi
+              exit 1
+              ;;
+          esac
 
       - name: Deployment notification
         run: |
