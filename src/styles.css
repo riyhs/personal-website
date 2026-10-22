@@ -1,10 +1,14 @@
 @import "tailwindcss";
 @import "@fontsource/plus-jakarta-sans/latin.css";
 
+@custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
+
 @theme {
   --font-sans:
     "Plus Jakarta Sans", "Inter", "Segoe UI", system-ui, -apple-system,
     BlinkMacSystemFont, sans-serif;
+  --font-mono:
+    ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
 
   --text-md: 1rem;
   --text-lg: 1.618rem;
@@ -21,6 +25,25 @@
 
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  /* Entrance animations are CSS so SSR content paints without waiting for JS.
+     Use `motion-safe:animate-fade-up motion-reduce:animate-fade-in`. */
+  --animate-fade-in: fade-in 600ms var(--ease-out) both;
+  --animate-fade-up: fade-up 600ms var(--ease-out) both;
+  --animate-page-in: fade-in 150ms var(--ease-out) both;
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(32px);
+    }
+  }
 }
 
 :root {
@@ -79,6 +102,7 @@
   --border: 212 212 216;
   --input: 212 212 216;
   --ring: 9 9 11;
+  --shadow-soft: 0 10px 40px 0 rgb(0 0 0 / 0.06);
 }
 
 @layer base {
@@ -251,59 +275,77 @@
 }
 
 @layer components {
-  .glass-panel {
-    background-color: rgb(var(--background) / 0.55);
-    /* border: 1px solid rgb(var(--border) / 0.6); */
-    box-shadow: var(--shadow-soft);
-    /* Keep persistent-surface blur <= 12px (fetchz.vercel.app ceiling for
-       smooth Firefox mobile). Currently 8px per user preference. */
-    backdrop-filter: blur(8px);
+  /* Monospace uppercase meta label (section headers, dates, colophon keys) */
+  .mono-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgb(var(--foreground) / 0.6);
   }
 
-  .glow-card {
+  /* Intro paragraph under every page title */
+  .lead-text {
+    max-width: 42rem;
+    font-size: 1.125rem;
+    line-height: 1.65;
+    color: rgb(var(--foreground) / 0.75);
+  }
+
+  /* Title + text of a list item (project, post, experience) */
+  .item-title {
+    font-size: 1.25rem;
+    line-height: 1.35;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-underline-offset: 4px;
+  }
+
+  .item-text {
+    font-size: 1rem;
+    line-height: 1.65;
+    color: rgb(var(--foreground) / 0.75);
+  }
+
+  /* Faint drafting grid, faded out toward the bottom */
+  .grid-backdrop {
+    background-image:
+      linear-gradient(rgb(var(--foreground) / 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgb(var(--foreground) / 0.05) 1px, transparent 1px);
+    background-size: 48px 48px;
+    background-position: center top;
+    mask-image: linear-gradient(to bottom, black 30%, transparent);
+  }
+
+  /* Dashed divider with crosshair marks at both ends */
+  .dashed-rule {
     position: relative;
-    isolation: isolate;
+    border-top: 1px dashed rgb(var(--foreground) / 0.15);
   }
 
-  .glow-card::after {
-    content: "";
+  .dashed-rule::before,
+  .dashed-rule::after {
+    content: "+";
     position: absolute;
-    inset: -1px;
-    border-radius: inherit;
-    z-index: -1;
-    background: radial-gradient(
-      circle,
-      rgba(14, 106, 253, 0.15),
-      rgba(14, 106, 253, 0.05) 100%,
-      transparent 100%
-    );
-    opacity: 0;
-    transition: opacity 300ms ease;
+    top: 0;
+    transform: translate(-50%, -54%);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    line-height: 1;
+    color: rgb(var(--foreground) / 0.35);
   }
 
-  .glow-card:hover::after {
-    opacity: 1;
+  .dashed-rule::before {
+    left: 0;
+  }
+
+  .dashed-rule::after {
+    left: 100%;
   }
 }
 
 @layer utilities {
-  .text-golden-lg {
-    font-size: var(--text-lg);
-    line-height: 1.2;
-    text-wrap: balance;
-  }
-
-  .text-golden-xl {
-    font-size: var(--text-xl);
-    line-height: 1.15;
-    text-wrap: balance;
-  }
-
-  .text-hero {
-    font-size: var(--text-hero);
-    line-height: 1.05;
-  }
-
   .radial-glow {
     background-image: var(--glow-soft);
   }

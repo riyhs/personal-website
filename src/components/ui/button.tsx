@@ -8,11 +8,11 @@ type ButtonSize = 'sm' | 'md' | 'lg'
 
 const variantClasses: Record<ButtonVariant, string> = {
   default:
-    'bg-[rgb(var(--foreground))] text-[rgb(var(--background))] hover:bg-[rgb(var(--foreground))]/90 shadow-2xl shadow-black/25',
+    'bg-[rgb(var(--foreground))] text-[rgb(var(--background))] hover:bg-[rgb(var(--foreground))]/90 shadow-[var(--shadow-soft)]',
   ghost:
-    'bg-transparent text-[rgb(var(--foreground))] hover:bg-[rgb(var(--foreground))/0.08]',
+    'bg-transparent text-[rgb(var(--foreground))] hover:bg-[rgb(var(--foreground)/0.08)]',
   outline:
-    'border border-[rgb(var(--border))] text-[rgb(var(--foreground))] hover:bg-[rgb(var(--foreground))/0.05]',
+    'border border-[rgb(var(--border))] text-[rgb(var(--foreground))] hover:bg-[rgb(var(--foreground)/0.05)]',
 }
 
 const sizeClasses: Record<ButtonSize, string> = {
