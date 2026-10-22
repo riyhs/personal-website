@@ -4,6 +4,15 @@
 
 ## ACTIVE
 
+Branch: `feat/personal-refresh` — inspiration pass from safzan.dev + dharma-yudistira.com
+
+- [x] 1. Theme: fix broken `rgb(var(--x))/N]` opacity classes, tokenize `white/N` theme surfaces, header light/dark toggle -> verify: compiled CSS has no `))/.`, screenshots both themes
+- [x] 2. Colophon footer: build SHA + date via Vite `define` (GIT_SHA env -> git fallback), Dockerfile ARG -> verify: footer renders, hides SHA when absent
+- [x] 3. `/llms.txt` + `/index.md` server routes from data modules -> verify: curl body + content-type
+- [x] 4. Home: specific hero, grouped stack table, dated writing list, project rows, mono labels, dashed dividers, faint grid -> verify: screenshots desktop/mobile
+- [x] 5. `/projects/$slug` case-study pages + sitemap entries -> verify: unknown slug -> 404
+- [x] 6. Gate: pnpm test, tsc, build, screenshots all routes x theme x viewport; review
+
 ## DONE
 
 - [x] Fix TanStack Router dev code-splitter duplicate `hot` declaration on blog detail route
