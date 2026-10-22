@@ -110,7 +110,7 @@ Use subagents only when main agents are poor fit or when narrow read-only search
 ### Components
 
 - **Function declarations** for route components and page-level components
-- **`forwardRef`** for UI primitives (Button, Card, etc.) with explicit `displayName`
+- **`forwardRef`** for UI primitives (Button, etc.) with explicit `displayName`
 - **Props:** Extend HTML element attributes: `interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>`
 - **Default props** via destructuring defaults: `{ variant = 'default', size = 'md', ...props }`
 - **`cn()` helper** (`clsx` + `tailwind-merge`) for all conditional class merging
@@ -130,12 +130,14 @@ Use subagents only when main agents are poor fit or when narrow read-only search
 - **No tailwind.config.js** — Tailwind v4 configured via `src/styles.css` (`@import "tailwindcss"` + `@theme`)
 - **Design tokens** in `@theme` block: fonts, type scale (golden ratio), radius, shadows
 - **Color system:** CSS vars as space-separated RGB channels: `--background: 9 9 11`
-  Used as: `bg-[rgb(var(--background))]`, `text-[rgb(var(--foreground))/0.75]`
-- **Opacity tokens:** Always `text-[rgb(var(--foreground))/N]` — never `text-white/N` (breaks light mode). Standardize: 0.5 for labels, 0.75 for body text.
-- **Animation:** `<MotionConfig reducedMotion="user">` in RootDocument — all framer-motion transform animations respect OS `prefers-reduced-motion`. Opacity animations continue normally.
-- **Custom layers:** `@layer base` (resets, typography), `@layer components` (glass-panel, glow-card), `@layer utilities` (text-golden-\*, radial-glow)
+  Used as: `bg-[rgb(var(--background))]`, `text-[rgb(var(--foreground)/0.75)]`
+- **Opacity tokens:** Always `text-[rgb(var(--foreground)/N)]` (alpha INSIDE `rgb()`) — never `text-[rgb(var(--foreground))/N]` (compiles to invalid CSS, silently dropped) and never `text-white/N` (breaks light mode). Standardize: 0.6 for labels (AA on light background), 0.75 for body text. Keep `white`/`black` only on image overlays and the lightbox scrim.
+- **Meta labels:** `.mono-label` (monospace uppercase) for section labels, dates, colophon keys. `.dashed-rule` for section dividers, `.grid-backdrop` for the hero grid.
+- **Animation:** Entrance animations are CSS (`animate-fade-up`, `animate-fade-in`, `animate-page-in` in `@theme`) so SSR HTML paints without JS. Pair `motion-safe:animate-fade-up motion-reduce:animate-fade-in`. Never SSR content at `opacity: 0` via Framer `initial`, never gate content on `whileInView`. Framer Motion is only for exit animations (mobile menu); `<MotionConfig reducedMotion="user">` covers it.
+- **Custom layers:** `@layer base` (resets, typography), `@layer components` (mono-label, grid-backdrop, dashed-rule), `@layer utilities` (radial-glow)
 - **Responsive:** Mobile-first with `sm:`, `md:`, `lg:` breakpoints
-- **Dark-only** currently (no light theme CSS vars defined, but ThemeProvider supports toggle)
+- **Dark + light themes:** tokens in `:root` and `[data-theme="light"]`; toggle in Header via `useTheme()`. Use the `light:` custom variant for theme-specific markup that must match the pre-hydration theme script (no flash).
+- **Type scale gotcha:** `@theme` overrides `text-lg` (1.618rem) and `text-xl` (2.618rem). Use `text-[1.125rem]` / `text-[1.25rem]` for body-sized text.
 
 ### Routing (TanStack Router)
 
@@ -169,9 +171,10 @@ Use subagents only when main agents are poor fit or when narrow read-only search
 src/
 ├── routes/          # TanStack file-based routes (SSR via Nitro)
 ├── components/      # Shared components
-│   ├── ui/          # Primitives (Button, Badge, Card, TwitterIcon)
+│   ├── ui/          # Primitives (Button, TwitterIcon)
 │   ├── NotFound.tsx # 404 page (used as notFoundComponent on root)
-│   ├── ImageModal.tsx # Lightbox for project screenshots
+│   ├── PageHeader.tsx # Page intro (mono label, h1, lead) used by every page except home
+│   ├── Section.tsx  # Dashed-rule content section with label + optional link
 │   ├── Header.tsx   # Sticky nav with mobile menu
 │   ├── Footer.tsx   # Site footer
 │   └── ThemeProvider.tsx # Dark/light theme toggle

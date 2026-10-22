@@ -6,7 +6,7 @@ import {
   createRootRoute,
   useRouterState,
 } from "@tanstack/react-router";
-import { AnimatePresence, MotionConfig, motion } from "framer-motion";
+import { MotionConfig } from "framer-motion";
 import { type ReactNode } from "react";
 
 import { AppDevtools } from "../components/AppDevtools";
@@ -14,8 +14,6 @@ import Header from "../components/Header";
 import { Footer } from "../components/Footer";
 import { NotFound } from "../components/NotFound";
 import { ThemeProvider } from "../components/ThemeProvider";
-
-import { EASE_OUT } from "../lib/animation";
 
 import "../styles.css";
 
@@ -68,7 +66,6 @@ export const Route = createRootRoute({
       { rel: "icon", type: "image/png", sizes: "128x128", href: "/favicon.png" },
       { rel: "apple-touch-icon", href: "/logo192.png" },
       { rel: "manifest", href: "/manifest.json" },
-      { rel: "canonical", href: "https://riyaldi.dev" },
       { rel: "preconnect", href: "https://github.com" },
       { rel: "preconnect", href: "https://www.linkedin.com" },
     ],
@@ -86,17 +83,11 @@ function RootComponent() {
     <div className="flex min-h-svh flex-col bg-[rgb(var(--background))] text-[rgb(var(--foreground))]">
       <Header />
       <main className="flex-1">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={key}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.15, ease: EASE_OUT }}
-          >
-            <Outlet />
-          </motion.div>
-        </AnimatePresence>
+        {/* Remount on path change replays the CSS fade. No exit animation:
+            <Outlet /> already renders the next route, so exiting would fade the wrong page */}
+        <div key={key} className="animate-page-in">
+          <Outlet />
+        </div>
       </main>
       <Footer />
     </div>

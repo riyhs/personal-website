@@ -1,11 +1,30 @@
 // @vitest-environment jsdom
 import type { AnchorHTMLAttributes, ReactNode } from 'react'
 import { render, screen, fireEvent, cleanup } from '@testing-library/react'
-import { afterEach, describe, it, expect, vi } from 'vitest'
+import { afterEach, beforeEach, describe, it, expect, vi } from 'vitest'
 import Header from './Header'
+import { ThemeProvider } from './ThemeProvider'
+
+const renderHeader = () =>
+  render(
+    <ThemeProvider>
+      <Header />
+    </ThemeProvider>,
+  )
+
+beforeEach(() => {
+  // jsdom has no matchMedia; ThemeProvider subscribes to prefers-color-scheme
+  window.matchMedia = vi.fn().mockReturnValue({
+    matches: false,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  })
+})
 
 afterEach(() => {
   cleanup()
+  window.localStorage.clear()
+  delete document.documentElement.dataset.theme
 })
 
 interface MockLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
@@ -24,7 +43,7 @@ vi.mock('@tanstack/react-router', () => ({
 
 describe('Header', () => {
   it('has only 1 child inside <header> both before and after expanding the mobile menu', () => {
-    const { container } = render(<Header />)
+    const { container } = renderHeader()
     const header = container.querySelector('header')!
     expect(header).toBeDefined()
     expect(header.children.length).toBe(1)
@@ -75,7 +94,7 @@ describe('Header', () => {
   })
 
   it('closes mobile menu when navigation link is clicked', () => {
-    const { container } = render(<Header />)
+    const { container } = renderHeader()
     const menuButton = screen.getByRole('button', { name: /open navigation menu/i })
     fireEvent.click(menuButton)
     expect(container.querySelector('#mobile-navigation')).toBeDefined()
@@ -88,12 +107,28 @@ describe('Header', () => {
   })
 
   it('closes mobile menu when Escape key is pressed', () => {
-    render(<Header />)
+    renderHeader()
     const menuButton = screen.getByRole('button', { name: /open navigation menu/i })
     fireEvent.click(menuButton)
     expect(screen.getByRole('button', { name: /close navigation menu/i })).toBeDefined()
 
     fireEvent.keyDown(window, { key: 'Escape' })
     expect(screen.queryByRole('button', { name: /close navigation menu/i })).toBeNull()
+  })
+
+  it('toggles between dark and light theme and persists the choice', () => {
+    renderHeader()
+    // Desktop and mobile toggles render; both drive the same state
+    const toggle = screen.getAllByRole('button', { name: /dark theme/i })[0]
+    expect(toggle.getAttribute('aria-pressed')).toBe('true')
+
+    fireEvent.click(toggle)
+    expect(document.documentElement.dataset.theme).toBe('light')
+    expect(window.localStorage.getItem('riyaldi.theme')).toBe('light')
+    expect(toggle.getAttribute('aria-pressed')).toBe('false')
+
+    fireEvent.click(toggle)
+    expect(document.documentElement.dataset.theme).toBe('dark')
+    expect(window.localStorage.getItem('riyaldi.theme')).toBe('dark')
   })
 })

@@ -1,32 +1,22 @@
 import { Link } from '@tanstack/react-router'
-import { motion } from 'framer-motion'
 import { ArrowLeft } from 'lucide-react'
 
-import { fadeUp } from '../lib/animation'
-
+import { PageHeader } from './PageHeader'
 import { getButtonClasses } from './ui/button'
 import { cn } from '../lib/utils'
 
 export function NotFound() {
   return (
-    <div className="flex min-h-[calc(100svh-73px)] items-center justify-center px-5">
-      <motion.div
-        initial={fadeUp.initial}
-        animate={fadeUp.animate}
-        transition={fadeUp.transition}
-        className="text-center"
+    <div className="min-h-[calc(100svh-73px-20rem)]">
+      <PageHeader
+        label="404"
+        title="Page not found"
+        lead="The page you're looking for doesn't exist or has been moved."
       >
-        <p className="text-xs uppercase tracking-[0.4em] text-[rgb(var(--foreground))/0.5]">
-          404
-        </p>
-        <h1 className="mt-4 text-golden-xl">Page not found</h1>
-        <p className="mt-4 text-lg text-[rgb(var(--foreground))/0.7]">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <Link to="/" className={cn(getButtonClasses(), 'mt-8')}>
+        <Link to="/" className={cn(getButtonClasses(), 'mt-8 gap-2 px-6 text-sm')}>
           <ArrowLeft size={16} aria-hidden="true" /> Back to Home
         </Link>
-      </motion.div>
+      </PageHeader>
     </div>
   )
 }

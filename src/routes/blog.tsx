@@ -1,11 +1,7 @@
-import { Link, Outlet, createFileRoute, useMatches } from '@tanstack/react-router'
-import { motion } from 'framer-motion'
+import { Link, createFileRoute } from '@tanstack/react-router'
 
-import { fadeUp, stagger } from '../lib/animation'
-import { ArrowRight } from 'lucide-react'
-
-import { Badge } from '../components/ui/badge'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card'
+import { PageHeader } from '../components/PageHeader'
+import { Section } from '../components/Section'
 import { formatShortDate } from '../lib/date'
 import { listPosts } from '../lib/posts'
 
@@ -62,83 +58,50 @@ export const Route = createFileRoute('/blog')({
 
 function BlogPage() {
   const { posts } = Route.useLoaderData()
-  const matches = useMatches()
-  const isDetailPage = matches.some(match => match.routeId === '/blog/$slug')
 
   return (
-    <>
-      <Outlet />
-      {!isDetailPage && (
-        <div className="mx-auto max-w-6xl px-5 py-16">
-          <motion.div
-            initial={fadeUp.initial}
-            animate={fadeUp.animate}
-            transition={fadeUp.transition}
-            className="space-y-4 text-center md:text-left"
-          >
-            <p className="text-xs uppercase tracking-[0.4em] text-[rgb(var(--foreground))/0.5]">Journal</p>
-            <h1 className="text-golden-xl">Notes on algorithms, learning, and code</h1>
-            <p className="text-lg text-[rgb(var(--foreground))/0.75]">
-              A collection of technical essays, project debriefs, and learnings from my journey in software engineering.
-            </p>
-          </motion.div>
+    <div className="pb-8">
+      <PageHeader
+        label="Writing"
+        title="Notes on algorithms, learning, and code"
+        lead="A collection of technical essays, project debriefs, and learnings from my journey in software engineering."
+      />
 
-          <motion.div
-            initial={fadeUp.initial}
-            animate={fadeUp.animate}
-            transition={{ ...fadeUp.transition, delay: 0.1 }}
-            className="mt-12 space-y-8"
-          >
-        {posts.map((post: {
-          slug: string
-          frontmatter: {
-            title: string
-            excerpt: string
-            date: string
-            tags: string[]
-            readingTime: string
-          }
-        }, index) => (
-          <motion.div
-            key={post.slug}
-            initial={fadeUp.initial}
-            animate={fadeUp.animate}
-            transition={stagger(index, 60)}
-          >
-          <Card className="border-white/10 bg-white/5 p-0">
-            <CardHeader className="gap-4 border-b border-white/5 p-6 md:flex md:items-center md:justify-between">
-              <div>
-                <p className="text-xs uppercase tracking-[0.3em] text-white/50">
-                  {formatShortDate(post.frontmatter.date)}
-                </p>
-                <CardTitle className="mt-3 text-3xl">{post.frontmatter.title}</CardTitle>
-                <CardDescription>{post.frontmatter.excerpt}</CardDescription>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {post.frontmatter.tags.map((tag: string) => (
-                  <Badge key={tag} variant="outline" className="text-white/70">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-6 p-6 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-white/60">{post.frontmatter.readingTime}</p>
+      <Section label={`${posts.length} ${posts.length === 1 ? 'post' : 'posts'}`}>
+        <ul className="divide-y divide-dashed divide-[rgb(var(--foreground)/0.12)]">
+          {posts.map((post: {
+            slug: string
+            frontmatter: {
+              title: string
+              excerpt: string
+              date: string
+              tags: string[]
+              readingTime: string
+            }
+          }) => (
+            <li key={post.slug}>
               <Link
                 to="/blog/$slug"
                 params={{ slug: post.slug }}
-                className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2 text-sm font-semibold text-white hover:bg-white/10"
-                aria-label={`Read ${post.frontmatter.title}`}
+                className="group grid gap-2 py-6 sm:grid-cols-[8rem_1fr] sm:gap-6"
               >
-                Read article <ArrowRight size={16} />
+                <time dateTime={post.frontmatter.date} className="mono-label sm:pt-1">
+                  {formatShortDate(post.frontmatter.date)}
+                </time>
+                <div>
+                  <h3 className="item-title group-hover:underline">
+                    {post.frontmatter.title}
+                  </h3>
+                  <p className="item-text mt-2">{post.frontmatter.excerpt}</p>
+                  <p className="mt-3 font-mono text-xs text-[rgb(var(--foreground)/0.6)]">
+                    {post.frontmatter.readingTime} · {post.frontmatter.tags.join(', ')}
+                  </p>
+                </div>
               </Link>
-            </CardContent>
-          </Card>
-          </motion.div>
-        ))}
-      </motion.div>
+            </li>
+          ))}
+        </ul>
+      </Section>
     </div>
-      )}
-    </>
   )
 }

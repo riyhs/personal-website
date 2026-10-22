@@ -116,3 +116,29 @@ Our blurred surfaces used larger radii than the reference (glass-panel 18px, sti
 
 ### Rule
 When a reference site does an effect smoothly, measure and copy its concrete parameters (radii, layer count, what sits behind) before adding browser-detection fallbacks.
+
+## 2026-10-22 Opacity token syntax was invalid site-wide -> Verify arbitrary-value classes in compiled CSS
+
+### Problem
+The documented convention `text-[rgb(var(--foreground))/0.75]` compiled to `color: rgb(var(--foreground))/.75`, which is invalid CSS. Browsers dropped it, so every "muted" text rendered at full strength for months. Found while adding light mode.
+
+### Fix
+Moved alpha inside `rgb()`: `text-[rgb(var(--foreground)/0.75)]` (28 occurrences). Labels raised 0.5 -> 0.6 for AA on the light background.
+
+### Rule
+When a Tailwind arbitrary value carries a modifier, grep the built CSS for the generated rule before standardizing it. `bg-[rgb(var(--x))]/55` (modifier outside brackets) is valid; `/N` inside the brackets after `rgb(...)` is not.
+
+## 2026-10-22 Sections blank after browser back -> Don't gate content on scroll-triggered animation
+
+### Problem
+User reported lists (projects, posts, skills) blank after opening a detail page and going back; only a reload fixed it. Agent's Chromium tests passed; the bug only reproduced in Firefox.
+
+### Root Cause
+`__root.tsx` wraps a live `<Outlet />` in a keyed `AnimatePresence mode="wait"`, so on navigation the exiting wrapper briefly renders the destination page and the page remounts. `Section` used `whileInView` (`once: true`); across that remount Firefox left in-view sections at inline `opacity: 0`.
+
+### Fix
+`Section` uses mount `animate` instead of `whileInView`. Verified with a Firefox back/forward suite (8 scenarios, 3 runs, all sections visible).
+
+### Rule
+Content must never depend on IntersectionObserver-driven animation. Test navigation flows in Firefox too (`pnpm exec playwright install firefox`), not just Chromium.
+

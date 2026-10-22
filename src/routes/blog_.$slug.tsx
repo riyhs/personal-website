@@ -1,16 +1,16 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
-import { motion } from 'framer-motion'
-
-import { fadeUp } from '../lib/animation'
+import { Link, createFileRoute, notFound } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
 
-import { Badge } from '../components/ui/badge'
+import { PageHeader } from '../components/PageHeader'
 import { formatLongDate } from '../lib/date'
 import { findPostBySlug } from '../lib/posts'
 
-export const Route = createFileRoute('/blog/$slug')({
+export const Route = createFileRoute('/blog_/$slug')({
   codeSplitGroupings: [['loader', 'component']],
   head: ({ loaderData, params }) => {
+    if (!loaderData) {
+      return {}
+    }
     const data = loaderData as unknown as {
       slug: string
       frontmatter: {
@@ -78,7 +78,7 @@ export const Route = createFileRoute('/blog/$slug')({
   loader: ({ params }) => {
     const post = findPostBySlug(params.slug as string)
     if (!post) {
-      throw new Error('Post not found')
+      throw notFound()
     }
     return {
       slug: post.slug,
@@ -97,48 +97,38 @@ function BlogDetailPage() {
   const Content = post.Component
 
   return (
-    <article className="mx-auto max-w-3xl px-5 py-16">
-      <motion.div
-        initial={fadeUp.initial}
-        animate={fadeUp.animate}
-        transition={fadeUp.transition}
+    <article className="pb-16">
+      <PageHeader
+        label={
+          <>
+            <Link
+              to="/blog"
+              className="inline-flex items-center gap-2 transition-colors hover:text-[rgb(var(--foreground))]"
+            >
+              <ArrowLeft size={14} aria-hidden="true" /> All posts
+            </Link>
+            <span className="mt-10 block">
+              <time dateTime={post.frontmatter.date}>{formatLongDate(post.frontmatter.date)}</time>
+              {' · '}
+              {post.frontmatter.readingTime}
+            </span>
+          </>
+        }
+        title={post.frontmatter.title}
+        lead={post.frontmatter.excerpt}
       >
-        <Link
-          to="/blog"
-          className="inline-flex items-center gap-2 text-sm text-white/70 hover:text-white"
-        >
-          <ArrowLeft size={16} /> Back to Blog
-        </Link>
-      </motion.div>
-
-      <motion.div
-        initial={fadeUp.initial}
-        animate={fadeUp.animate}
-        transition={{ ...fadeUp.transition, delay: 0.1 }}
-        className="mt-8 space-y-6"
-      >
-        <p className="text-xs uppercase tracking-[0.4em] text-white/60">
-          {formatLongDate(post.frontmatter.date)}
+        <p className="mt-6 font-mono text-xs text-[rgb(var(--foreground)/0.6)]">
+          {post.frontmatter.tags.map((tag) => `#${tag}`).join('  ')}
         </p>
-        <h1 className="text-golden-xl">{post.frontmatter.title}</h1>
-        <p className="text-lg text-white/75">{post.frontmatter.excerpt}</p>
-        <div className="flex flex-wrap gap-2">
-          {post.frontmatter.tags.map((tag: string) => (
-            <Badge key={tag} variant="outline" className="text-white/70">
-              {tag}
-            </Badge>
-          ))}
-        </div>
-      </motion.div>
+      </PageHeader>
 
-      <motion.div
-        initial={fadeUp.initial}
-        animate={fadeUp.animate}
-        transition={{ ...fadeUp.transition, delay: 0.2 }}
-        className="mdx-content mt-12"
-      >
-        <Content />
-      </motion.div>
+      <div className="mx-auto w-full max-w-4xl px-5">
+        <div className="dashed-rule animate-fade-in pt-4 [animation-delay:200ms]">
+          <div className="mdx-content max-w-3xl">
+            <Content />
+          </div>
+        </div>
+      </div>
     </article>
   )
 }
