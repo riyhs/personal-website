@@ -4,7 +4,7 @@ import { writeFileSync } from 'fs';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { readdirSync, statSync } from 'fs';
+import { readdirSync, readFileSync, statSync } from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -48,6 +48,18 @@ function getBlogPosts() {
     }
 }
 
+// Function to get all project case-study pages (slugs from src/data/projects.ts)
+function getProjectPages() {
+    const projectsFile = join(__dirname, '..', 'src', 'data', 'projects.ts');
+    const source = readFileSync(projectsFile, 'utf-8');
+
+    return [...source.matchAll(/slug: '([^']+)'/g)].map(([, slug]) => ({
+        path: `/projects/${slug}`,
+        priority: 0.7,
+        changefreq: 'monthly',
+    }));
+}
+
 // Function to generate sitemap XML
 function generateSitemap(routes) {
     const currentDate = new Date().toISOString().split('T')[0];
@@ -77,8 +89,12 @@ function main() {
     const blogPosts = getBlogPosts();
     console.log(`✓ Found ${blogPosts.length} blog post(s)`);
 
+    // Get project pages
+    const projectPages = getProjectPages();
+    console.log(`✓ Found ${projectPages.length} project page(s)`);
+
     // Combine all routes
-    const allRoutes = [...staticRoutes, ...blogPosts];
+    const allRoutes = [...staticRoutes, ...projectPages, ...blogPosts];
     console.log(`✓ Total routes: ${allRoutes.length}`);
 
     // Generate sitemap
