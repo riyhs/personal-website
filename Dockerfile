@@ -12,6 +12,10 @@ RUN corepack enable && pnpm install --frozen-lockfile
 # Copy source code
 COPY . .
 
+# Commit SHA shown in the site footer (.git is not in the build context)
+ARG GIT_SHA=""
+ENV GIT_SHA=$GIT_SHA
+
 # Build the project
 RUN pnpm run build
 
