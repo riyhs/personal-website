@@ -1,10 +1,9 @@
 ﻿import { createFileRoute } from '@tanstack/react-router'
-import { motion } from 'framer-motion'
 
-import { fadeUp } from '../lib/animation'
-
-import { Badge } from '../components/ui/badge'
+import { PageHeader } from '../components/PageHeader'
+import { Section } from '../components/Section'
 import { experiences } from '../data/experience'
+import { techStack } from '../data/stack'
 
 export const Route = createFileRoute('/about')({
   head: () => ({
@@ -54,114 +53,54 @@ export const Route = createFileRoute('/about')({
   component: AboutPage,
 })
 
-const skillGroups = [
-  {
-    label: 'Languages',
-    skills: ['Python', 'Kotlin', 'JavaScript', 'TypeScript'],
-  },
-  {
-    label: 'Frameworks / Libraries',
-    skills: ['React', 'Laravel', 'Flask', 'TensorFlow', 'Jetpack Compose'],
-  },
-  {
-    label: 'Tools / Platforms',
-    skills: ['Linux', 'VPS', 'Firebase', 'Git'],
-  },
-  {
-    label: 'Domains',
-    skills: ['Web Development', 'Android', 'Machine Learning', 'DevOps'],
-  },
-]
-
 function AboutPage() {
   return (
-    <div className="mx-auto max-w-6xl px-5 py-16">
-      <div className="space-y-14">
-        <motion.section
-          initial={fadeUp.initial}
-          animate={fadeUp.animate}
-          transition={fadeUp.transition}
-          className="space-y-4 text-center md:text-left"
-        >
-          <div className="space-y-4">
-            <p className="text-sm uppercase tracking-[0.4em] text-[rgb(var(--foreground))/0.5]">
-              About
-            </p>
-            <h1 className="text-golden-xl">Riyaldi Hasan Setiawan</h1>
-            <p className="text-lg text-[rgb(var(--foreground))/0.75]">
-              Computer Science undergraduate turning algorithms into shipped systems.
-            </p>
-          </div>
-        </motion.section>
+    <div className="pb-8">
+      <PageHeader
+        label="About"
+        title="Riyaldi Hasan Setiawan"
+        lead="Computer Science undergraduate turning algorithms into shipped systems."
+      />
 
-        <motion.section
-          initial={fadeUp.initial}
-          animate={fadeUp.animate}
-          transition={{ ...fadeUp.transition, delay: 0.1 }}
-          className="space-y-6 border-t border-white/10 pt-10"
-        >
-          <div className="space-y-2">
-            <p className="text-sm uppercase tracking-[0.4em] text-[rgb(var(--foreground))/0.5]">
-              Skills
-            </p>
-            <h2 className="text-2xl font-semibold">Tools I use to ship</h2>
-          </div>
-          <div className="space-y-6">
-            {skillGroups.map((group) => (
-              <div
-                key={group.label}
-                className="grid gap-3 sm:grid-cols-[12rem_1fr]"
-              >
-                <h3 className="text-xs uppercase tracking-[0.3em] text-white/60">
-                  {group.label}
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {group.skills.map((skill) => (
-                    <Badge
-                      key={skill}
-                      variant="outline"
-                      className="text-white/75"
-                    >
-                      {skill}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </motion.section>
-
-        <motion.section
-          initial={fadeUp.initial}
-          animate={fadeUp.animate}
-          transition={{ ...fadeUp.transition, delay: 0.2 }}
-          className="border-t border-white/10 pt-10"
-        >
-          <p className="text-sm uppercase tracking-[0.4em] text-[rgb(var(--foreground))/0.5]">
-            Experience
-          </p>
-          <div className="mt-8 space-y-10 border-l-2 border-white/10 pl-8">
-            {experiences.map((experience) => (
-              <div key={experience.company} className="relative">
-                <span className="absolute -left-[39px] top-0 h-3 w-3 rounded-full border-2 border-[rgb(var(--background))] bg-white" />
-                <p className="text-xs uppercase tracking-[0.3em] text-white/60">
-                  {experience.period}
-                </p>
-                <h3 className="mt-2 text-2xl font-semibold">
+      <Section label="Skills">
+        <dl className="space-y-4 sm:space-y-3">
+          {techStack.map((group) => (
+            <div key={group.label} className="grid gap-1 sm:grid-cols-[11rem_1fr] sm:gap-6">
+              <dt className="text-sm text-[rgb(var(--foreground)/0.6)]">{group.label}</dt>
+              <dd className="flex flex-wrap gap-x-5 gap-y-1 text-sm text-[rgb(var(--foreground)/0.9)]">
+                {group.items.map((item) => (
+                  <span key={item}>{item}</span>
+                ))}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </Section>
+      <Section label="Experience">
+        <ol className="divide-y divide-dashed divide-[rgb(var(--foreground)/0.12)]">
+          {experiences.map((experience) => (
+            <li
+              key={experience.company}
+              className="grid gap-2 py-8 first:pt-0 sm:grid-cols-[11rem_1fr] sm:gap-6"
+            >
+              <p className="mono-label sm:pt-1.5">{experience.period}</p>
+              <div>
+                <h3 className="item-title">
                   {experience.role}
                 </h3>
-                <p className="text-white/70">{experience.company}</p>
-                <p className="mt-3 text-white/70">{experience.summary}</p>
-                <ul className="mt-4 list-disc space-y-2 pl-5 text-white/60">
+                <p className="text-[rgb(var(--foreground)/0.6)]">{experience.company}</p>
+                <p className="item-text mt-3">{experience.summary}</p>
+                <ul className="mt-4 list-disc space-y-2 pl-5">
                   {experience.impact.map((item) => (
-                    <li key={item}>{item}</li>
+                    <li key={item} className="text-[rgb(var(--foreground)/0.75)]">{item}</li>
                   ))}
                 </ul>
               </div>
-            ))}
-          </div>
-        </motion.section>
-      </div>
+            </li>
+          ))}
+        </ol>
+      </Section>
+
     </div>
   )
 }
