@@ -78,11 +78,20 @@ function ProjectDetailPage() {
           </>
         }
         title={project.title}
-        lead={project.description}
       />
 
       <div className="mx-auto w-full max-w-4xl px-5 [animation-delay:100ms] motion-safe:animate-fade-up motion-reduce:animate-fade-in">
-        <dl className="grid grid-cols-2 border-t border-l border-dashed border-[rgb(var(--foreground)/0.15)] sm:grid-cols-4">
+        {/* First large element on the page (LCP), so fetch it ahead of other images */}
+        <img
+          src={project.thumbnail}
+          alt={`${project.title} screenshot`}
+          width={1280}
+          height={720}
+          fetchPriority="high"
+          className="aspect-video w-full rounded-2xl border border-[rgb(var(--foreground)/0.1)] object-cover"
+        />
+
+        <dl className="mt-6 grid grid-cols-2 border-t border-l border-dashed border-[rgb(var(--foreground)/0.15)] sm:grid-cols-4">
           {project.role && <MetaItem label="Role">{project.role}</MetaItem>}
           <MetaItem label="Platform">{project.platform}</MetaItem>
           <MetaItem label="Year">{project.year}</MetaItem>
@@ -90,6 +99,8 @@ function ProjectDetailPage() {
             {project.stack.join(' · ')}
           </MetaItem>
         </dl>
+
+        <p className="lead-text mt-10">{project.description}</p>
 
         <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm">
           {project.links.map((link) => (
@@ -105,14 +116,6 @@ function ProjectDetailPage() {
             </a>
           ))}
         </div>
-
-        <img
-          src={project.thumbnail}
-          alt={`${project.title} screenshot`}
-          width={1280}
-          height={720}
-          className="mt-10 aspect-video w-full rounded-2xl border border-[rgb(var(--foreground)/0.1)] object-cover"
-        />
 
         {project.highlights && (
           <section className="dashed-rule mt-14 pt-10">

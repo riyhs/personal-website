@@ -77,7 +77,7 @@
   - `animate-fade-in` — opacity only, 600ms. Used by `Section`, blog body; also the reduced-motion fallback via `motion-reduce:`.
   - `animate-page-in` — 150ms route fade.
   - Stagger with `[animation-delay:100ms]`.
-- `src/lib/animation.ts` keeps only `EASE_OUT` / `EASE_IN_OUT` for the Framer Motion mobile menu.
+- `src/lib/animation.ts` keeps only `EASE_OUT` / `EASE_IN_OUT` for the Motion (`motion/react`) mobile menu.
 - Never gate content visibility on `whileInView` (Firefox left sections stuck at opacity 0 after back navigation).
 - Header mobile menu uses `AnimatePresence` animating `height` + `opacity`, 200ms `EASE_OUT`.
 - Mobile menu link block staggers in with `opacity` + `y: -20`, 300ms `EASE_OUT`.

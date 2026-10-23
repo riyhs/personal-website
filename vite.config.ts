@@ -3,7 +3,6 @@ import { execSync } from 'node:child_process'
 import { defineConfig } from 'vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact from '@vitejs/plugin-react'
-import viteTsConfigPaths from 'vite-tsconfig-paths'
 import tailwindcss from '@tailwindcss/vite'
 import { nitro } from 'nitro/vite'
 import mdx from '@mdx-js/rollup'
@@ -30,10 +29,6 @@ function getBuildSha() {
 const config = defineConfig({
   plugins: [
     !isTest && nitro(),
-    // this is the plugin that enables path aliases
-    viteTsConfigPaths({
-      projects: ['./tsconfig.json'],
-    }),
     mdx({
       remarkPlugins: [
         remarkFrontmatter,
@@ -60,6 +55,8 @@ const config = defineConfig({
     __BUILD_DATE__: JSON.stringify(new Date().toISOString().slice(0, 10)),
   },
   resolve: {
+    // Built-in tsconfig `paths` support (Vite 8), replaces vite-tsconfig-paths
+    tsconfigPaths: true,
     dedupe: ['react', 'react-dom'],
   },
   test: {

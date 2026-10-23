@@ -8,8 +8,8 @@
 ## PROJECT OVERVIEW
 
 **Name:** personal-website | **Domain:** riyaldi.dev | **Stack:** TanStack Start + React 19 + Tailwind v4
-**Package manager:** pnpm (10.20.0) | **Runtime:** Node 24 | **Deploy:** Docker → Dokploy (GHCR)
-**Module:** ESM (`"type": "module"`) | **TypeScript:** strict mode, ES2022 target
+**Package manager:** pnpm (10.20.0) | **Runtime:** Node 24 (CI too) | **Bundler:** Vite 8 (Rolldown) | **Deploy:** Docker → Dokploy (GHCR)
+**Module:** ESM (`"type": "module"`) | **TypeScript:** 6.x, strict mode, ES2022 target, no `baseUrl` (removed in TS 7; `paths` are relative to tsconfig)
 
 ---
 
@@ -27,7 +27,7 @@ pnpm vitest --watch                 # Watch mode
 pnpm tsc --noEmit                   # Type-check only (no build)
 ```
 
-**Test runner:** Vitest 3.x | **DOM env:** jsdom | **Libraries:** @testing-library/react + @testing-library/dom
+**Test runner:** Vitest 5.x | **DOM env:** jsdom | **Libraries:** @testing-library/react + @testing-library/dom
 **Test convention:** Co-located `module.test.ts` / `module.test.tsx` next to source files.
 **No vitest.config.ts** — Vitest inherits from `vite.config.ts`.
 
@@ -133,7 +133,7 @@ Use subagents only when main agents are poor fit or when narrow read-only search
   Used as: `bg-[rgb(var(--background))]`, `text-[rgb(var(--foreground)/0.75)]`
 - **Opacity tokens:** Always `text-[rgb(var(--foreground)/N)]` (alpha INSIDE `rgb()`) — never `text-[rgb(var(--foreground))/N]` (compiles to invalid CSS, silently dropped) and never `text-white/N` (breaks light mode). Standardize: 0.6 for labels (AA on light background), 0.75 for body text. Keep `white`/`black` only on image overlays and the lightbox scrim.
 - **Meta labels:** `.mono-label` (monospace uppercase) for section labels, dates, colophon keys. `.dashed-rule` for section dividers, `.grid-backdrop` for the hero grid.
-- **Animation:** Entrance animations are CSS (`animate-fade-up`, `animate-fade-in`, `animate-page-in` in `@theme`) so SSR HTML paints without JS. Pair `motion-safe:animate-fade-up motion-reduce:animate-fade-in`. Never SSR content at `opacity: 0` via Framer `initial`, never gate content on `whileInView`. Framer Motion is only for exit animations (mobile menu); `<MotionConfig reducedMotion="user">` covers it.
+- **Animation:** Entrance animations are CSS (`animate-fade-up`, `animate-fade-in`, `animate-page-in` in `@theme`) so SSR HTML paints without JS. Pair `motion-safe:animate-fade-up motion-reduce:animate-fade-in`. Never SSR content at `opacity: 0` via Motion `initial`, never gate content on `whileInView`. Motion (`motion` package, import from `motion/react`) is only for exit animations (mobile menu); `<MotionConfig reducedMotion="user">` covers it.
 - **Custom layers:** `@layer base` (resets, typography), `@layer components` (mono-label, grid-backdrop, dashed-rule), `@layer utilities` (radial-glow)
 - **Responsive:** Mobile-first with `sm:`, `md:`, `lg:` breakpoints
 - **Dark + light themes:** tokens in `:root` and `[data-theme="light"]`; toggle in Header via `useTheme()`. Use the `light:` custom variant for theme-specific markup that must match the pre-hydration theme script (no flash).
@@ -171,7 +171,7 @@ Use subagents only when main agents are poor fit or when narrow read-only search
 src/
 ├── routes/          # TanStack file-based routes (SSR via Nitro)
 ├── components/      # Shared components
-│   ├── ui/          # Primitives (Button, TwitterIcon)
+│   ├── ui/          # Primitives (Button, brand icons: GithubIcon, LinkedinIcon, TwitterIcon)
 │   ├── NotFound.tsx # 404 page (used as notFoundComponent on root)
 │   ├── PageHeader.tsx # Page intro (mono label, h1, lead) used by every page except home
 │   ├── Section.tsx  # Dashed-rule content section with label + optional link

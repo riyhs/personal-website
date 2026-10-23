@@ -1,9 +1,11 @@
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { Github, Linkedin, Mail } from "lucide-react";
+import { Mail } from "lucide-react";
 
 import { PageHeader } from "../components/PageHeader";
 import { Section } from "../components/Section";
 import { getButtonClasses } from "../components/ui/button";
+import { GithubIcon } from "../components/ui/GithubIcon";
+import { LinkedinIcon } from "../components/ui/LinkedinIcon";
 import { TwitterIcon } from "../components/ui/TwitterIcon";
 import { cn } from "../lib/utils";
 import { formatShortDate } from "../lib/date";
@@ -133,9 +135,9 @@ export const Route = createFileRoute("/")({
 });
 
 const socialIcons = {
-  GitHub: Github,
+  GitHub: GithubIcon,
   Twitter: TwitterIcon,
-  LinkedIn: Linkedin,
+  LinkedIn: LinkedinIcon,
 };
 
 function HomePage() {

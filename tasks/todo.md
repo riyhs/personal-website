@@ -4,17 +4,19 @@
 
 ## ACTIVE
 
-Branch: `feat/personal-refresh` — inspiration pass from safzan.dev + dharma-yudistira.com
+Branch: `chore/upgrade-tanstack-start` — upgrade to latest TanStack Start (uncommitted, for user review)
 
-- [x] 1. Theme: fix broken `rgb(var(--x))/N]` opacity classes, tokenize `white/N` theme surfaces, header light/dark toggle -> verify: compiled CSS has no `))/.`, screenshots both themes
-- [x] 2. Colophon footer: build SHA + date via Vite `define` (GIT_SHA env -> git fallback), Dockerfile ARG -> verify: footer renders, hides SHA when absent
-- [x] 3. `/llms.txt` + `/index.md` server routes from data modules -> verify: curl body + content-type
-- [x] 4. Home: specific hero, grouped stack table, dated writing list, project rows, mono labels, dashed dividers, faint grid -> verify: screenshots desktop/mobile
-- [x] 5. `/projects/$slug` case-study pages + sitemap entries -> verify: unknown slug -> 404
-- [x] 6. Gate: pnpm test, tsc, build, screenshots all routes x theme x viewport; review
+- [x] 1. Baseline: build time, bundle sizes, route statuses, SSR HTML -> saved for comparison
+- [x] 2. Upgrade TanStack packages together + Vite 8 + plugin-react 6 + Vitest 5 + nitro beta, per TanStack start-basic example
+- [x] 3. Replace vite-tsconfig-paths with Vite `resolve.tsconfigPaths`
+- [x] 4. CI Node 20 -> 24
+- [x] 5. Gate: tsc, tests, prod build, Firefox + Chromium e2e, dev server, clean-container CI build, Docker image
+- [x] 6. Batch 2: React 19.3, shiki 4, lucide 1.x (+ local brand icons), framer-motion -> motion, TS 6, jsdom 30, @types/node 24
+- [x] 7. Gate batch 2: tsc, tests, build, icon/code-block HTML diff, Firefox + Chromium e2e, Docker
 
 ## DONE
 
+- [x] Personal refresh (safzan/dharma inspiration): theme toggle, colophon, llms.txt/index.md, home redesign, case studies — merged PR #3
 - [x] Fix TanStack Router dev code-splitter duplicate `hot` declaration on blog detail route
 - [x] Read legacy workflow files, understand codebase
 - [x] Update AGENTS.md with code style guidelines

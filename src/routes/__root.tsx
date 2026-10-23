@@ -6,7 +6,7 @@ import {
   createRootRoute,
   useRouterState,
 } from "@tanstack/react-router";
-import { MotionConfig } from "framer-motion";
+import { MotionConfig } from "motion/react";
 import { type ReactNode } from "react";
 
 import { AppDevtools } from "../components/AppDevtools";
@@ -77,13 +77,15 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
-  const key = useRouterState({ select: (s) => s.location.pathname })
+  // Key on the rendered leaf match, not `location`: location changes on click, while
+  // the old page stays up until an unvisited route's chunk loads (fading the old page)
+  const key = useRouterState({ select: (s) => s.matches.at(-1)?.id })
 
   return (
     <div className="flex min-h-svh flex-col bg-[rgb(var(--background))] text-[rgb(var(--foreground))]">
       <Header />
       <main className="flex-1">
-        {/* Remount on path change replays the CSS fade. No exit animation:
+        {/* Remount when the new page renders replays the CSS fade. No exit animation:
             <Outlet /> already renders the next route, so exiting would fade the wrong page */}
         <div key={key} className="animate-page-in">
           <Outlet />
