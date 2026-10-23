@@ -6,7 +6,7 @@ import {
   createRootRoute,
   useRouterState,
 } from "@tanstack/react-router";
-import { MotionConfig } from "framer-motion";
+import { MotionConfig } from "motion/react";
 import { type ReactNode } from "react";
 
 import { AppDevtools } from "../components/AppDevtools";
