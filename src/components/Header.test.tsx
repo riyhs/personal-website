@@ -33,8 +33,16 @@ interface MockLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 }
 
 vi.mock('@tanstack/react-router', () => ({
+  // Like the real Link, stay on the page (client-side navigation) instead of letting jsdom navigate
   Link: ({ children, to, onClick, ...props }: MockLinkProps) => (
-    <a href={to} onClick={onClick} {...props}>
+    <a
+      href={to}
+      onClick={(event) => {
+        event.preventDefault()
+        onClick?.(event)
+      }}
+      {...props}
+    >
       {children}
     </a>
   ),
