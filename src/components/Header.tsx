@@ -1,8 +1,6 @@
 import { Link, useRouterState } from '@tanstack/react-router'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
-  Github,
-  Linkedin,
   Menu,
   Moon,
   Sun,
@@ -12,6 +10,8 @@ import { useEffect, useState } from 'react'
 
 import { useTheme } from './ThemeProvider'
 import { Button } from './ui/button'
+import { GithubIcon } from './ui/GithubIcon'
+import { LinkedinIcon } from './ui/LinkedinIcon'
 import { TwitterIcon } from './ui/TwitterIcon'
 import { cn } from '../lib/utils'
 import { EASE_OUT } from '../lib/animation'
@@ -25,7 +25,7 @@ const primaryLinks = [
 
 const socials = [
   { 
-    icon: Github, 
+    icon: GithubIcon, 
     href: 'https://github.com/riyhs', 
     label: 'GitHub' 
   },
@@ -35,7 +35,7 @@ const socials = [
     label: 'Twitter',
   },
   {
-    icon: Linkedin,
+    icon: LinkedinIcon,
     href: 'https://www.linkedin.com/in/riyaldi',
     label: 'LinkedIn',
   },
