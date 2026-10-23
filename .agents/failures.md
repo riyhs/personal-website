@@ -1,3 +1,4 @@
 # FAILURES
 
 ## 2026-03-31 TanStack CLI doc lookup | file: n/a | error: `npx @tanstack/cli search-docs` resolved as a missing npm script in this shell | tried: `search-docs` for react-start, react-router, vite | hypothesis: the local `rtk` wrapper / npm resolution path does not expose TanStack CLI directly here, so use web docs or another invocation path instead
+## 2026-10-22 Isolate motion 14 bundle cost by building with framer-motion 12 | file: package.json (temporary) | error: [MISSING_EXPORT] "activeAnimations" is not exported by motion-dom@12.43.0 | tried: add framer-motion@12.23.24 alongside motion; remove motion then add framer-motion@12.23.24 | hypothesis: fresh resolve of framer-motion 12's caret range pulls a newer motion-dom 12.x missing that export; only the original lockfile pins a compatible set. Diagnostic only, not the deliverable; attributed the cost by elimination (lucide runtime +0.5 KB) instead. Files restored and verified identical with cmp.

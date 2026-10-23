@@ -6,10 +6,10 @@ A modern personal portfolio website built with TanStack Start, React 19, and Tai
 
 - **Framework:** TanStack Start (SSR via Nitro)
 - **Routing:** TanStack Router (file-based)
-- **UI:** React 19 + Framer Motion
+- **UI:** React 19 + Motion (`motion/react`)
 - **Styling:** Tailwind CSS v4 (CSS-first config via `@theme`)
 - **Content:** MDX blog posts with Shiki syntax highlighting
-- **Icons:** Lucide React
+- **Icons:** Lucide React (GitHub/LinkedIn marks are local components; Lucide 1.x dropped brand icons)
 - **Package Manager:** pnpm 10.20.0
 - **Runtime:** Node 24
 - **TypeScript:** Strict mode, ES2022 target
