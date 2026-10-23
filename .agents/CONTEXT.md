@@ -5,14 +5,14 @@
 **Name:** personal-website | **Stack:** TanStack Start + React 19 + Tailwind v4 | **Repo:** riyaldi.dev
 
 ## State
-**Status:** TanStack Start upgrade done on `chore/upgrade-tanstack-start` (uncommitted, awaiting user review). Personal refresh merged to main (PR #3).
+**Status:** Upgrade committed on `chore/upgrade-tanstack-start` (5 commits, not pushed). First-visit page-fade glitch fixed in `__root.tsx` (uncommitted). Personal refresh merged to main (PR #3).
 **Branch:** chore/upgrade-tanstack-start | **Worktree:** personal-website
 **Last completed:** Start 1.168.49 -> 1.169.3, Router 1.170.45, router-plugin 1.168.47, router-devtools 1.167.2, Vite 7 -> 8.3.5, plugin-react 5 -> 6.1.2, Vitest 3 -> 5.0.5, nitro alpha.2 -> 3.0.260903-beta, vite-tsconfig-paths removed (Vite `resolve.tsconfigPaths`), CI Node 20 -> 24
 **Verified:** tsc, 9 unit tests, prod build (21.4s -> ~11s), first-load JS 160.8 -> 158.4 KB gz, Firefox + Chromium back/forward/theme/menu/404 suite, dev server, CI build in clean node:24, Docker image (443.2 -> 427.5 MB), SSR HTML null bytes gone
 **In progress:** None
 **Also done (batch 2, same branch):** React 19.3.1, shiki + @shikijs/rehype 4.5.0, lucide-react 1.61.0 (local GithubIcon/LinkedinIcon, identical markup), framer-motion -> motion 14.5.0 (`motion/react`), TypeScript 6.0.3 (baseUrl removed), jsdom 30.1.3, @types/node 24.19.2
 **Cost noted:** first-load JS 158.4 -> 175.2 KB gz (~8.5 KB React 19.3 measured, ~8.7 KB motion 14 by elimination)
-**Next:** User reviews the served build and commits. Remaining: remark-mdx-frontmatter 6, web-vitals/rehype-highlight/remark-gfm removal (unused), TS 7 later
+**Next:** User checks the fade fix on the served build, then commit/push/PR. Remaining: remark-mdx-frontmatter 6, web-vitals/rehype-highlight/remark-gfm removal (unused), TS 7 later
 
 ## Blockers
 None.
@@ -52,6 +52,7 @@ None.
 | 2026-10-22 | GitHub/LinkedIn icons as local components copied from lucide 0.544 | lucide-react 1.0 removed brand icons; copying the ISC-licensed outline paths keeps the exact look and stroke style of the other icons |
 | 2026-10-22 | Only install versions >= 1 day old (motion 14.5.0, not 14.6.0) | Repo intent in `.npmrc` (`minimumReleaseAge: 1d`), which pnpm currently ignores |
 | 2026-10-22 | CI on Node 24 | Start needs Node >=22.12, Vitest 5 needs >=22.12; matches Dockerfile |
+| 2026-10-23 | Page fade keyed on leaf match id (`s.matches.at(-1)?.id`), not `location.pathname` | `location` updates on click but the old page stays rendered until an unvisited route's chunk loads, so the old page re-faded and the new one popped in. Match ids change in the same render as the page; leaf `pathname` collides for unknown URLs (root-only match = `/`) |
 
 ---
-_Updated: 2026-10-22
+_Updated: 2026-10-23

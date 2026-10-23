@@ -153,3 +153,15 @@ Stop servers by PID (`node ... & PID=$!; ...; kill $PID`) and confirm the port b
 
 ### Rule
 For any before/after comparison, use a fresh port per run, verify which process owns it, and kill by PID. Never `pkill -f` with a pattern that also matches the current shell.
+
+
+## 2026-10-23 Page fade replayed the old page on first visits -> Key transitions on rendered matches
+
+### Problem
+The page fade wrapper in `__root.tsx` was keyed on `location.pathname`. TanStack Router sets `location` when navigation starts, but keeps rendering the old matches until an unvisited route's code chunk (and loader) is ready. The wrapper remounted early, the old page blinked and faded back in, then the new page popped in without a fade. Cached routes render in the same frame, so second visits looked fine.
+
+### Fix
+Key on the committed leaf match: `useRouterState({ select: (s) => s.matches.at(-1)?.id })`. Verified with a per-frame rAF log in Chromium at 150 ms and 1500 ms latency: the remount frame already holds the new page.
+
+### Rule
+Anything that should react to "the page changed" (transitions, focus, analytics) reads `matches` or `resolvedLocation`, not `location`. Reproduce timing bugs with a throttled, frame-by-frame log on a cold cache, not by eye.
