@@ -367,35 +367,10 @@
     mask-image: linear-gradient(to bottom, black 30%, transparent);
   }
 
-  /* One lit grid cell. A 48px box moved with `transform`, so the fade is a compositor-only
-     opacity change on a tiny layer instead of a repaint of the whole backdrop. */
-  .grid-hover-cell {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 48px;
-    height: 48px;
-    background-color: rgb(var(--grid-hover) / 0.22);
-    opacity: 0;
-    /* Leaving a cell: 250ms delay, then a 1.25s fade. Linear keeps the whole trail equally
-       visible for the full duration; an ease-out curve is ~85% gone within 300ms. */
-    transition: opacity 1250ms linear 250ms;
-  }
-
-  .grid-hover-cell.is-active {
-    opacity: 1;
-    /* Entering is quick so the highlight tracks the cursor and a fast flick still reaches
-       full brightness before the cell starts fading */
-    transition: opacity 90ms var(--ease-out);
-  }
-
-  /* Reduced motion: keep the highlight, drop the decay. Cells switch instantly instead of
-     leaving a 1.25s trail, so only the cell under the cursor is ever lit. */
-  @media (prefers-reduced-motion: reduce) {
-    .grid-hover-cell,
-    .grid-hover-cell.is-active {
-      transition: none;
-    }
+  /* Once the canvas has painted the grid it draws the same lines, so the static background
+     would only double their alpha. It stays as the pre-hydration paint. */
+  .grid-backdrop[data-canvas] {
+    background-image: none;
   }
 
   /* Dashed divider with crosshair marks at both ends */
