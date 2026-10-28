@@ -61,6 +61,8 @@
 - Main shell uses a vertical app frame with `Header`, `main`, and `Footer`.
 - Single narrow column everywhere: `mx-auto max-w-4xl px-5` (header and footer too).
 - Every page except home opens with `PageHeader` (grid backdrop, mono label, h1, lead).
+- The hero grid is a 48px drafting grid (`.grid-backdrop`) masked with `linear-gradient(to bottom, black 30%, transparent)`, so it fades toward the bottom. Hovering a cell tints only that cell green (`--grid-hover`); every cell you cross keeps fading on its own, so a sweep leaves a trail of up to 32 cells. Each tint sits inside the masked backdrop, so it dims with the grid (top row measures a 29 green delta, bottom row 3). Cells hold for 250ms, then fade linearly over 1.25s — linear, not ease-out, so the trail stays visible for the whole duration.
+- Hovering also bends the grid. The lines are drawn on a canvas and resampled through a radial pull toward the cursor — a mass on a rubber sheet, not a perspective trick. Pull peaks at `BEND_STRENGTH` and decays as `e^-(r/R)^2` with `R = BEND_RADIUS`, so the sheet is flat again three radii out and the rest of the grid never drifts. The tint is drawn as the quad between the hovered cell's four bent corners, so it bends with the grid instead of drifting off it. `src/lib/grid.ts` holds the field and the line positions, both unit-tested.
 - Content sits in `Section` blocks: `.dashed-rule` top border with `+` crosshair marks, mono label, optional "see all" link.
 - Lists are rows with dashed dividers, no cards: projects (thumbnail + text), posts (date column + title), experience (period column + details), stack/skills (label column + items).
 - Blog detail prose is capped at `max-w-3xl` inside the column.
@@ -72,6 +74,13 @@
 - Shared animation tokens in `src/styles.css` `@theme`:
   - `--ease-out: cubic-bezier(0.23, 1, 0.32, 1)` — strong ease-out for UI entrances.
   - `--ease-in-out: cubic-bezier(0.77, 0, 0.175, 1)` — strong ease-in-out for on-screen movement.
+  - `--default-transition-timing-function: var(--ease-out)` — every Tailwind `transition-*` utility inherits the repo curve instead of Tailwind's weaker default, so hovers match the entrance motion.
+- Theme swaps blend over 250ms `ease`. The backdrop, header bar, footer, rules and text all ease together.
+  - The backdrop is a fixed, viewport-sized `body::before` layer (solid colour, no glow). A background propagated to the viewport canvas cannot be transitioned, and animating a full-height wrapper instead measured p95 33ms.
+  - `body` no longer paints `--glow-soft`: it was never visible (the layout wrapper's opaque background covered it), and once that wrapper went transparent the glow washed the dark background grey.
+  - `color` transitions go only on elements that set their own colour (`h1-h4`, `p`, `li`, `.mono-label`, `.lead-text`, `.item-text`). Adding them to inheriting children makes each child retarget its parent's moving value every frame — hundreds of cancelled transitions and a fade that overshoots its duration.
+  - Measured: 202 transitions, 0 cancels, median ~240ms, p50/p95 frame gap 17ms.
+- Never stack `transition-colors transition-shadow transition-transform` — each sets `transition-property` and the last one wins, silently leaving colours and shadow with no transition. Use `transition` (Tailwind v4's full list includes colour, shadow, transform and scale; not layout).
 - Entrance animations are CSS, defined in `@theme` in `src/styles.css` so they run on first paint (no JS, no SSR `opacity: 0`):
   - `animate-fade-up` — opacity + `translateY(32px)`, 600ms `--ease-out`. Used by `PageHeader`, case-study body.
   - `animate-fade-in` — opacity only, 600ms. Used by `Section`, blog body; also the reduced-motion fallback via `motion-reduce:`.
@@ -81,7 +90,7 @@
 - Never gate content visibility on `whileInView` (Firefox left sections stuck at opacity 0 after back navigation).
 - Header mobile menu uses `AnimatePresence` animating `height` + `opacity`, 200ms `EASE_OUT`.
 - Mobile menu link block staggers in with `opacity` + `y: -20`, 300ms `EASE_OUT`.
-- `Button` base class includes `transition-transform active:scale-[0.97]` for press feedback.
+- `Button` base class uses `transition duration-150` (colour + shadow + `active:scale-[0.97]`), so hover and press both ease on the repo curve.
 
 ## Components
 
@@ -90,6 +99,8 @@
   - `getButtonClasses()`
 - `src/components/PageHeader.tsx`
   - page intro: grid backdrop, mono label (accepts nodes, e.g. back link), h1, lead, children
+- `src/components/GridBackdrop.tsx`
+  - hero grid + hover trail; owns the pointer listener, the bend field and the canvas. Grid maths in `src/lib/grid.ts` (`cellFromPoint` / `cellPosition` / `bendPoint` / line positions), all mirroring the grid's `background-position: center top`. The canvas reproduces the CSS grid line for line, so the static `background-image` stays only as the pre-hydration paint and is dropped via `data-canvas` once drawing starts. Lines outside three bend radii are stroked as plain two-point segments; everything goes into one path with one `stroke()`, which is what keeps a software canvas at 60fps. The loop stops when the well has settled and no cell is still ramping or fading (measured 0 rAF/s at rest), so a lit cell under a resting cursor costs nothing. Under `prefers-reduced-motion: reduce` there is no bend and no trail: the grid stays flat and only the hovered cell is lit.
 - `src/components/Section.tsx`
   - dashed-rule section with mono label and optional link
 - `src/components/Header.tsx`
