@@ -68,6 +68,7 @@
   --border: 39 39 42;
   --input: 63 63 70;
   --ring: 250 250 250;
+  --grid-hover: 74 222 128;
   --glow-soft:
     radial-gradient(
       circle at 30% 20%,
@@ -102,6 +103,7 @@
   --border: 212 212 216;
   --input: 212 212 216;
   --ring: 9 9 11;
+  --grid-hover: 22 163 74;
   --shadow-soft: 0 10px 40px 0 rgb(0 0 0 / 0.06);
 }
 
@@ -316,6 +318,29 @@
     background-size: 48px 48px;
     background-position: center top;
     mask-image: linear-gradient(to bottom, black 30%, transparent);
+  }
+
+  /* One lit grid cell. A 48px box moved with `transform`, so the fade is a compositor-only
+     opacity change on a tiny layer instead of a repaint of the whole backdrop. */
+  .grid-hover-cell {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 48px;
+    height: 48px;
+    background-color: rgb(var(--grid-hover) / 0.22);
+    opacity: 0;
+    /* Leaving a cell: 250ms delay, then a 1.25s fade. Linear keeps the whole trail equally
+       visible for the full duration; an ease-out curve is ~85% gone within 300ms. */
+    transition: opacity 1250ms linear 250ms;
+    will-change: opacity;
+  }
+
+  .grid-hover-cell.is-active {
+    opacity: 1;
+    /* Entering is quick so the highlight tracks the cursor and a fast flick still reaches
+       full brightness before the cell starts fading */
+    transition: opacity 90ms var(--ease-out);
   }
 
   /* Dashed divider with crosshair marks at both ends */
