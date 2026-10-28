@@ -17,6 +17,18 @@ Goal: hovering a 48px cell of the hero grid tints **only that cell** green. Ever
 - [x] 7. Serve over Tailscale for user review
 - [x] 8. Round 2 (user feedback: trail capped at 2 cells, fade too quick) -> 32-cell ring buffer, exit 250ms + **linear** fade, entry 90ms
 - [x] 9. Round 3: fade duration 1500ms -> 1250ms (user-tuned)
+- [x] 10. Animation audit (improve-animations, HEAD 5502ca0) — 5 findings fixed:
+  - button: stacked `transition-*` utilities cancelled colour + shadow transitions
+  - `--default-transition-timing-function: var(--ease-out)` so all 12 `transition-colors` sites use the repo curve
+  - theme swap made instant (animating every element measured ~30fps; fading body alone left a mismatch)
+  - dropped `will-change: opacity` from the 32 trail layers
+  - trail disabled under `prefers-reduced-motion: reduce` (instant on/off, one cell lit)
+- [x] 12. Smooth theme swap (user request, like fenilromoliya.com): 250ms colour blend on backdrop + header + footer + rules + text
+  - backdrop moved to `body::before` (canvas-propagated backgrounds can't transition)
+  - removed the opaque `bg-[rgb(var(--background))]` from the root layout wrapper that hid the layer
+  - colour transitions scoped to elements that set their own colour (inheriting children caused a retarget storm)
+  - verified: 206 transitions / 0 cancels / median 180ms / p50-p95 17ms in Chromium + Firefox
+- [ ] 11. Audit follow-ups left for user decision: 600ms page entrance on every nav; DESIGN.md claims a mobile-menu link stagger that doesn't exist; menu animates `height` (layout)
 
 Outcome: 32 tint layers of 48x48 moved with `transform` inside `.grid-backdrop`, so they inherit the bottom-fade mask (green delta 29 on the top row -> 3 on the bottom row). Trail of 13 cells after a 13-cell sweep, 27 after a full-width sweep, capped at the 32-cell pool. Cost ~+600 B gz total. Cell-change handler 22.5us (no layout read per move). Frame gaps p50 16.7ms / p95 16.8ms, no long tasks.
 

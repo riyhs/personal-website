@@ -218,3 +218,50 @@ Entry transition 180ms -> 90ms. Cells crossed in one frame now peak at ~0.9+ ins
 
 ### Rule
 An entry animation must finish inside the shortest time the pointer can spend on the element, or fast input never reaches full visual weight. Verify with a one-cell-per-frame synthetic sweep, not a slow human-speed one.
+
+## 2026-10-28 Three stacked `transition-*` utilities silently cancelled two of them
+
+### Problem
+The primary button used `transition-colors transition-shadow transition-transform`. Hover background and shadow snapped instantly; only the press scale animated.
+
+### Root Cause
+Each Tailwind `transition-*` utility emits its own rule setting `transition-property`. They all have the same specificity, so the last one in the stylesheet wins — `transition-transform` — leaving `background-color` and `box-shadow` with no transition. `getComputedStyle(btn).transitionProperty` returned exactly `transform, translate, scale, rotate`, which is how it was caught.
+
+### Fix
+One `transition` utility (Tailwind v4's full list covers colour, shadow, transform, translate, scale, rotate — not layout properties). Verified the hover now ramps alpha 1 -> 0.956 -> 0.927 -> ... -> 0.9 over ~9 frames.
+
+### Rule
+Never stack `transition-*` utilities on one element. Pick the single one that covers every property you animate, and check `transitionProperty` in computed style rather than trusting the class list.
+
+## 2026-10-28 Animating a theme swap across every element costs 30fps -> switch in one frame
+
+### Problem
+`body` had `transition: background-color 300ms, color 300ms` while the header bar, cards, rules and text snapped instantly. Mid-swap the header was already near-white while the body was still mid-grey — visibly mismatched for 300ms.
+
+### Root Cause
+Theme tokens are CSS variables consumed by hundreds of elements. Only `body` opted into a transition, so everything else flipped at once while the background lagged.
+
+### Fix attempt that failed
+A zero-specificity `:where(*) { transition-property: color, background-color, border-color; transition-duration: 300ms }` made every surface ease in lockstep — and dropped the swap to ~30fps (25 frames vs 53 idle, p50 33.4ms). Repainting the colour of every element per frame is not cheap.
+
+### Fix
+Remove the theme colour transition entirely. Everything switches in one frame: verified body, header bar and body text all settled on the same frame.
+
+### Rule
+A theme swap changes colour on the entire page. Either switch it in one frame, or don't animate it — per-element colour transitions are not a budget you can afford site-wide. Measure a theme toggle with a rAF frame log; a "smooth" fade can be the slowest thing on the site.
+
+## 2026-10-28 Three separate reasons a theme fade looked like a snap
+
+### Problem
+After adding colour transitions for the theme swap, the page background still jumped instantly while the header eased.
+
+### Root causes (all three had to be fixed)
+1. **The root layout div was painting over the backdrop.** `__root.tsx` wrapped everything in `bg-[rgb(var(--background))]` — an opaque, non-transitioning background covering the viewport. Nothing behind it could ever show.
+2. **Canvas propagation.** `body`'s background is propagated to the viewport canvas, and a propagated background is not animated. Moving it to `html` doesn't help either — the root's background is propagated the same way. The backdrop has to be a real painted element (`body::before`, `position: fixed`, `z-index: -1`, `pointer-events: none`) with `body` transparent.
+3. **Inheriting children retargeted their parent.** With `body` transitioning `color` and children also transitioning `color`, every frame the inherited value moved, so each child restarted its transition: hundreds of `transitioncancel` events and a fade that ran to 795ms instead of 250ms. Only elements that set their own colour need a transition; children follow for free.
+
+### Verification
+`transitionrun`/`transitionend`/`transitioncancel` counts (bubbling, so listen with capture): 206 run / 206 end / **0 cancel**, median 180ms, last 271ms. Frame gaps p50/p95 = 17ms during the swap. To prove a backdrop blends at all, stretch the duration with an injected 3s `!important` and screenshot mid-way — a 250ms fade is impossible to time reliably with screenshots.
+
+### Rule
+When a full-page colour change won't animate, check in this order: is something opaque painted above the layer, is the background propagated to the canvas, and is a child inheriting an already-animating colour. All three produce the identical symptom.

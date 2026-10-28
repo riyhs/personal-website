@@ -9,8 +9,8 @@
 **Branch:** feat/add-hero-bg-effect | **Worktree:** personal-website
 **Last completed:** TanStack Start 1.169.3 / Router 1.170.45 / Vite 8.3.5 / Vitest 5.0.5 / React 19.3.1 / Motion 14.5.0 / TypeScript 6.0.3 upgrade (PR #4), plus project-page screenshot under the title (`a110556`) and the page-fade keyed on leaf match id (`da94a01`)
 **Verified:** tsc, 14 unit tests, prod build, first-load JS 175.2 KB gz, Firefox + Chromium hover suite (14 checks), frame gaps p50 16.7ms / p95 16.8ms with no long tasks during a full trail, Docker image 427.5 MB
-**In progress:** None — hero grid hover trail built, verified, served over Tailscale for user review (uncommitted)
-**Next:** User reviews the hover feel on the Tailscale preview, then commit/push/PR. Remaining backlog: remark-mdx-frontmatter 6, web-vitals/rehype-highlight/remark-gfm removal (unused), TS 7 later, untrack `package-lock.json` (npm leftover from `.cta.json`, repo uses pnpm)
+**In progress:** None — animation audit fixes applied on top of the hero trail (uncommitted, for user review)
+**Next:** User reviews the motion changes on the Tailscale preview, then commit. Audit follow-ups deliberately NOT done: 600ms page entrance (DESIGN.md marks it deliberate) and the mobile-menu link stagger that DESIGN.md documents but the code never had. Remaining backlog: remark-mdx-frontmatter 6, web-vitals/rehype-highlight/remark-gfm removal (unused), TS 7 later, untrack `package-lock.json` (npm leftover from `.cta.json`, repo uses pnpm)
 
 ## Blockers
 None.
@@ -56,6 +56,12 @@ None.
 | 2026-10-28 | Fade is `linear` at 1250ms, not `--ease-out` | ease-out is ~85% done at 20% of the duration, so a 1s fade read as a 300ms flick. Linear keeps the trail evenly weighted for the whole duration. User tuned the duration 1000 -> 1500 -> 1250ms |
 | 2026-10-28 | Entry ramp 90ms, exit 250ms delay + 1250ms fade | A fast flick crosses a 48px cell in 16-50ms; with a 180ms entry every cell was abandoned at 0.37 opacity and the trail looked washed out. 90ms gets cells to 0.9-0.98 |
 | 2026-10-28 | Cache the backdrop rect in a ref instead of calling `getBoundingClientRect()` per pointermove | The handler writes classes and custom properties, so the next read forced a synchronous layout: 428us per cell change. Caching drops it to 22.5us (same as a no-op move) |
+| 2026-10-28 | Button transition: one `transition` utility, not three stacked `transition-*` | Each `transition-*` sets `transition-property` and the last wins; computed style proved colours and shadow had none and snapped on hover |
+| 2026-10-28 | `--default-transition-timing-function: var(--ease-out)` in `@theme` | The repo curve existed but no utility consumed it; all 12 `transition-colors` sites used Tailwind's default `cubic-bezier(0.4, 0, 0.2, 1)` |
+| 2026-10-28 | Theme swap is instant, no colour transition at all | Fading only `body` left surfaces/text snapping mid-swap; transitioning colour on every element measured ~30fps (25 vs 53 frames). One-frame switch is coherent and free |
+| 2026-10-28 | Theme swap blends 250ms via a fixed `body::before` backdrop | Canvas-propagated backgrounds never transition, so the solid backdrop lives on a viewport-sized fixed layer. `--glow-soft` had to be dropped from `body`: the layout wrapper used to cover it, so removing that opaque background exposed it and the dark page turned grey. Animating the full-height wrapper instead cost p95 33ms |
+| 2026-10-28 | Colour transitions only on elements that set their own colour | Children that merely inherit end up retargeting the animated parent every frame: 0 cancels after narrowing the list vs hundreds before, and the fade stopped overshooting (last end 271ms vs 795ms) |
+| 2026-10-28 | Dropped `will-change: opacity` from the trail cells | 32 permanently promoted layers for a fade that only runs on hover. Measured neutral (p95 16.8ms either way), so the smaller cost wins |
 
 ---
 _Updated: 2026-10-28

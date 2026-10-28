@@ -73,6 +73,13 @@
 - Shared animation tokens in `src/styles.css` `@theme`:
   - `--ease-out: cubic-bezier(0.23, 1, 0.32, 1)` — strong ease-out for UI entrances.
   - `--ease-in-out: cubic-bezier(0.77, 0, 0.175, 1)` — strong ease-in-out for on-screen movement.
+  - `--default-transition-timing-function: var(--ease-out)` — every Tailwind `transition-*` utility inherits the repo curve instead of Tailwind's weaker default, so hovers match the entrance motion.
+- Theme swaps blend over 250ms `ease`. The backdrop, header bar, footer, rules and text all ease together.
+  - The backdrop is a fixed, viewport-sized `body::before` layer (solid colour, no glow). A background propagated to the viewport canvas cannot be transitioned, and animating a full-height wrapper instead measured p95 33ms.
+  - `body` no longer paints `--glow-soft`: it was never visible (the layout wrapper's opaque background covered it), and once that wrapper went transparent the glow washed the dark background grey.
+  - `color` transitions go only on elements that set their own colour (`h1-h4`, `p`, `li`, `.mono-label`, `.lead-text`, `.item-text`). Adding them to inheriting children makes each child retarget its parent's moving value every frame — hundreds of cancelled transitions and a fade that overshoots its duration.
+  - Measured: 202 transitions, 0 cancels, median ~240ms, p50/p95 frame gap 17ms.
+- Never stack `transition-colors transition-shadow transition-transform` — each sets `transition-property` and the last one wins, silently leaving colours and shadow with no transition. Use `transition` (Tailwind v4's full list includes colour, shadow, transform and scale; not layout).
 - Entrance animations are CSS, defined in `@theme` in `src/styles.css` so they run on first paint (no JS, no SSR `opacity: 0`):
   - `animate-fade-up` — opacity + `translateY(32px)`, 600ms `--ease-out`. Used by `PageHeader`, case-study body.
   - `animate-fade-in` — opacity only, 600ms. Used by `Section`, blog body; also the reduced-motion fallback via `motion-reduce:`.
@@ -82,7 +89,7 @@
 - Never gate content visibility on `whileInView` (Firefox left sections stuck at opacity 0 after back navigation).
 - Header mobile menu uses `AnimatePresence` animating `height` + `opacity`, 200ms `EASE_OUT`.
 - Mobile menu link block staggers in with `opacity` + `y: -20`, 300ms `EASE_OUT`.
-- `Button` base class includes `transition-transform active:scale-[0.97]` for press feedback.
+- `Button` base class uses `transition duration-150` (colour + shadow + `active:scale-[0.97]`), so hover and press both ease on the repo curve.
 
 ## Components
 
@@ -92,7 +99,7 @@
 - `src/components/PageHeader.tsx`
   - page intro: grid backdrop, mono label (accepts nodes, e.g. back link), h1, lead, children
 - `src/components/GridBackdrop.tsx`
-  - hero grid + hover trail; owns the pointer listener and a 32-cell ring buffer of 48px tint layers. Cell maths in `src/lib/grid.ts` (`cellFromPoint` / `cellPosition`) mirrors the grid's `background-position: center top`
+  - hero grid + hover trail; owns the pointer listener and a 32-cell ring buffer of 48px tint layers. Cell maths in `src/lib/grid.ts` (`cellFromPoint` / `cellPosition`) mirrors the grid's `background-position: center top`. The trail is disabled under `prefers-reduced-motion: reduce` (cells switch instantly, so only the hovered cell is lit). No `will-change` — opacity animations already composite, and 32 permanent promoted layers are idle cost (measured neutral either way).
 - `src/components/Section.tsx`
   - dashed-rule section with mono label and optional link
 - `src/components/Header.tsx`
