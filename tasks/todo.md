@@ -28,6 +28,11 @@ Goal: hovering a 48px cell of the hero grid tints **only that cell** green. Ever
   - removed the opaque `bg-[rgb(var(--background))]` from the root layout wrapper that hid the layer
   - colour transitions scoped to elements that set their own colour (inheriting children caused a retarget storm)
   - verified: 206 transitions / 0 cancels / median 180ms / p50-p95 17ms in Chromium + Firefox
+- [x] 13. Hero grid gravity-well bend (user request): grid lines pull toward the cursor, green tint still follows and rides the bend
+  - canvas draws grid + tint in one pass; cell tint is the quad between its four bent corners (a transform cannot match a quad)
+  - Gaussian pull `e^-(r/R)^2`, R=150, strength 0.4; flat again three radii out
+  - loop stops at rest (0 rAF/s), one path + one stroke, two-point segments outside the bend radius
+  - verified: 8/8 canvas checks, 24/24 unit tests, p95 ~20ms during a sweep, reduced motion flat with no trail, no console errors
 - [ ] 11. Audit follow-ups left for user decision: 600ms page entrance on every nav; DESIGN.md claims a mobile-menu link stagger that doesn't exist; menu animates `height` (layout)
 
 Outcome: 32 tint layers of 48x48 moved with `transform` inside `.grid-backdrop`, so they inherit the bottom-fade mask (green delta 29 on the top row -> 3 on the bottom row). Trail of 13 cells after a 13-cell sweep, 27 after a full-width sweep, capped at the 32-cell pool. Cost ~+600 B gz total. Cell-change handler 22.5us (no layout read per move). Frame gaps p50 16.7ms / p95 16.8ms, no long tasks.

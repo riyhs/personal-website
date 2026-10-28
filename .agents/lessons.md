@@ -265,3 +265,21 @@ After adding colour transitions for the theme swap, the page background still ju
 
 ### Rule
 When a full-page colour change won't animate, check in this order: is something opaque painted above the layer, is the background propagated to the canvas, and is a child inheriting an already-animating colour. All three produce the identical symptom.
+
+## 2026-10-28 Warping a DOM layer cannot follow a warped grid
+
+### Problem
+The hovered cell was a 48px `<span>` positioned with `translate3d` while the grid lines bent. It looked detached: the cell stayed rigid and axis-aligned while the cell it was supposed to represent tapered and shifted.
+
+### Why
+A single element can only be translated, scaled or rotated — an affine transform maps a rectangle to a parallelogram. The bent cell is a general quad, so no transform can match it. Four independent corners are needed.
+
+### Fix
+Draw both on one canvas. The grid is resampled per line; the tint is filled as the quad between the cell's four bent corners. Both share `bendPoint`, so they cannot drift apart. The trail timing moved from CSS transitions into the frame loop (`ENTER_MS` 90 ramp, `HOLD_MS` 250, `FADE_MS` 1250, linear).
+
+### Two performance traps found in the same pass
+1. **The loop never stopped.** A lit cell whose ramp had finished still reported "live", so rAF ran at 60/s while the cursor rested. Only cells that are still ramping or fading keep the loop alive; measured 0 rAF/s at rest now.
+2. **One `stroke()` per line.** 36 stroked paths on a software canvas cost real frames in Firefox (p95 35ms). Putting every line into one path and stroking once, and stroking only two-point segments outside three bend radii, brought p95 to ~20ms.
+
+### Rule
+If two layers must look like the same object under a non-uniform warp, they must be drawn in the same pass. And a canvas render loop needs an explicit "what can still change" predicate, or it becomes a 60fps idle burn.
