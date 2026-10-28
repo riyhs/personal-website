@@ -61,6 +61,7 @@
 - Main shell uses a vertical app frame with `Header`, `main`, and `Footer`.
 - Single narrow column everywhere: `mx-auto max-w-4xl px-5` (header and footer too).
 - Every page except home opens with `PageHeader` (grid backdrop, mono label, h1, lead).
+- The hero grid is a 48px drafting grid (`.grid-backdrop`) masked with `linear-gradient(to bottom, black 30%, transparent)`, so it fades toward the bottom. Hovering a cell tints only that cell green (`--grid-hover`); every cell you cross keeps fading on its own, so a sweep leaves a trail of up to 32 cells. Each tint sits inside the masked backdrop, so it dims with the grid (top row measures a 29 green delta, bottom row 3). Cells hold for 250ms, then fade linearly over 1.25s — linear, not ease-out, so the trail stays visible for the whole duration.
 - Content sits in `Section` blocks: `.dashed-rule` top border with `+` crosshair marks, mono label, optional "see all" link.
 - Lists are rows with dashed dividers, no cards: projects (thumbnail + text), posts (date column + title), experience (period column + details), stack/skills (label column + items).
 - Blog detail prose is capped at `max-w-3xl` inside the column.
@@ -90,6 +91,8 @@
   - `getButtonClasses()`
 - `src/components/PageHeader.tsx`
   - page intro: grid backdrop, mono label (accepts nodes, e.g. back link), h1, lead, children
+- `src/components/GridBackdrop.tsx`
+  - hero grid + hover trail; owns the pointer listener and a 32-cell ring buffer of 48px tint layers. Cell maths in `src/lib/grid.ts` (`cellFromPoint` / `cellPosition`) mirrors the grid's `background-position: center top`
 - `src/components/Section.tsx`
   - dashed-rule section with mono label and optional link
 - `src/components/Header.tsx`

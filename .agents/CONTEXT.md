@@ -5,14 +5,12 @@
 **Name:** personal-website | **Stack:** TanStack Start + React 19 + Tailwind v4 | **Repo:** riyaldi.dev
 
 ## State
-**Status:** Upgrade committed on `chore/upgrade-tanstack-start` (5 commits, not pushed). First-visit page-fade glitch fixed in `__root.tsx` (uncommitted). Personal refresh merged to main (PR #3).
-**Branch:** chore/upgrade-tanstack-start | **Worktree:** personal-website
-**Last completed:** Start 1.168.49 -> 1.169.3, Router 1.170.45, router-plugin 1.168.47, router-devtools 1.167.2, Vite 7 -> 8.3.5, plugin-react 5 -> 6.1.2, Vitest 3 -> 5.0.5, nitro alpha.2 -> 3.0.260903-beta, vite-tsconfig-paths removed (Vite `resolve.tsconfigPaths`), CI Node 20 -> 24
-**Verified:** tsc, 9 unit tests, prod build (21.4s -> ~11s), first-load JS 160.8 -> 158.4 KB gz, Firefox + Chromium back/forward/theme/menu/404 suite, dev server, CI build in clean node:24, Docker image (443.2 -> 427.5 MB), SSR HTML null bytes gone
-**In progress:** None
-**Also done (batch 2, same branch):** React 19.3.1, shiki + @shikijs/rehype 4.5.0, lucide-react 1.61.0 (local GithubIcon/LinkedinIcon, identical markup), framer-motion -> motion 14.5.0 (`motion/react`), TypeScript 6.0.3 (baseUrl removed), jsdom 30.1.3, @types/node 24.19.2
-**Cost noted:** first-load JS 158.4 -> 175.2 KB gz (~8.5 KB React 19.3 measured, ~8.7 KB motion 14 by elimination)
-**Next:** User checks the fade fix on the served build, then commit/push/PR. Remaining: remark-mdx-frontmatter 6, web-vitals/rehype-highlight/remark-gfm removal (unused), TS 7 later
+**Status:** Upgrade branch merged to `main` via PR #4 (`a81c881`). Tree clean. Working on the hero grid hover effect on `feat/add-hero-bg-effect`.
+**Branch:** feat/add-hero-bg-effect | **Worktree:** personal-website
+**Last completed:** TanStack Start 1.169.3 / Router 1.170.45 / Vite 8.3.5 / Vitest 5.0.5 / React 19.3.1 / Motion 14.5.0 / TypeScript 6.0.3 upgrade (PR #4), plus project-page screenshot under the title (`a110556`) and the page-fade keyed on leaf match id (`da94a01`)
+**Verified:** tsc, 14 unit tests, prod build, first-load JS 175.2 KB gz, Firefox + Chromium hover suite (14 checks), frame gaps p50 16.7ms / p95 16.8ms with no long tasks during a full trail, Docker image 427.5 MB
+**In progress:** None — hero grid hover trail built, verified, served over Tailscale for user review (uncommitted)
+**Next:** User reviews the hover feel on the Tailscale preview, then commit/push/PR. Remaining backlog: remark-mdx-frontmatter 6, web-vitals/rehype-highlight/remark-gfm removal (unused), TS 7 later, untrack `package-lock.json` (npm leftover from `.cta.json`, repo uses pnpm)
 
 ## Blockers
 None.
@@ -53,6 +51,11 @@ None.
 | 2026-10-22 | Only install versions >= 1 day old (motion 14.5.0, not 14.6.0) | Repo intent in `.npmrc` (`minimumReleaseAge: 1d`), which pnpm currently ignores |
 | 2026-10-22 | CI on Node 24 | Start needs Node >=22.12, Vitest 5 needs >=22.12; matches Dockerfile |
 | 2026-10-23 | Page fade keyed on leaf match id (`s.matches.at(-1)?.id`), not `location.pathname` | `location` updates on click but the old page stays rendered until an unvisited route's chunk loads, so the old page re-faded and the new one popped in. Match ids change in the same render as the page; leaf `pathname` collides for unknown URLs (root-only match = `/`) |
+| 2026-10-28 | Grid hover tint = a 32-element ring buffer, not 2 spans and not one div per cell | 2 spans capped the visible trail at 2 cells (user complaint). One div per cell is 300+ nodes and ~10 KB of SSR HTML. 32 covers any trail that fits on screen (~27 columns at 1280px); past that the ring overwrites the dimmest end |
+| 2026-10-28 | Cell tint is a 48x48 element moved with `transform` (replaced the `background-position` tile trick) | The tile trick needs `inset: 0` layers, so 32 of them meant 32 viewport-sized layers to composite. Sized + transformed elements make each fade a compositor-only opacity change on a tiny layer. Positions come from the cached backdrop rect; `cellPosition`/`cellFromPoint` round-trip is unit-tested |
+| 2026-10-28 | Fade is `linear` at 1250ms, not `--ease-out` | ease-out is ~85% done at 20% of the duration, so a 1s fade read as a 300ms flick. Linear keeps the trail evenly weighted for the whole duration. User tuned the duration 1000 -> 1500 -> 1250ms |
+| 2026-10-28 | Entry ramp 90ms, exit 250ms delay + 1250ms fade | A fast flick crosses a 48px cell in 16-50ms; with a 180ms entry every cell was abandoned at 0.37 opacity and the trail looked washed out. 90ms gets cells to 0.9-0.98 |
+| 2026-10-28 | Cache the backdrop rect in a ref instead of calling `getBoundingClientRect()` per pointermove | The handler writes classes and custom properties, so the next read forced a synchronous layout: 428us per cell change. Caching drops it to 22.5us (same as a no-op move) |
 
 ---
-_Updated: 2026-10-23
+_Updated: 2026-10-28

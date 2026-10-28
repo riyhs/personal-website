@@ -4,17 +4,27 @@
 
 ## ACTIVE
 
-Branch: `chore/upgrade-tanstack-start` — upgrade to latest TanStack Start (uncommitted, for user review)
+Branch: `feat/add-hero-bg-effect` — hover highlight on the hero grid backdrop
 
-- [x] 1. Baseline: build time, bundle sizes, route statuses, SSR HTML -> saved for comparison
-- [x] 2. Upgrade TanStack packages together + Vite 8 + plugin-react 6 + Vitest 5 + nitro beta, per TanStack start-basic example
-- [x] 3. Replace vite-tsconfig-paths with Vite `resolve.tsconfigPaths`
-- [x] 4. CI Node 20 -> 24
-- [x] 5. Gate: tsc, tests, prod build, Firefox + Chromium e2e, dev server, clean-container CI build, Docker image
-- [x] 6. Batch 2: React 19.3, shiki 4, lucide 1.x (+ local brand icons), framer-motion -> motion, TS 6, jsdom 30, @types/node 24
-- [x] 7. Gate batch 2: tsc, tests, build, icon/code-block HTML diff, Firefox + Chromium e2e, Docker
+Goal: hovering a 48px cell of the hero grid tints **only that cell** green. Every cell you cross keeps fading on its own, so a sweep leaves a trail. The green must inherit the existing bottom-fade mask (`.grid-backdrop`), so lower rows stay dimmer. Must not cost bundle size or main-thread frames.
+
+- [x] 1. Baseline screenshot of the hero (dark + light, desktop + mobile)
+- [x] 2. Extract `GridBackdrop` component + pure `cellFromPoint` / `cellPosition` helpers in `src/lib/grid.ts`
+- [x] 3. Implement: 32-cell ring buffer, CSS-only opacity transitions, pointermove bails unless the cell index changes
+- [x] 4. Add `--grid-hover` token for dark + light themes
+- [x] 5. Unit test `cellFromPoint` / `cellPosition` round trip
+- [x] 6. Verify: tsc, tests, prod build, before/after screenshots, Firefox + Chromium hover, bundle size delta
+- [x] 7. Serve over Tailscale for user review
+- [x] 8. Round 2 (user feedback: trail capped at 2 cells, fade too quick) -> 32-cell ring buffer, exit 250ms + **linear** fade, entry 90ms
+- [x] 9. Round 3: fade duration 1500ms -> 1250ms (user-tuned)
+
+Outcome: 32 tint layers of 48x48 moved with `transform` inside `.grid-backdrop`, so they inherit the bottom-fade mask (green delta 29 on the top row -> 3 on the bottom row). Trail of 13 cells after a 13-cell sweep, 27 after a full-width sweep, capped at the 32-cell pool. Cost ~+600 B gz total. Cell-change handler 22.5us (no layout read per move). Frame gaps p50 16.7ms / p95 16.8ms, no long tasks.
 
 ## DONE
+
+- [x] Upgrade TanStack Start to 1.169.3 + Vite 8 + React 19.3 + Motion 14 + TS 6 — merged PR #4
+- [x] Fix page fade replaying the old page on first visits (key on leaf match id) — `da94a01`
+- [x] Show project screenshot under the title on project pages — `a110556`
 
 - [x] Personal refresh (safzan/dharma inspiration): theme toggle, colophon, llms.txt/index.md, home redesign, case studies — merged PR #3
 - [x] Fix TanStack Router dev code-splitter duplicate `hot` declaration on blog detail route
