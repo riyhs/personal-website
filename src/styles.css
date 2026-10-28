@@ -26,6 +26,11 @@
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 
+  /* Every `transition-*` utility inherits the repo curve instead of Tailwind's weaker
+     default (cubic-bezier(0.4, 0, 0.2, 1)), so hover and colour motion matches the
+     entrance animations. */
+  --default-transition-timing-function: var(--ease-out);
+
   /* Entrance animations are CSS so SSR content paints without waiting for JS.
      Use `motion-safe:animate-fade-up motion-reduce:animate-fade-in`. */
   --animate-fade-in: fade-in 600ms var(--ease-out) both;
@@ -121,6 +126,53 @@
       0 0 0 4px rgb(var(--background) / 1);
   }
 
+  /* Theme swap easing. The palette lives in CSS variables, so every surface and text node
+     flips the moment the theme changes. These transitions keep the switch coherent: the
+     page blends instead of snapping. Scoped on purpose — transitioning `color` on every
+     element measured ~30fps, this list stays at 60fps. */
+  header > div,
+  footer,
+  .dashed-rule {
+    transition:
+      background-color 250ms ease,
+      border-color 250ms ease;
+  }
+
+  /* The page backdrop. `body`'s own background is propagated to the viewport canvas, and a
+     propagated background cannot be transitioned — it snapped while everything else eased.
+     A fixed layer is a real painted element, so it blends. It stays viewport-sized (a taller
+     wrapper animated at p95 33ms). Solid only: `--glow-soft` was never visible here, it was
+     covered by the layout wrapper, and painting it now washed the page grey. */
+  html {
+    background-color: rgb(var(--background));
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-color: rgb(var(--background));
+    transition: background-color 250ms ease;
+  }
+
+  /* Only elements that set their own colour belong here. A child that merely inherits
+     needs no transition: it follows the animated parent for free. Giving both a transition
+     makes the child retarget its parent's moving value every frame (hundreds of cancelled
+     transitions, and the fade stretching past its stated duration). */
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  li,
+  .mono-label,
+  .lead-text,
+  .item-text {
+    transition: color 250ms ease;
+  }
+
   body {
     min-height: 100svh;
     margin: 0;
@@ -129,11 +181,6 @@
     color: rgb(var(--foreground));
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    transition:
-      background-color 300ms ease,
-      color 300ms ease;
-    background-image: var(--glow-soft);
-    background-attachment: fixed;
   }
 
   h1,
@@ -333,7 +380,6 @@
     /* Leaving a cell: 250ms delay, then a 1.25s fade. Linear keeps the whole trail equally
        visible for the full duration; an ease-out curve is ~85% gone within 300ms. */
     transition: opacity 1250ms linear 250ms;
-    will-change: opacity;
   }
 
   .grid-hover-cell.is-active {
@@ -341,6 +387,15 @@
     /* Entering is quick so the highlight tracks the cursor and a fast flick still reaches
        full brightness before the cell starts fading */
     transition: opacity 90ms var(--ease-out);
+  }
+
+  /* Reduced motion: keep the highlight, drop the decay. Cells switch instantly instead of
+     leaving a 1.25s trail, so only the cell under the cursor is ever lit. */
+  @media (prefers-reduced-motion: reduce) {
+    .grid-hover-cell,
+    .grid-hover-cell.is-active {
+      transition: none;
+    }
   }
 
   /* Dashed divider with crosshair marks at both ends */
