@@ -15,7 +15,8 @@ Branch: `wt/mobile-grid-and-perf` (worktree `../personal-website-wt-mobile-grid-
 - [x] Post lists load frontmatter only (`?frontmatter` Vite plugin + `yaml` devDep); bodies are per-post chunks loaded by the post loader, `React.lazy` fallback during hydration
 - [x] Verify: tsc, 28 tests, prod build (entry 145.6 -> 113.5 KB gz, motion features 17.8 KB gz lazy), 31 Chromium checks (desktop, touch emulation, delayed-chunk hydration, morph pairing forward + back, dev-mode HMR)
 - [x] User review on Tailscale preview, then commit
-- [ ] Not checked: Firefox, real phone
+- [x] Navbar blur during view transitions fixed: name the bar div (backdrop-filter copied to the group); user-verified in Firefox + Chrome
+- [ ] Not checked: real phone
 
 Previous branch: `feat/add-hero-bg-effect` — hover highlight on the hero grid backdrop (merged, PR #5)
 

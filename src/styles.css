@@ -67,11 +67,14 @@
   animation-timing-function: var(--ease-out);
 }
 
-/* During a transition the site header gets its own snapshot, stacked above every other
-   group, so a morphing project image passes under the bar instead of over it. Only during:
-   a named element is always a backdrop root, so a permanent name left the bar's blur with
-   nothing behind it to blur. */
-html:active-view-transition .site-header {
+/* During a transition the header bar gets its own snapshot, stacked above every other
+   group, so a morphing project image passes under the bar instead of over it.
+   The name goes on the bar itself, the element that carries `backdrop-filter`: the spec
+   copies a captured element's backdrop-filter onto its ::view-transition-group, so the blur
+   keeps working over the transition in Chrome and Firefox. Naming the outer <header>
+   instead made it a backdrop root with nothing inside to blur. Only during a transition,
+   because a named element is always a backdrop root. */
+html:active-view-transition .site-header > div {
   view-transition-name: site-header;
 }
 
