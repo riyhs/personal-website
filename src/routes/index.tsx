@@ -10,7 +10,7 @@ import { TwitterIcon } from "../components/ui/TwitterIcon";
 import { cn } from "../lib/utils";
 import { formatShortDate } from "../lib/date";
 import { profile } from "../data/profile";
-import { spotlightProjects } from "../data/projects";
+import { projectShotTransition, spotlightProjects } from "../data/projects";
 import { techStack } from "../data/stack";
 import { listPosts } from "../lib/posts";
 
@@ -201,6 +201,7 @@ function HomePage() {
                   width={640}
                   height={360}
                   loading="lazy"
+                  style={{ viewTransitionName: projectShotTransition(project.slug) }}
                   className="aspect-video w-full rounded-[4px] border border-[rgb(var(--foreground)/0.1)] object-cover"
                 />
                 <div className="min-w-0">

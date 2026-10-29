@@ -4,7 +4,6 @@ import {
   Scripts,
   ScriptOnce,
   createRootRoute,
-  useRouterState,
 } from "@tanstack/react-router";
 import { MotionConfig } from "motion/react";
 import { type ReactNode } from "react";
@@ -66,8 +65,6 @@ export const Route = createRootRoute({
       { rel: "icon", type: "image/png", sizes: "128x128", href: "/favicon.png" },
       { rel: "apple-touch-icon", href: "/logo192.png" },
       { rel: "manifest", href: "/manifest.json" },
-      { rel: "preconnect", href: "https://github.com" },
-      { rel: "preconnect", href: "https://www.linkedin.com" },
     ],
   }),
 
@@ -77,19 +74,13 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
-  // Key on the rendered leaf match, not `location`: location changes on click, while
-  // the old page stays up until an unvisited route's chunk loads (fading the old page)
-  const key = useRouterState({ select: (s) => s.matches.at(-1)?.id })
-
   return (
     <div className="flex min-h-svh flex-col text-[rgb(var(--foreground))]">
       <Header />
       <main className="flex-1">
-        {/* Remount when the new page renders replays the CSS fade. No exit animation:
-            <Outlet /> already renders the next route, so exiting would fade the wrong page */}
-        <div key={key} className="animate-page-in">
-          <Outlet />
-        </div>
+        {/* The page fade is the router's view transition (see `::view-transition-*` in
+            styles.css), which cross-fades the old page into the new one */}
+        <Outlet />
       </main>
       <Footer />
     </div>

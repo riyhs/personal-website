@@ -79,7 +79,8 @@ const TINT_ALPHA = 0.22
 // mass sitting on a rubber sheet: every line is resampled through a radial pull toward the
 // cursor. The hovered cell lights green and leaves a fading trail, and because the tint is
 // drawn as the quad between that cell's four bent corners it bends with the grid instead of
-// drifting off it.
+// drifting off it. Touch gets the same effect: a tap pulses the grid under the finger and a
+// sideways drag sweeps it, while vertical drags still scroll the page.
 export function GridBackdrop({ children }: GridBackdropProps) {
   const backdropRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -351,8 +352,6 @@ export function GridBackdrop({ children }: GridBackdropProps) {
   }, [])
 
   const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (event.pointerType !== 'mouse') return
-
     const box = boxRef.current
     if (!box) return
 
@@ -392,11 +391,15 @@ export function GridBackdrop({ children }: GridBackdropProps) {
   }
 
   return (
+    // `pan-y` keeps vertical swipes scrolling (the browser then fires pointercancel) while a
+    // sideways drag stays with the grid; `pinch-zoom` keeps zoom working
     <div
-      className="relative"
+      className="relative touch-pan-y touch-pinch-zoom"
       onPointerEnter={measure}
+      onPointerDown={handlePointerMove}
       onPointerMove={handlePointerMove}
       onPointerLeave={hide}
+      onPointerCancel={hide}
     >
       <div
         ref={backdropRef}

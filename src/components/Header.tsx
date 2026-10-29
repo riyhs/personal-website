@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router'
-import { AnimatePresence, motion } from 'motion/react'
+import { AnimatePresence, LazyMotion, m } from 'motion/react'
 import {
   Menu,
   Moon,
@@ -40,6 +40,10 @@ const socials = [
     label: 'LinkedIn',
   },
 ]
+
+// Motion's animation features (~18 KB gzipped) only matter once the mobile menu opens, so
+// they load as their own chunk after hydration instead of sitting in the entry bundle
+const loadMotionFeatures = () => import('../lib/motionFeatures').then((mod) => mod.default)
 
 const iconButtonClasses =
   'rounded-full border border-[rgb(var(--foreground)/0.1)] bg-[rgb(var(--foreground)/0.05)] p-2 text-[rgb(var(--foreground)/0.8)] transition-colors hover:bg-[rgb(var(--foreground)/0.15)]'
@@ -104,7 +108,7 @@ export default function Header() {
   )
 
   return (
-    <header className="sticky top-0 z-50 h-[73px]">
+    <header className="site-header sticky top-0 z-50 h-[73px]">
       <div className="absolute inset-x-0 top-0 w-full backdrop-blur-sm bg-[rgb(var(--background))]/55 border-b border-[rgb(var(--foreground)/0.1)] shadow-[var(--shadow-soft)]">
         <div className="mx-auto flex max-w-4xl items-center justify-between px-5 py-4 text-sm">
           <Link to="/" className="flex items-center gap-3" aria-label="Riyaldi home">
@@ -148,36 +152,38 @@ export default function Header() {
           </div>
         </div>
 
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              id="mobile-navigation"
-              className="overflow-hidden lg:hidden"
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2, ease: EASE_OUT }}
-            >
-              <div className="mx-auto max-w-4xl pt-2 pb-8 space-y-6 px-5">
-                {renderLinks('mobile')}
-                <div className="flex justify-center gap-4 pt-2">
-                  {socials.map((social) => (
-                    <a
-                      key={social.href}
-                      href={social.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={social.label}
-                      className={iconButtonClasses}
-                    >
-                      <social.icon size={16} />
-                    </a>
-                  ))}
+        <LazyMotion features={loadMotionFeatures} strict>
+          <AnimatePresence>
+            {isOpen && (
+              <m.div
+                id="mobile-navigation"
+                className="overflow-hidden lg:hidden"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2, ease: EASE_OUT }}
+              >
+                <div className="mx-auto max-w-4xl pt-2 pb-8 space-y-6 px-5">
+                  {renderLinks('mobile')}
+                  <div className="flex justify-center gap-4 pt-2">
+                    {socials.map((social) => (
+                      <a
+                        key={social.href}
+                        href={social.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={social.label}
+                        className={iconButtonClasses}
+                      >
+                        <social.icon size={16} />
+                      </a>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              </m.div>
+            )}
+          </AnimatePresence>
+        </LazyMotion>
       </div>
     </header>
   )

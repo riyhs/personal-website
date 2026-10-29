@@ -283,3 +283,18 @@ Draw both on one canvas. The grid is resampled per line; the tint is filled as t
 
 ### Rule
 If two layers must look like the same object under a non-uniform warp, they must be drawn in the same pass. And a canvas render loop needs an explicit "what can still change" predicate, or it becomes a 60fps idle burn.
+
+## 2026-10-29 View transitions broke the blurred header bar (two bugs)
+
+### Problem
+1. Firefox: the header bar lost its blur and read as transparent for the whole transition, most visibly on back (scroll restored, text under the bar). User-confirmed with a no-op `document.startViewTransition(() => {})` slowed to 5s, so no navigation or scroll was involved.
+2. Both browsers: the morphing project image flew over the header. Named elements are lifted into the `::view-transition` overlay, which sits above the root snapshot, header included.
+
+### Fix attempt that failed
+A denser tint during the transition (`html:active-view-transition header > div { background-color: ... / 0.9 }`). Headless Firefox showed the denser bar, but the user's real Firefox stayed transparent. Most likely hardware WebRender drops the whole backdrop-filtered element, background included, inside snapshots, so no background change can show. The selector also hit `PageHeader`'s `<header>` children.
+
+### Fix (partial, user-chosen)
+`html:active-view-transition .site-header { view-transition-name: site-header }` plus `::view-transition-group(site-header) { z-index: 1 }` keeps the morph under the bar. A permanent name (second attempt) killed the blur everywhere at rest: a named element is always a backdrop root, so the bar's child blurred only the header's own empty content. Swapping the blur for a 0.9 tint during transitions was reverted at the user's request (it read as the blur going away). Known trade-off: during a transition the bar is tint-only in every browser, since its own snapshot has nothing behind it to blur.
+
+### Rule
+Never rely on `backdrop-filter` inside a view transition. Never put a permanent `view-transition-name` on, or above, a blurred element; name it only while a transition runs. Scope selectors to the site header (`.site-header`), because `PageHeader` renders a `<header>` too. Headless Firefox renders no backdrop-filter at all, so blur bugs need a real Firefox, and a fix that only passed headless is unverified.

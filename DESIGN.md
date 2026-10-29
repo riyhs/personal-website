@@ -16,7 +16,7 @@
 
 ## Typography
 
-- Font import: `Plus Jakarta Sans` from `@fontsource/plus-jakarta-sans`.
+- Font import: `Plus Jakarta Sans` from `@fontsource/plus-jakarta-sans`, weights 400 and 600 only (the only two in use).
 - `--font-sans` is defined in `src/styles.css` and used as main family.
 - Type tokens in `@theme`:
   - `--text-md: 1rem`
@@ -62,6 +62,7 @@
 - Single narrow column everywhere: `mx-auto max-w-4xl px-5` (header and footer too).
 - Every page except home opens with `PageHeader` (grid backdrop, mono label, h1, lead).
 - The hero grid is a 48px drafting grid (`.grid-backdrop`) masked with `linear-gradient(to bottom, black 30%, transparent)`, so it fades toward the bottom. Hovering a cell tints only that cell green (`--grid-hover`); every cell you cross keeps fading on its own, so a sweep leaves a trail of up to 32 cells. Each tint sits inside the masked backdrop, so it dims with the grid (top row measures a 29 green delta, bottom row 3). Cells hold for 250ms, then fade linearly over 1.25s — linear, not ease-out, so the trail stays visible for the whole duration.
+- Touch and pen drive the same effect: a tap pulses the cell under the finger, a sideways drag sweeps a trail. The wrapper is `touch-pan-y touch-pinch-zoom`, so a vertical swipe still scrolls (the browser fires `pointercancel`, which releases the grid) and pinch-zoom still works.
 - Hovering also bends the grid. The lines are drawn on a canvas and resampled through a radial pull toward the cursor — a mass on a rubber sheet, not a perspective trick. Pull peaks at `BEND_STRENGTH` and decays as `e^-(r/R)^2` with `R = BEND_RADIUS`, so the sheet is flat again three radii out and the rest of the grid never drifts. The tint is drawn as the quad between the hovered cell's four bent corners, so it bends with the grid instead of drifting off it. `src/lib/grid.ts` holds the field and the line positions, both unit-tested.
 - Content sits in `Section` blocks: `.dashed-rule` top border with `+` crosshair marks, mono label, optional "see all" link.
 - Lists are rows with dashed dividers, no cards: projects (thumbnail + text), posts (date column + title), experience (period column + details), stack/skills (label column + items).
@@ -70,7 +71,7 @@
 ## Motion
 
 - Root wraps children in `MotionConfig reducedMotion="user"`.
-- Root `RootComponent` wraps `<Outlet />` in a `div` keyed on pathname with `animate-page-in` (150ms CSS fade). No exit animation: `<Outlet />` already renders the next route, so an exit would fade the wrong page and remount it.
+- Route changes are view transitions (`defaultViewTransition: true` in `src/router.tsx`). The root cross-fades in 150ms `--ease-out`; a project thumbnail (home, /projects) and its case-study hero share `view-transition-name: project-shot-<slug>` (`projectShotTransition()` in `src/data/projects.ts`), so the image morphs over 200ms, both ways. The hero sits outside the case-study fade-up, since a fading target would morph into nothing. Under `prefers-reduced-motion: reduce` the transition animations are off. While a transition runs, the site header (`.site-header`) is its own snapshot stacked above the rest (`z-index: 1` on its group; named only then, because a named element is always a backdrop root and would blur nothing), so the morph passes under the bar. Trade-off: a separately captured element cannot blur what is behind it, so during a transition the bar shows its 55% tint without blur (all browsers). Browsers without View Transitions get an instant swap.
 - Shared animation tokens in `src/styles.css` `@theme`:
   - `--ease-out: cubic-bezier(0.23, 1, 0.32, 1)` — strong ease-out for UI entrances.
   - `--ease-in-out: cubic-bezier(0.77, 0, 0.175, 1)` — strong ease-in-out for on-screen movement.
@@ -84,9 +85,8 @@
 - Entrance animations are CSS, defined in `@theme` in `src/styles.css` so they run on first paint (no JS, no SSR `opacity: 0`):
   - `animate-fade-up` — opacity + `translateY(32px)`, 600ms `--ease-out`. Used by `PageHeader`, case-study body.
   - `animate-fade-in` — opacity only, 600ms. Used by `Section`, blog body; also the reduced-motion fallback via `motion-reduce:`.
-  - `animate-page-in` — 150ms route fade.
   - Stagger with `[animation-delay:100ms]`.
-- `src/lib/animation.ts` keeps only `EASE_OUT` / `EASE_IN_OUT` for the Motion (`motion/react`) mobile menu.
+- `src/lib/animation.ts` keeps only `EASE_OUT` / `EASE_IN_OUT` for the Motion (`motion/react`) mobile menu. The menu uses `LazyMotion strict` + `m.div`; the animation features (~18 KB gz) are a separate chunk (`src/lib/motionFeatures.ts`) fetched after hydration, not part of the entry bundle.
 - Never gate content visibility on `whileInView` (Firefox left sections stuck at opacity 0 after back navigation).
 - Header mobile menu uses `AnimatePresence` animating `height` + `opacity`, 200ms `EASE_OUT`.
 - Mobile menu link block staggers in with `opacity` + `y: -20`, 300ms `EASE_OUT`.

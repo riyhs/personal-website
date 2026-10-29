@@ -4,7 +4,20 @@
 
 ## ACTIVE
 
-Branch: `feat/add-hero-bg-effect` — hover highlight on the hero grid backdrop
+Branch: `wt/mobile-grid-and-perf` (worktree `../personal-website-wt-mobile-grid-and-perf`) — items picked from the 2026-10-29 audit (Obsidian: `Hermes/Personal Website - Audit 2026-10-29.md`). Uncommitted, for user review.
+
+- [x] Touch on the hero grid: tap pulses, sideways drag sweeps, vertical swipe still scrolls (`touch-pan-y touch-pinch-zoom`, pointercancel hides)
+- [x] View transitions: `defaultViewTransition`, thumbnail -> case-study hero morph via shared `view-transition-name`; keyed `animate-page-in` removed; disabled under reduced motion
+- [x] `LazyMotion` + `m` in Header, features in `src/lib/motionFeatures.ts` (own chunk)
+- [x] `defaultPreload: 'intent'`
+- [x] Fonts: only Jakarta 400 + 600
+- [x] Removed github/linkedin preconnects
+- [x] Post lists load frontmatter only (`?frontmatter` Vite plugin + `yaml` devDep); bodies are per-post chunks loaded by the post loader, `React.lazy` fallback during hydration
+- [x] Verify: tsc, 28 tests, prod build (entry 145.6 -> 113.5 KB gz, motion features 17.8 KB gz lazy), 31 Chromium checks (desktop, touch emulation, delayed-chunk hydration, morph pairing forward + back, dev-mode HMR)
+- [x] User review on Tailscale preview, then commit
+- [ ] Not checked: Firefox, real phone
+
+Previous branch: `feat/add-hero-bg-effect` — hover highlight on the hero grid backdrop (merged, PR #5)
 
 Goal: hovering a 48px cell of the hero grid tints **only that cell** green. Every cell you cross keeps fading on its own, so a sweep leaves a trail. The green must inherit the existing bottom-fade mask (`.grid-backdrop`), so lower rows stay dimmer. Must not cost bundle size or main-thread frames.
 

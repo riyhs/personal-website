@@ -1,5 +1,7 @@
 @import "tailwindcss";
-@import "@fontsource/plus-jakarta-sans/latin.css";
+/* Only the weights in use: 400 (body) and 600 (headings, `font-semibold`) */
+@import "@fontsource/plus-jakarta-sans/latin-400.css";
+@import "@fontsource/plus-jakarta-sans/latin-600.css";
 
 @custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
 
@@ -35,7 +37,6 @@
      Use `motion-safe:animate-fade-up motion-reduce:animate-fade-in`. */
   --animate-fade-in: fade-in 600ms var(--ease-out) both;
   --animate-fade-up: fade-up 600ms var(--ease-out) both;
-  --animate-page-in: fade-in 150ms var(--ease-out) both;
 
   @keyframes fade-in {
     from {
@@ -48,6 +49,41 @@
       opacity: 0;
       transform: translateY(32px);
     }
+  }
+}
+
+/* Route changes run inside a view transition (`defaultViewTransition` in router.tsx). The
+   page cross-fades quickly, and a project thumbnail morphs into its case-study hero
+   because both carry the same `view-transition-name`. */
+::view-transition-group(root),
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 150ms;
+  animation-timing-function: var(--ease-out);
+}
+
+::view-transition-group(*) {
+  animation-duration: 200ms;
+  animation-timing-function: var(--ease-out);
+}
+
+/* During a transition the site header gets its own snapshot, stacked above every other
+   group, so a morphing project image passes under the bar instead of over it. Only during:
+   a named element is always a backdrop root, so a permanent name left the bar's blur with
+   nothing behind it to blur. */
+html:active-view-transition .site-header {
+  view-transition-name: site-header;
+}
+
+::view-transition-group(site-header) {
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none;
   }
 }
 
