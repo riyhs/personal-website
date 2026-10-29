@@ -9,6 +9,7 @@ export type Project = {
     stack: string[]
     links: { label: string; href: string }[]
     highlights?: string[]
+    demo?: 'digit'
 }
 
 // Shared by a project's thumbnail and its case-study hero, so the router's view transition
@@ -16,6 +17,36 @@ export type Project = {
 export const projectShotTransition = (slug: string) => `project-shot-${slug}`
 
 export const spotlightProjects: Project[] = [
+    {
+        slug: 'nutrivision',
+        title: 'NutriVision Android App',
+        description:
+            'Native Android application built with Kotlin. Applied intermediate mobile development principles to create a seamless user experience.',
+        year: '2025',
+        platform: 'Android',
+        thumbnail:
+            '/img/projects/NutriVision.webp',
+        stack: ['Kotlin', 'Android', 'Jetpack Compose', 'Firebase'],
+        links: [
+            { label: 'GitHub', href: 'https://github.com/riyhs/nutrivision' },
+        ],
+    },
+    {
+        slug: 'bangkit-ml-capstone',
+        title: 'Bangkit Machine Learning Capstone',
+        description:
+            'Selected as Google Bangkit Academy cohorts (10% Acceptance Rate). Developed a TensorFlow model for real-world application, collaborating with a cross-university team.',
+        year: '2024',
+        platform: 'Machine Learning',
+        thumbnail:
+            '/img/projects/AritmaPlay.webp',
+        stack: ['Python', 'TensorFlow', 'Flask'],
+        demo: 'digit',
+        links: [
+            { label: 'Project GitHub', href: 'https://github.com/AritmaPlay' },
+            { label: 'Model API GitHub', href: 'https://github.com/AritmaPlay/aritmaplay-ml-api' },
+        ],
+    },
     {
         slug: 'pingfest-2023',
         title: 'P!NGFEST 2023 Platform',
@@ -34,35 +65,6 @@ export const spotlightProjects: Project[] = [
         highlights: [
             'Managed VPS infrastructure ensuring 100% uptime for 70+ competing teams.',
             'Led a team of 4 developers to align technical delivery with event goals.',
-        ],
-    },
-    {
-        slug: 'bangkit-ml-capstone',
-        title: 'Bangkit Machine Learning Capstone',
-        description:
-            'Selected as Google Bangkit Academy cohorts (10% Acceptance Rate). Developed a TensorFlow model for real-world application, collaborating with a cross-university team.',
-        year: '2024',
-        platform: 'Machine Learning',
-        thumbnail:
-            '/img/projects/AritmaPlay.webp',
-        stack: ['Python', 'TensorFlow', 'Flask'],
-        links: [
-            { label: 'Project GitHub', href: 'https://github.com/AritmaPlay' },
-            { label: 'Model API GitHub', href: 'https://github.com/AritmaPlay/aritmaplay-ml-api' },
-        ],
-    },
-    {
-        slug: 'nutrivision',
-        title: 'NutriVision Android App',
-        description:
-            'Native Android application built with Kotlin. Applied intermediate mobile development principles to create a seamless user experience.',
-        year: '2025',
-        platform: 'Android',
-        thumbnail:
-            '/img/projects/NutriVision.webp',
-        stack: ['Kotlin', 'Android', 'Jetpack Compose', 'Firebase'],
-        links: [
-            { label: 'GitHub', href: 'https://github.com/riyhs/nutrivision' },
         ],
     },
 ]

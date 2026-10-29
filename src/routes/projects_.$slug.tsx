@@ -2,6 +2,7 @@ import { Link, createFileRoute, notFound } from '@tanstack/react-router'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 import type { ReactNode } from 'react'
 
+import { DigitDemo } from '../components/DigitDemo'
 import { PageHeader } from '../components/PageHeader'
 import { cn } from '../lib/utils'
 import { projectShotTransition, spotlightProjects } from '../data/projects'
@@ -121,17 +122,18 @@ function ProjectDetailPage() {
             ))}
           </div>
 
-          {project.highlights && (
-            <section className="dashed-rule mt-14 pt-10">
-              <h2 className="mono-label">Highlights</h2>
-              <ul className="mt-6 list-disc space-y-2 pl-5">
-                {project.highlights.map((item) => (
-                  <li key={item} className="text-[rgb(var(--foreground)/0.75)]">{item}</li>
-                ))}
-              </ul>
-            </section>
-          )}
-        </div>
+        {project.demo === 'digit' && <DigitDemo />}
+
+        {project.highlights && (
+          <section className="dashed-rule mt-14 pt-10">
+            <h2 className="mono-label">Highlights</h2>
+            <ul className="mt-6 list-disc space-y-2 pl-5">
+              {project.highlights.map((item) => (
+                <li key={item} className="text-[rgb(var(--foreground)/0.75)]">{item}</li>
+              ))}
+            </ul>
+          </section>
+        )}
       </div>
     </article>
   )

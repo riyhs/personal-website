@@ -5,12 +5,12 @@
 **Name:** personal-website | **Stack:** TanStack Start + React 19 + Tailwind v4 | **Repo:** riyaldi.dev
 
 ## State
-**Status:** Hero grid bend merged via PR #5 (`345b0ad`). Audit items (2026-10-29) implemented on `wt/mobile-grid-and-perf`, uncommitted, for user review.
-**Branch:** wt/mobile-grid-and-perf | **Worktree:** ../personal-website-wt-mobile-grid-and-perf
-**Last completed:** touch on hero grid, route view transitions + project thumbnail morph, LazyMotion, `defaultPreload: 'intent'`, fonts 400/600 only, dropped preconnects, post lists load frontmatter only
-**Verified:** tsc, 28 unit tests, prod build (entry 145.6 -> 113.5 KB gz; motion features 17.8 KB gz own chunk), 31 Chromium checks incl. touch emulation, delayed-chunk hydration (no blank), morph old/new pairing forward + back, dev-mode frontmatter HMR
-**In progress:** User review on the Tailscale preview (prod build on :3000)
-**Next:** Commit after review. Not checked: Firefox, a real phone. Known noise: rapid clicks log "Transition was skipped" (router leaves the skipped transition's promise unhandled; navigation still lands). Content backlog lives in the Obsidian note `Hermes/Personal Website - Audit 2026-10-29.md` (missing `riyaldi-hasan.webp`, one blog post, ProCost case study, thin case studies). Older backlog: remark-mdx-frontmatter 6, web-vitals/rehype-highlight/remark-gfm removal (unused), TS 7 later, untrack `package-lock.json`
+**Status:** Bangkit case-study digit demo built on `feat/bangkit-digit-demo`; uncommitted for review.
+**Branch:** feat/bangkit-digit-demo | **Worktree:** personal-website
+**Last completed:** In-browser Bangkit CNN demo: weights pinned to `AritmaPlay/aritmaplay-ml-api` `model/model.h5` (blob `417f9d3…`, sha256 `0d7f329…`), 20,954 float32 weights (83,816 B), Keras 3.5.0 parity fixtures, pointer canvas, lazy weight fetch, probability bars.
+**Verified:** tsc; 32 unit tests (5 parity samples < 1e-5); prod build; production weights 200 / 83,816 B; Chromium desktop (1 and 7) + mobile (1); clear resets canvas; no console errors; no horizontal overflow.
+**In progress:** None — branch uncommitted for user review.
+**Next:** Review `/projects/bangkit-ml-capstone`, confirm team permission to redistribute the weights (AritmaPlay repos have no LICENSE), then commit/PR. Remaining backlog: remark-mdx-frontmatter 6, web-vitals/rehype-highlight/remark-gfm removal (unused), TS 7 later, untrack `package-lock.json` (npm leftover from `.cta.json`, repo uses pnpm)
 
 ## Blockers
 None.
@@ -18,8 +18,7 @@ None.
 ## Active worktrees
 | Name | Path | Status |
 |------|------|--------|
-| main | ./ | stable |
-| mobile-grid-and-perf | ../personal-website-wt-mobile-grid-and-perf | review |
+| feat/bangkit-digit-demo | ./ | uncommitted digit demo |
 
 ## Key decisions
 | Date | Decision | Why |
@@ -65,6 +64,10 @@ None.
 | 2026-10-28 | Theme swap blends 250ms via a fixed `body::before` backdrop | Canvas-propagated backgrounds never transition, so the solid backdrop lives on a viewport-sized fixed layer. `--glow-soft` had to be dropped from `body`: the layout wrapper used to cover it, so removing that opaque background exposed it and the dark page turned grey. Animating the full-height wrapper instead cost p95 33ms |
 | 2026-10-28 | Colour transitions only on elements that set their own colour | Children that merely inherit end up retargeting the animated parent every frame: 0 cancels after narrowing the list vs hundreds before, and the fade stopped overshooting (last end 271ms vs 795ms) |
 | 2026-10-28 | Dropped `will-change: opacity` from the trail cells | 32 permanently promoted layers for a fade that only runs on hover. Measured neutral (p95 16.8ms either way), so the smaller cost wins |
+| 2026-10-29 | Run the Bangkit CNN in the browser (Option A) | No server or API surface; the 83,816 B weight file is fetched only when the demo nears the viewport |
+| 2026-10-29 | Pin weights to `AritmaPlay/aritmaplay-ml-api` `model/model.h5` blob `417f9d3…` (sha256 `0d7f329…`) | User asked for that exact file; `scripts/export-digit-model.py` refuses any other checksum |
+| 2026-10-29 | Match the app's preprocessing: 6:5 canvas, stroke 55/1080, whole canvas squashed to 48x48 | The model was trained on the app's whole-canvas captures, not cropped/centred digits |
+| 2026-10-29 | Parity-test the TS forward pass against Keras 3.5.0 | Catches weight order, flatten order, padding and 1/255 scaling errors |
 | 2026-10-29 | Route fade = router view transitions (`defaultViewTransition`), keyed `animate-page-in` removed | Lets a project thumbnail morph into its case-study hero via a shared `view-transition-name`. Root group pinned to 150ms so pointer input isn't blocked for the 400ms morph (briefly 200ms while the bar lost its blur; back to 400ms once the blur fix landed); morph target kept out of the fade-up |
 | 2026-10-29 | `post.mdx?frontmatter` resolves to a virtual `\0….mdx.frontmatter.js` id | Eager-globbing the MDX modules put every post body in the home/blog chunks. A static + dynamic import of the same module can't split, so the header needs its own module. `@mdx-js/rollup` strips queries before its extname check, so the id must not end in `.mdx` |
 | 2026-10-29 | Post body: loader awaits `loadPostBody`, component falls back to `React.lazy` under `<Suspense>` | Client loaders don't run during hydration; the lazy fallback keeps the server HTML until the chunk arrives (verified with a 1.5s delayed chunk: 0 blank mutations) |
