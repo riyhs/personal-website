@@ -77,7 +77,7 @@
   - `--ease-out: cubic-bezier(0.23, 1, 0.32, 1)` — strong ease-out for UI entrances.
   - `--ease-in-out: cubic-bezier(0.77, 0, 0.175, 1)` — strong ease-in-out for on-screen movement.
   - `--default-transition-timing-function: var(--ease-out)` — every Tailwind `transition-*` utility inherits the repo curve instead of Tailwind's weaker default, so hovers match the entrance motion.
-- Theme swaps blend over 500ms `ease` (250ms read as a flash; doubled at user request). The backdrop, header bar, footer, rules and text all ease together.
+- Theme swaps blend over 750ms `ease` (250ms read as a flash; raised to 750ms at user request). The backdrop, header bar, footer, rules and text all ease together.
   - The backdrop is a fixed, viewport-sized `body::before` layer (solid colour, no glow). A background propagated to the viewport canvas cannot be transitioned, and animating a full-height wrapper instead measured p95 33ms.
   - `body` no longer paints `--glow-soft`: it was never visible (the layout wrapper's opaque background covered it), and once that wrapper went transparent the glow washed the dark background grey.
   - `color` transitions go only on elements that set their own colour (`h1-h4`, `p`, `li`, `.mono-label`, `.lead-text`, `.item-text`). Adding them to inheriting children makes each child retarget its parent's moving value every frame — hundreds of cancelled transitions and a fade that overshoots its duration.

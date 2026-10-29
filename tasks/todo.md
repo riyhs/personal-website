@@ -10,7 +10,10 @@ Branch: `fix/navbar-blur-delay-dissapear` — mobile navbar blur delay after nav
 - [x] 2. Root cause: router captures after loaders (~150ms), Motion exit is 200ms, so the tall bar is frozen in the named snapshot
 - [x] 3. Close the menu synchronously on nav-link clicks (unmount AnimatePresence before capture); keep X-button exit animation
 - [x] 4. Verify: tsc, 40 tests, prod build, Chromium + Firefox mobile, desktop nav + project morph under the bar
-- [ ] 5. User review on Tailscale port 3000, then commit
+- [x] 5. User review on Tailscale port 3000, then commit (`09a4e8d`)
+- [x] 6. Research theme swap: 500ms `ease` reaches ~80% by 250ms; 800ms ease-in-out tried and reverted
+- [x] 7. Keep the original curve and raise only the duration to 750ms
+- [ ] 8. User preview of the 750ms timing, then commit
 
 ## ACTIVE
 

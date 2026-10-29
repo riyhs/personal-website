@@ -325,3 +325,17 @@ Nav-link clicks set `skipExit` and close the menu in the same React event, unmou
 
 ### Rule
 Everything inside a `view-transition-name` element is frozen at capture time. If its size or content can change just before a navigation (open menus, expanding panels), settle it synchronously in the click handler instead of relying on an exit animation that can outlive the capture.
+
+## 2026-10-29 A 500ms theme fade read as a flash -> know the curve before tuning duration
+
+### Problem
+The dark/light swap still felt snappy at 500ms `ease`, even after it had been doubled from 250ms.
+
+### Measurements
+`ease` (`cubic-bezier(0.25, 0.1, 0.25, 1)`) at 500ms reached ~50% progress at 140ms and ~80% at 250ms. The stated duration was 500ms; the perceived change was ~250ms. At 800ms `linear`, the background was 50% at 400ms, but the page sat in the mid-grey crossover for a long time.
+
+### Decision
+User chose to keep the original `ease` curve and raise only the duration to 750ms: 50% at ~225ms, 80% at ~375ms. An 800ms `cubic-bezier(0.45, 0, 0.55, 1)` was tried and reverted; it did not feel right. Frame gaps stay p50/p95 16.7ms.
+
+### Rule
+A duration change is not linear in perception: `ease`/ease-out are ~80% done at half the stated time. Sample the progress curve before claiming a fade is "500ms". Also note that interpolating background and text together passes through a low-contrast midpoint; a longer fade lengthens that window unless the curve crosses it quickly.

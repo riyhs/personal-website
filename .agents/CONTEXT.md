@@ -5,12 +5,12 @@
 **Name:** personal-website | **Stack:** TanStack Start + React 19 + Tailwind v4 | **Repo:** riyaldi.dev
 
 ## State
-**Status:** Mobile navbar fix on `fix/navbar-blur-delay-dissapear`; uncommitted for user review.
+**Status:** Mobile navbar fix committed (`09a4e8d`); theme duration raised to 750ms (uncommitted).
 **Branch:** fix/navbar-blur-delay-dissapear | **Worktree:** personal-website
-**Last completed:** Mobile menu nav links now collapse the bar before the router captures the `site-header` view-transition snapshot, so the tall blurred bar no longer lingers for the 400ms transition. X-button close still animates 200ms.
-**Verified:** tsc; 40 unit tests; prod build; Chromium + Firefox mobile (bar 332.8 -> 73.3 at click, transition captures the closed bar); desktop nav and project-image morph still use the named header group.
-**In progress:** None — waiting for Tailscale preview review.
-**Next:** User review on `http://johor.ison-mintaka.ts.net:3000` (or `http://100.102.71.54:3000`), then commit/PR. Backlog: remark-mdx-frontmatter 6, web-vitals/rehype-highlight/remark-gfm removal (unused), TS 7 later, untrack `package-lock.json` (npm leftover from `.cta.json`, repo uses pnpm)
+**Last completed:** Mobile menu nav links collapse the bar before the router captures the `site-header` view-transition snapshot, so the tall blurred bar no longer lingers for the 400ms transition. X-button close still animates 200ms. Theme swap: original `ease` curve kept, duration 500ms -> 750ms.
+**Verified:** tsc; 40 unit tests; prod build; Chromium + Firefox mobile (bar 332.8 -> 73.3 at click, transition captures the closed bar); desktop nav and project-image morph still use the named header group. Theme timing at 750ms `ease`: 50% at ~225ms, 80% at ~375ms; frame p50/p95 16.7ms.
+**In progress:** Theme-swap feel — waiting for user preview of the 750ms `ease` timing.
+**Next:** Preview on `http://100.102.71.54:3000`; tune the three `750ms ease` values in `src/styles.css` if needed, then commit. MagicDNS host is blocked by Vite `allowedHosts`. Backlog: remark-mdx-frontmatter 6, web-vitals/rehype-highlight/remark-gfm removal (unused), TS 7 later, untrack `package-lock.json` (npm leftover from `.cta.json`, repo uses pnpm)
 
 ## Blockers
 None.
@@ -73,6 +73,7 @@ None.
 | 2026-10-29 | Post body: loader awaits `loadPostBody`, component falls back to `React.lazy` under `<Suspense>` | Client loaders don't run during hydration; the lazy fallback keeps the server HTML until the chunk arrives (verified with a 1.5s delayed chunk: 0 blank mutations) |
 | 2026-10-29 | `LazyMotion strict` + `m`, features in `src/lib/motionFeatures.ts` | Full Motion was ~30% of the entry chunk for one menu animation; entry dropped 32 KB gz |
 | 2026-10-29 | Hero grid takes touch: tap + sideways drag, wrapper `touch-pan-y touch-pinch-zoom` | Mobile visitors saw a static grid. `pan-y` keeps vertical scroll (pointercancel releases the grid); `pinch-zoom` keeps zoom |
+| 2026-10-29 | Theme swap duration 500ms -> 750ms, `ease` curve unchanged | `ease` does ~80% of the change by half the stated time, so 500ms read as ~250ms. Tried an 800ms ease-in-out, but the user chose the original curve with only a longer duration |
 | 2026-10-29 | Mobile menu closes instantly on nav-link clicks (`skipExit`); X keeps the 200ms exit | The router captures view transitions after loaders (~150ms), while Motion's 200ms menu close was still running; the `site-header` snapshot froze the partly-open bar for 400ms. Settling it in the click handler makes the captured bar 73px without losing the X animation |
 
 ---
