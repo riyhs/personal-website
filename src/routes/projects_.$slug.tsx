@@ -2,6 +2,7 @@ import { Link, createFileRoute, notFound } from '@tanstack/react-router'
 import { ArrowLeft, ArrowUpRight } from 'lucide-react'
 import type { ReactNode } from 'react'
 
+import { DigitDemo } from '../components/DigitDemo'
 import { PageHeader } from '../components/PageHeader'
 import { cn } from '../lib/utils'
 import { spotlightProjects } from '../data/projects'
@@ -116,6 +117,8 @@ function ProjectDetailPage() {
             </a>
           ))}
         </div>
+
+        {project.demo === 'digit' && <DigitDemo />}
 
         {project.highlights && (
           <section className="dashed-rule mt-14 pt-10">

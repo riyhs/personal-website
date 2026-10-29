@@ -1,0 +1,39 @@
+{
+  "source": "https://github.com/AritmaPlay/aritmaplay-ml-api/blob/main/model/model.h5",
+  "raw": "https://raw.githubusercontent.com/AritmaPlay/aritmaplay-ml-api/main/model/model.h5",
+  "blobSha": "417f9d3f59abe22a529f3b807e72fad2803e317a",
+  "commit": "cf311ad2cd3d50a58e578cb030d0f10318fe28d9",
+  "modelSha256": "0d7f3296e185eb597c046d74cc0c0c771624952c3fd0a7f505e6e0e8b621a9d1",
+  "kerasVersion": "3.5.0",
+  "weights": "bangkit-digit-weights.bin",
+  "weightsSha256": "d96017830d1d892c429f5fa818e518bc8b43fe328e0d4f49d31f8dd9450a166c",
+  "bytes": 83816,
+  "weightsCount": 20954,
+  "shapes": {
+    "conv1Kernel": [
+      3,
+      3,
+      1,
+      32
+    ],
+    "conv1Bias": [
+      32
+    ],
+    "conv2Kernel": [
+      3,
+      3,
+      32,
+      16
+    ],
+    "conv2Bias": [
+      16
+    ],
+    "denseKernel": [
+      1600,
+      10
+    ],
+    "denseBias": [
+      10
+    ]
+  }
+}

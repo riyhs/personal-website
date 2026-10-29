@@ -9,6 +9,7 @@ export type Project = {
     stack: string[]
     links: { label: string; href: string }[]
     highlights?: string[]
+    demo?: 'digit'
 }
 
 export const spotlightProjects: Project[] = [
@@ -42,6 +43,7 @@ export const spotlightProjects: Project[] = [
         thumbnail:
             '/img/projects/AritmaPlay.webp',
         stack: ['Python', 'TensorFlow', 'Flask'],
+        demo: 'digit',
         links: [
             { label: 'Project GitHub', href: 'https://github.com/AritmaPlay' },
             { label: 'Model API GitHub', href: 'https://github.com/AritmaPlay/aritmaplay-ml-api' },

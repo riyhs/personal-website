@@ -4,6 +4,20 @@
 
 ## ACTIVE
 
+Branch: `feat/bangkit-digit-demo` — Bangkit case-study in-browser digit demo
+
+- [x] 1. Pin `model.h5` to AritmaPlay/aritmaplay-ml-api blob `417f9d3…` (sha256 `0d7f329…`) and export 20,954 float32 weights (83,816 B)
+- [x] 2. Generate Keras 3.5.0 parity fixtures from the same file (5 samples)
+- [x] 3. Implement `src/lib/digitModel.ts` (conv/pool/dense/softmax) and `src/lib/digitInput.ts` (48x48 grayscale)
+- [x] 4. Add unit + parity tests (8 new; all 32 pass)
+- [x] 5. Build `DigitDemo`: pointer canvas, lazy 84 KB weights, 10 probability bars, clear, retry
+- [x] 6. Wire into `projects.ts` (`demo: 'digit'`) and `projects_.$slug.tsx`
+- [x] 7. Verify tsc, tests, build, production asset (200 / 83,816 B), Chromium desktop + mobile (1 and 7), no console errors
+- [ ] 8. User review, then commit/PR (not committed)
+- [ ] 9. Confirm team permission to redistribute the model weights (AritmaPlay repos have no LICENSE)
+
+## DONE — hero grid (merged PR #5)
+
 Branch: `feat/add-hero-bg-effect` — hover highlight on the hero grid backdrop
 
 Goal: hovering a 48px cell of the hero grid tints **only that cell** green. Every cell you cross keeps fading on its own, so a sweep leaves a trail. The green must inherit the existing bottom-fade mask (`.grid-backdrop`), so lower rows stay dimmer. Must not cost bundle size or main-thread frames.

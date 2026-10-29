@@ -103,6 +103,8 @@
   - hero grid + hover trail; owns the pointer listener, the bend field and the canvas. Grid maths in `src/lib/grid.ts` (`cellFromPoint` / `cellPosition` / `bendPoint` / line positions), all mirroring the grid's `background-position: center top`. The canvas reproduces the CSS grid line for line, so the static `background-image` stays only as the pre-hydration paint and is dropped via `data-canvas` once drawing starts. Lines outside three bend radii are stroked as plain two-point segments; everything goes into one path with one `stroke()`, which is what keeps a software canvas at 60fps. The loop stops when the well has settled and no cell is still ramping or fading (measured 0 rAF/s at rest), so a lit cell under a resting cursor costs nothing. Under `prefers-reduced-motion: reduce` there is no bend and no trail: the grid stays flat and only the hovered cell is lit.
 - `src/components/Section.tsx`
   - dashed-rule section with mono label and optional link
+- `src/components/DigitDemo.tsx`
+  - Bangkit case-study canvas demo. Pointer drawing, whole-canvas 48x48 grayscale downscale, and the exported CNN forward pass in `src/lib/digitModel.ts`; the 83,816-byte weight file loads only when the section is within 200px of the viewport. Ten softmax probabilities render as bars, with clear and retry states.
 - `src/components/Header.tsx`
   - sticky navigation with `/logo.svg` mark, mobile menu, theme toggle
 - `src/components/Footer.tsx`
@@ -123,6 +125,7 @@
 
 - `PageHeader`, then one row per project: thumbnail, year · platform, title, description, mono stack line, case-study + external links.
 - `/projects/$slug` case study: back link, metadata grid (role/platform/year/stack), links, screenshot, optional highlights.
+- The Bangkit case study adds an in-browser digit demo below its links (`demo: 'digit'` in `src/data/projects.ts`): 6:5 canvas, stroke width 55/1080 of the canvas, whole canvas squashed to 48x48 to match the app's preprocessing.
 
 ### Blog
 
@@ -148,6 +151,8 @@
 
 - `src/styles.css`
 - `src/lib/animation.ts`
+- `src/lib/digitModel.ts`
+- `src/lib/digitInput.ts`
 - `src/routes/__root.tsx`
 - `src/routes/index.tsx`
 - `src/routes/projects.tsx`
@@ -159,8 +164,10 @@
 - `src/components/PageHeader.tsx`
 - `src/components/Section.tsx`
 - `src/components/NotFound.tsx`
+- `src/components/DigitDemo.tsx`
 - `src/components/ui/button.tsx`
 - `src/components/ui/card.tsx`
 - `src/components/ui/badge.tsx`
 - `src/data/projects.ts`
 - `src/data/experience.ts`
+- `scripts/export-digit-model.py`
