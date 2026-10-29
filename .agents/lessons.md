@@ -283,3 +283,31 @@ Draw both on one canvas. The grid is resampled per line; the tint is filled as t
 
 ### Rule
 If two layers must look like the same object under a non-uniform warp, they must be drawn in the same pass. And a canvas render loop needs an explicit "what can still change" predicate, or it becomes a 60fps idle burn.
+
+## 2026-10-29 View transitions broke the blurred header bar (two bugs)
+
+### Problem
+1. Firefox: the header bar lost its blur and read as transparent for the whole transition, most visibly on back (scroll restored, text under the bar). User-confirmed with a no-op `document.startViewTransition(() => {})` slowed to 5s, so no navigation or scroll was involved.
+2. Both browsers: the morphing project image flew over the header. Named elements are lifted into the `::view-transition` overlay, which sits above the root snapshot, header included.
+
+### Fix attempt that failed
+A denser tint during the transition (`html:active-view-transition header > div { background-color: ... / 0.9 }`). Headless Firefox showed the denser bar, but the user's real Firefox stayed transparent. Most likely hardware WebRender drops the whole backdrop-filtered element, background included, inside snapshots, so no background change can show. The selector also hit `PageHeader`'s `<header>` children.
+
+### Fix
+`html:active-view-transition .site-header > div { view-transition-name: site-header }` plus `::view-transition-group(site-header) { z-index: 1 }`. The name sits on the bar itself, the element carrying `backdrop-filter`: CSS View Transitions 1 copies a captured element's backdrop-filter onto its `::view-transition-group`, so the blur is applied live over the transition (WPT `backdrop-filter-captured.html`; Firefox's `ViewTransition.cpp` copies it too). Verified in Chromium: blur kept mid-transition, image under the bar.
+
+Failed on the way: a 0.9 tint during transitions (Firefox still see-through, then reverted because it read as the blur going away); a permanent name on `<header>` (backdrop root, so no blur anywhere at rest); the name on `<header>` only during transitions (Chrome lost the blur mid-transition: the blurred child's backdrop root was the empty header).
+
+### Rule
+Never rely on `backdrop-filter` inside a view transition. Put `view-transition-name` on the element that carries `backdrop-filter`, never on an ancestor of it, and only while a transition runs. Cross-browser background: Chrome blurs inside page snapshots, Firefox and Safari don't (WebKit bug 302256). Scope selectors to the site header (`.site-header`), because `PageHeader` renders a `<header>` too. Headless Firefox renders no backdrop-filter at all, so blur bugs need a real Firefox, and a fix that only passed headless is unverified.
+
+## 2026-10-29 Two blind fixes failed; the spec had the answer
+
+### Problem
+The header blur broke during view transitions. Two guesses (a denser tint, then naming the outer `<header>`) each fixed one symptom and caused another.
+
+### Fix
+Reading CSS View Transitions 1, WebKit bug 302256, the WPT test `backdrop-filter-captured.html` and Firefox's `ViewTransition.cpp` showed the mechanism (named element = backdrop root; its own backdrop-filter is copied to the group). The one-line fix followed directly.
+
+### Rule
+After 2 failed attempts, research official docs, specs, bug trackers, WPT and engine source before attempt 3 (now in AGENTS.md Failure Escalation).

@@ -75,7 +75,8 @@ For behavior changes, prefer test-first when practical. Never mark a task done w
 
 ### Failure Escalation
 
-After **2 failed attempts**: stop trying, write to `.agents/failures.md`, summarize attempts, and ask user for direction.
+After **2 failed attempts**: stop trying, write to `.agents/failures.md`, summarize attempts.
+Then **research before attempt 3**: read the official sources (specs such as drafts.csswg.org, MDN, framework docs), browser/library bug trackers (bugzilla, crbug, bugs.webkit.org, GitHub issues), web-platform-tests / wpt.fyi, and the engine or library source when docs are thin. Prove the root cause with evidence (a minimal repro, injected CSS/JS, screenshots) before touching code, then bring the user the findings, sources and an evidence-backed fix, and ask for direction.
 Format: `## [DATE] [title] | file: X | error: Y | tried: A, B | hypothesis: Z`
 
 ### Review Agent
@@ -133,7 +134,7 @@ Use subagents only when main agents are poor fit or when narrow read-only search
   Used as: `bg-[rgb(var(--background))]`, `text-[rgb(var(--foreground)/0.75)]`
 - **Opacity tokens:** Always `text-[rgb(var(--foreground)/N)]` (alpha INSIDE `rgb()`) — never `text-[rgb(var(--foreground))/N]` (compiles to invalid CSS, silently dropped) and never `text-white/N` (breaks light mode). Standardize: 0.6 for labels (AA on light background), 0.75 for body text. Keep `white`/`black` only on image overlays and the lightbox scrim.
 - **Meta labels:** `.mono-label` (monospace uppercase) for section labels, dates, colophon keys. `.dashed-rule` for section dividers, `.grid-backdrop` for the hero grid.
-- **Animation:** Entrance animations are CSS (`animate-fade-up`, `animate-fade-in`, `animate-page-in` in `@theme`) so SSR HTML paints without JS. Pair `motion-safe:animate-fade-up motion-reduce:animate-fade-in`. Never SSR content at `opacity: 0` via Motion `initial`, never gate content on `whileInView`. Motion (`motion` package, import from `motion/react`) is only for exit animations (mobile menu); `<MotionConfig reducedMotion="user">` covers it.
+- **Animation:** Entrance animations are CSS (`animate-fade-up`, `animate-fade-in` in `@theme`) so SSR HTML paints without JS. Pair `motion-safe:animate-fade-up motion-reduce:animate-fade-in`. Never SSR content at `opacity: 0` via Motion `initial`, never gate content on `whileInView`. Motion (`motion` package, import from `motion/react`) is only for exit animations (mobile menu), via `LazyMotion` + `m` (never `motion.*`; features load from `src/lib/motionFeatures.ts`); `<MotionConfig reducedMotion="user">` covers it. Route changes are view transitions (`defaultViewTransition`); an element morphing between pages must not sit inside a fade-up.
 - **Custom layers:** `@layer base` (resets, typography), `@layer components` (mono-label, grid-backdrop, dashed-rule), `@layer utilities` (radial-glow)
 - **Responsive:** Mobile-first with `sm:`, `md:`, `lg:` breakpoints
 - **Dark + light themes:** tokens in `:root` and `[data-theme="light"]`; toggle in Header via `useTheme()`. Use the `light:` custom variant for theme-specific markup that must match the pre-hydration theme script (no flash).
@@ -188,7 +189,7 @@ src/
 ```
 
 **SSR engine:** Nitro (via `nitro/vite` plugin) — server output at `.output/server/index.mjs`
-**MDX pipeline:** `@mdx-js/rollup` + remark-frontmatter + Shiki syntax highlighting
+**MDX pipeline:** `@mdx-js/rollup` + remark-frontmatter + Shiki syntax highlighting. Post lists import `post.mdx?frontmatter` (YAML header only, `mdxFrontmatter` plugin in vite.config.ts); bodies load per post via `loadPostBody` / `getPostBody` in `src/lib/posts.ts`
 **Devtools:** `@tanstack/react-devtools` + `@tanstack/react-router-devtools` (dev only, guarded by `import.meta.env.DEV`)
 
 ---

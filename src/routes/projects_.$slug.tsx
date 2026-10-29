@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 
 import { PageHeader } from '../components/PageHeader'
 import { cn } from '../lib/utils'
-import { spotlightProjects } from '../data/projects'
+import { projectShotTransition, spotlightProjects } from '../data/projects'
 
 export const Route = createFileRoute('/projects_/$slug')({
   loader: ({ params }) => {
@@ -80,53 +80,58 @@ function ProjectDetailPage() {
         title={project.title}
       />
 
-      <div className="mx-auto w-full max-w-4xl px-5 [animation-delay:100ms] motion-safe:animate-fade-up motion-reduce:animate-fade-in">
-        {/* First large element on the page (LCP), so fetch it ahead of other images */}
+      <div className="mx-auto w-full max-w-4xl px-5">
+        {/* First large element on the page (LCP), so fetch it ahead of other images. It
+            stays out of the fade-up below: the view transition morphs the thumbnail into it,
+            and a fading target would morph into nothing */}
         <img
           src={project.thumbnail}
           alt={`${project.title} screenshot`}
           width={1280}
           height={720}
           fetchPriority="high"
+          style={{ viewTransitionName: projectShotTransition(project.slug) }}
           className="aspect-video w-full rounded-2xl border border-[rgb(var(--foreground)/0.1)] object-cover"
         />
 
-        <dl className="mt-6 grid grid-cols-2 border-t border-l border-dashed border-[rgb(var(--foreground)/0.15)] sm:grid-cols-4">
-          {project.role && <MetaItem label="Role">{project.role}</MetaItem>}
-          <MetaItem label="Platform">{project.platform}</MetaItem>
-          <MetaItem label="Year">{project.year}</MetaItem>
-          <MetaItem label="Stack" className={cn(!project.role && 'col-span-2')}>
-            {project.stack.join(' · ')}
-          </MetaItem>
-        </dl>
+        <div className="[animation-delay:100ms] motion-safe:animate-fade-up motion-reduce:animate-fade-in">
+          <dl className="mt-6 grid grid-cols-2 border-t border-l border-dashed border-[rgb(var(--foreground)/0.15)] sm:grid-cols-4">
+            {project.role && <MetaItem label="Role">{project.role}</MetaItem>}
+            <MetaItem label="Platform">{project.platform}</MetaItem>
+            <MetaItem label="Year">{project.year}</MetaItem>
+            <MetaItem label="Stack" className={cn(!project.role && 'col-span-2')}>
+              {project.stack.join(' · ')}
+            </MetaItem>
+          </dl>
 
-        <p className="lead-text mt-10">{project.description}</p>
+          <p className="lead-text mt-10">{project.description}</p>
 
-        <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm">
-          {project.links.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1.5 text-[rgb(var(--foreground))] underline decoration-[rgb(var(--foreground)/0.3)] underline-offset-4 transition-colors hover:decoration-[rgb(var(--foreground))]"
-            >
-              {link.label}
-              <ArrowUpRight size={14} aria-hidden="true" />
-            </a>
-          ))}
+          <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+            {project.links.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 text-[rgb(var(--foreground))] underline decoration-[rgb(var(--foreground)/0.3)] underline-offset-4 transition-colors hover:decoration-[rgb(var(--foreground))]"
+              >
+                {link.label}
+                <ArrowUpRight size={14} aria-hidden="true" />
+              </a>
+            ))}
+          </div>
+
+          {project.highlights && (
+            <section className="dashed-rule mt-14 pt-10">
+              <h2 className="mono-label">Highlights</h2>
+              <ul className="mt-6 list-disc space-y-2 pl-5">
+                {project.highlights.map((item) => (
+                  <li key={item} className="text-[rgb(var(--foreground)/0.75)]">{item}</li>
+                ))}
+              </ul>
+            </section>
+          )}
         </div>
-
-        {project.highlights && (
-          <section className="dashed-rule mt-14 pt-10">
-            <h2 className="mono-label">Highlights</h2>
-            <ul className="mt-6 list-disc space-y-2 pl-5">
-              {project.highlights.map((item) => (
-                <li key={item} className="text-[rgb(var(--foreground)/0.75)]">{item}</li>
-              ))}
-            </ul>
-          </section>
-        )}
       </div>
     </article>
   )

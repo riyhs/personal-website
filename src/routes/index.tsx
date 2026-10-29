@@ -10,7 +10,7 @@ import { TwitterIcon } from "../components/ui/TwitterIcon";
 import { cn } from "../lib/utils";
 import { formatShortDate } from "../lib/date";
 import { profile } from "../data/profile";
-import { spotlightProjects } from "../data/projects";
+import { projectShotTransition, spotlightProjects } from "../data/projects";
 import { techStack } from "../data/stack";
 import { listPosts } from "../lib/posts";
 
@@ -145,7 +145,7 @@ function HomePage() {
 
   return (
     <div className="pb-8">
-      <PageHeader label={profile.tagline} title={profile.name} lead={profile.summary}>
+      <PageHeader label={profile.tagline} title={profile.name} lead={profile.summary} introRipple>
         <p className="lead-text mt-4">{profile.recent}</p>
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <Link to="/projects" className={cn(getButtonClasses(), "px-6 text-sm")}>
@@ -201,6 +201,7 @@ function HomePage() {
                   width={640}
                   height={360}
                   loading="lazy"
+                  style={{ viewTransitionName: projectShotTransition(project.slug) }}
                   className="aspect-video w-full rounded-[4px] border border-[rgb(var(--foreground)/0.1)] object-cover"
                 />
                 <div className="min-w-0">

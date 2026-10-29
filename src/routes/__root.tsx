@@ -4,10 +4,13 @@ import {
   Scripts,
   ScriptOnce,
   createRootRoute,
-  useRouterState,
 } from "@tanstack/react-router";
 import { MotionConfig } from "motion/react";
 import { type ReactNode } from "react";
+// Same files the @font-face rules in styles.css load, so the preload and the CSS share one
+// hashed URL and one download
+import jakarta400 from "@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-400-normal.woff2?url";
+import jakarta600 from "@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-600-normal.woff2?url";
 
 import { AppDevtools } from "../components/AppDevtools";
 import Header from "../components/Header";
@@ -66,8 +69,10 @@ export const Route = createRootRoute({
       { rel: "icon", type: "image/png", sizes: "128x128", href: "/favicon.png" },
       { rel: "apple-touch-icon", href: "/logo192.png" },
       { rel: "manifest", href: "/manifest.json" },
-      { rel: "preconnect", href: "https://github.com" },
-      { rel: "preconnect", href: "https://www.linkedin.com" },
+      // Fetch both weights with the HTML instead of after the CSS is parsed, so the h1 and
+      // body text swap from the fallback sooner. Fonts preload in CORS mode, hence crossOrigin.
+      { rel: "preload", href: jakarta400, as: "font", type: "font/woff2", crossOrigin: "anonymous" },
+      { rel: "preload", href: jakarta600, as: "font", type: "font/woff2", crossOrigin: "anonymous" },
     ],
   }),
 
@@ -77,19 +82,13 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
-  // Key on the rendered leaf match, not `location`: location changes on click, while
-  // the old page stays up until an unvisited route's chunk loads (fading the old page)
-  const key = useRouterState({ select: (s) => s.matches.at(-1)?.id })
-
   return (
     <div className="flex min-h-svh flex-col text-[rgb(var(--foreground))]">
       <Header />
       <main className="flex-1">
-        {/* Remount when the new page renders replays the CSS fade. No exit animation:
-            <Outlet /> already renders the next route, so exiting would fade the wrong page */}
-        <div key={key} className="animate-page-in">
-          <Outlet />
-        </div>
+        {/* The page fade is the router's view transition (see `::view-transition-*` in
+            styles.css), which cross-fades the old page into the new one */}
+        <Outlet />
       </main>
       <Footer />
     </div>

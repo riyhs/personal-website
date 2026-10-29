@@ -5,12 +5,12 @@
 **Name:** personal-website | **Stack:** TanStack Start + React 19 + Tailwind v4 | **Repo:** riyaldi.dev
 
 ## State
-**Status:** Upgrade branch merged to `main` via PR #4 (`a81c881`). Tree clean. Working on the hero grid hover effect on `feat/add-hero-bg-effect`.
-**Branch:** feat/add-hero-bg-effect | **Worktree:** personal-website
-**Last completed:** TanStack Start 1.169.3 / Router 1.170.45 / Vite 8.3.5 / Vitest 5.0.5 / React 19.3.1 / Motion 14.5.0 / TypeScript 6.0.3 upgrade (PR #4), plus project-page screenshot under the title (`a110556`) and the page-fade keyed on leaf match id (`da94a01`)
-**Verified:** tsc, 14 unit tests, prod build, first-load JS 175.2 KB gz, Firefox + Chromium hover suite (14 checks), frame gaps p50 16.7ms / p95 16.8ms with no long tasks during a full trail, Docker image 427.5 MB
-**In progress:** None — animation audit fixes applied on top of the hero trail (uncommitted, for user review)
-**Next:** User reviews the motion changes on the Tailscale preview, then commit. Audit follow-ups deliberately NOT done: 600ms page entrance (DESIGN.md marks it deliberate) and the mobile-menu link stagger that DESIGN.md documents but the code never had. Remaining backlog: remark-mdx-frontmatter 6, web-vitals/rehype-highlight/remark-gfm removal (unused), TS 7 later, untrack `package-lock.json` (npm leftover from `.cta.json`, repo uses pnpm)
+**Status:** Hero grid bend merged via PR #5 (`345b0ad`). Audit items (2026-10-29) implemented on `wt/mobile-grid-and-perf`, uncommitted, for user review.
+**Branch:** wt/mobile-grid-and-perf | **Worktree:** ../personal-website-wt-mobile-grid-and-perf
+**Last completed:** touch on hero grid, route view transitions + project thumbnail morph, LazyMotion, `defaultPreload: 'intent'`, fonts 400/600 only, dropped preconnects, post lists load frontmatter only
+**Verified:** tsc, 28 unit tests, prod build (entry 145.6 -> 113.5 KB gz; motion features 17.8 KB gz own chunk), 31 Chromium checks incl. touch emulation, delayed-chunk hydration (no blank), morph old/new pairing forward + back, dev-mode frontmatter HMR
+**In progress:** User review on the Tailscale preview (prod build on :3000)
+**Next:** Commit after review. Not checked: Firefox, a real phone. Known noise: rapid clicks log "Transition was skipped" (router leaves the skipped transition's promise unhandled; navigation still lands). Content backlog lives in the Obsidian note `Hermes/Personal Website - Audit 2026-10-29.md` (missing `riyaldi-hasan.webp`, one blog post, ProCost case study, thin case studies). Older backlog: remark-mdx-frontmatter 6, web-vitals/rehype-highlight/remark-gfm removal (unused), TS 7 later, untrack `package-lock.json`
 
 ## Blockers
 None.
@@ -19,6 +19,7 @@ None.
 | Name | Path | Status |
 |------|------|--------|
 | main | ./ | stable |
+| mobile-grid-and-perf | ../personal-website-wt-mobile-grid-and-perf | review |
 
 ## Key decisions
 | Date | Decision | Why |
@@ -50,7 +51,7 @@ None.
 | 2026-10-22 | GitHub/LinkedIn icons as local components copied from lucide 0.544 | lucide-react 1.0 removed brand icons; copying the ISC-licensed outline paths keeps the exact look and stroke style of the other icons |
 | 2026-10-22 | Only install versions >= 1 day old (motion 14.5.0, not 14.6.0) | Repo intent in `.npmrc` (`minimumReleaseAge: 1d`), which pnpm currently ignores |
 | 2026-10-22 | CI on Node 24 | Start needs Node >=22.12, Vitest 5 needs >=22.12; matches Dockerfile |
-| 2026-10-23 | Page fade keyed on leaf match id (`s.matches.at(-1)?.id`), not `location.pathname` | `location` updates on click but the old page stays rendered until an unvisited route's chunk loads, so the old page re-faded and the new one popped in. Match ids change in the same render as the page; leaf `pathname` collides for unknown URLs (root-only match = `/`) |
+| 2026-10-23 | (Superseded 2026-10-29 by view transitions) Page fade keyed on leaf match id (`s.matches.at(-1)?.id`), not `location.pathname` | `location` updates on click but the old page stays rendered until an unvisited route's chunk loads, so the old page re-faded and the new one popped in. Match ids change in the same render as the page; leaf `pathname` collides for unknown URLs (root-only match = `/`) |
 | 2026-10-28 | Grid hover tint = a 32-element ring buffer, not 2 spans and not one div per cell | 2 spans capped the visible trail at 2 cells (user complaint). One div per cell is 300+ nodes and ~10 KB of SSR HTML. 32 covers any trail that fits on screen (~27 columns at 1280px); past that the ring overwrites the dimmest end |
 | 2026-10-28 | Cell tint is a 48x48 element moved with `transform` (replaced the `background-position` tile trick) | The tile trick needs `inset: 0` layers, so 32 of them meant 32 viewport-sized layers to composite. Sized + transformed elements make each fade a compositor-only opacity change on a tiny layer. Positions come from the cached backdrop rect; `cellPosition`/`cellFromPoint` round-trip is unit-tested |
 | 2026-10-28 | Fade is `linear` at 1250ms, not `--ease-out` | ease-out is ~85% done at 20% of the duration, so a 1s fade read as a 300ms flick. Linear keeps the trail evenly weighted for the whole duration. User tuned the duration 1000 -> 1500 -> 1250ms |
@@ -64,6 +65,11 @@ None.
 | 2026-10-28 | Theme swap blends 250ms via a fixed `body::before` backdrop | Canvas-propagated backgrounds never transition, so the solid backdrop lives on a viewport-sized fixed layer. `--glow-soft` had to be dropped from `body`: the layout wrapper used to cover it, so removing that opaque background exposed it and the dark page turned grey. Animating the full-height wrapper instead cost p95 33ms |
 | 2026-10-28 | Colour transitions only on elements that set their own colour | Children that merely inherit end up retargeting the animated parent every frame: 0 cancels after narrowing the list vs hundreds before, and the fade stopped overshooting (last end 271ms vs 795ms) |
 | 2026-10-28 | Dropped `will-change: opacity` from the trail cells | 32 permanently promoted layers for a fade that only runs on hover. Measured neutral (p95 16.8ms either way), so the smaller cost wins |
+| 2026-10-29 | Route fade = router view transitions (`defaultViewTransition`), keyed `animate-page-in` removed | Lets a project thumbnail morph into its case-study hero via a shared `view-transition-name`. Root group pinned to 150ms so pointer input isn't blocked for the 400ms morph (briefly 200ms while the bar lost its blur; back to 400ms once the blur fix landed); morph target kept out of the fade-up |
+| 2026-10-29 | `post.mdx?frontmatter` resolves to a virtual `\0….mdx.frontmatter.js` id | Eager-globbing the MDX modules put every post body in the home/blog chunks. A static + dynamic import of the same module can't split, so the header needs its own module. `@mdx-js/rollup` strips queries before its extname check, so the id must not end in `.mdx` |
+| 2026-10-29 | Post body: loader awaits `loadPostBody`, component falls back to `React.lazy` under `<Suspense>` | Client loaders don't run during hydration; the lazy fallback keeps the server HTML until the chunk arrives (verified with a 1.5s delayed chunk: 0 blank mutations) |
+| 2026-10-29 | `LazyMotion strict` + `m`, features in `src/lib/motionFeatures.ts` | Full Motion was ~30% of the entry chunk for one menu animation; entry dropped 32 KB gz |
+| 2026-10-29 | Hero grid takes touch: tap + sideways drag, wrapper `touch-pan-y touch-pinch-zoom` | Mobile visitors saw a static grid. `pan-y` keeps vertical scroll (pointercancel releases the grid); `pinch-zoom` keeps zoom |
 
 ---
-_Updated: 2026-10-28
+_Updated: 2026-10-29

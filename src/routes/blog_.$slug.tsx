@@ -1,9 +1,10 @@
 import { Link, createFileRoute, notFound } from '@tanstack/react-router'
 import { ArrowLeft } from 'lucide-react'
+import { Suspense } from 'react'
 
 import { PageHeader } from '../components/PageHeader'
 import { formatLongDate } from '../lib/date'
-import { findPostBySlug } from '../lib/posts'
+import { findPostBySlug, getPostBody, loadPostBody } from '../lib/posts'
 
 export const Route = createFileRoute('/blog_/$slug')({
   codeSplitGroupings: [['loader', 'component']],
@@ -75,11 +76,12 @@ export const Route = createFileRoute('/blog_/$slug')({
     }
   },
   component: BlogDetailPage,
-  loader: ({ params }) => {
+  loader: async ({ params }) => {
     const post = findPostBySlug(params.slug as string)
     if (!post) {
       throw notFound()
     }
+    await loadPostBody(post.slug)
     return {
       slug: post.slug,
       frontmatter: post.frontmatter,
@@ -90,11 +92,11 @@ export const Route = createFileRoute('/blog_/$slug')({
 function BlogDetailPage() {
   const { slug } = Route.useLoaderData() as unknown as { slug: string }
   const post = findPostBySlug(slug)
+  const Content = getPostBody(slug)
 
-  if (!post) {
+  if (!post || !Content) {
     return null
   }
-  const Content = post.Component
 
   return (
     <article className="pb-16">
@@ -125,7 +127,9 @@ function BlogDetailPage() {
       <div className="mx-auto w-full max-w-4xl px-5">
         <div className="dashed-rule animate-fade-in pt-4 [animation-delay:200ms]">
           <div className="mdx-content max-w-3xl">
-            <Content />
+            <Suspense>
+              <Content />
+            </Suspense>
           </div>
         </div>
       </div>
