@@ -311,3 +311,17 @@ Reading CSS View Transitions 1, WebKit bug 302256, the WPT test `backdrop-filter
 
 ### Rule
 After 2 failed attempts, research official docs, specs, bug trackers, WPT and engine source before attempt 3 (now in AGENTS.md Failure Escalation).
+
+## 2026-10-29 Mobile nav left a tall blurred bar after navigation -> settle the header before the view-transition capture
+
+### Problem
+On mobile, tapping a menu link while the nav was open navigated, but the tall blurred bar stayed for the whole page transition (menu items and the X icon were already gone). It read as the navbar "unblurring" late.
+
+### Root cause
+`html:active-view-transition .site-header > div { view-transition-name: site-header }` captures the bar. TanStack Router starts the view transition only after the route loaders resolve (measured ~150ms after the click), while Motion's 200ms `height`/`opacity` exit was still running. The old `site-header` snapshot froze the bar at ~100px (partly open), and the default 400ms group cross-fade kept that stale bar visible after the live menu had unmounted.
+
+### Fix
+Nav-link clicks set `skipExit` and close the menu in the same React event, unmounting `AnimatePresence` before the router's `startViewTransition` capture. The captured bar is always the closed 73px bar, and the named `site-header` group still keeps the project-image morph under the bar. The X button keeps the animated 200ms exit.
+
+### Rule
+Everything inside a `view-transition-name` element is frozen at capture time. If its size or content can change just before a navigation (open menus, expanding panels), settle it synchronously in the click handler instead of relying on an exit animation that can outlive the capture.

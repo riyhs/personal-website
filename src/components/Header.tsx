@@ -68,6 +68,9 @@ function ThemeToggle() {
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
+  // A nav-link click has to collapse the bar before the router captures the view
+  // transition, or the tall open-menu bar is frozen in the `site-header` snapshot
+  const [skipExit, setSkipExit] = useState(false)
   const activePath = useRouterState({ select: (state) => state.location.pathname })
   useEffect(() => {
     if (!isOpen) return
@@ -93,7 +96,10 @@ export default function Header() {
           <li key={link.href}>
             <Link
               to={link.href}
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                setSkipExit(true)
+                setIsOpen(false)
+              }}
               className={cn(
                 'px-2 py-1 text-[rgb(var(--foreground)/0.75)] transition-colors hover:text-[rgb(var(--foreground))] focus-visible:outline-none',
                 isActive && 'text-[rgb(var(--foreground))]',
@@ -145,7 +151,10 @@ export default function Header() {
               aria-label={isOpen ? 'Close navigation menu' : 'Open navigation menu'}
               aria-expanded={isOpen}
               aria-controls="mobile-navigation"
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={() => {
+                setSkipExit(false)
+                setIsOpen(!isOpen)
+              }}
             >
               {isOpen ? <X size={20} /> : <Menu size={20} />}
             </Button>
@@ -153,36 +162,38 @@ export default function Header() {
         </div>
 
         <LazyMotion features={loadMotionFeatures} strict>
-          <AnimatePresence>
-            {isOpen && (
-              <m.div
-                id="mobile-navigation"
-                className="overflow-hidden lg:hidden"
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.2, ease: EASE_OUT }}
-              >
-                <div className="mx-auto max-w-4xl pt-2 pb-8 space-y-6 px-5">
-                  {renderLinks('mobile')}
-                  <div className="flex justify-center gap-4 pt-2">
-                    {socials.map((social) => (
-                      <a
-                        key={social.href}
-                        href={social.href}
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label={social.label}
-                        className={iconButtonClasses}
-                      >
-                        <social.icon size={16} />
-                      </a>
-                    ))}
+          {!skipExit && (
+            <AnimatePresence>
+              {isOpen && (
+                <m.div
+                  id="mobile-navigation"
+                  className="overflow-hidden lg:hidden"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.2, ease: EASE_OUT }}
+                >
+                  <div className="mx-auto max-w-4xl pt-2 pb-8 space-y-6 px-5">
+                    {renderLinks('mobile')}
+                    <div className="flex justify-center gap-4 pt-2">
+                      {socials.map((social) => (
+                        <a
+                          key={social.href}
+                          href={social.href}
+                          target="_blank"
+                          rel="noreferrer"
+                          aria-label={social.label}
+                          className={iconButtonClasses}
+                        >
+                          <social.icon size={16} />
+                        </a>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              </m.div>
-            )}
-          </AnimatePresence>
+                </m.div>
+              )}
+            </AnimatePresence>
+          )}
         </LazyMotion>
       </div>
     </header>

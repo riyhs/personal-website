@@ -4,6 +4,16 @@
 
 ## ACTIVE
 
+Branch: `fix/navbar-blur-delay-dissapear` — mobile navbar blur delay after navigation
+
+- [x] 1. Reproduce in mobile Chromium: `site-header` snapshot captured the bar mid-close and stayed for 400ms
+- [x] 2. Root cause: router captures after loaders (~150ms), Motion exit is 200ms, so the tall bar is frozen in the named snapshot
+- [x] 3. Close the menu synchronously on nav-link clicks (unmount AnimatePresence before capture); keep X-button exit animation
+- [x] 4. Verify: tsc, 40 tests, prod build, Chromium + Firefox mobile, desktop nav + project morph under the bar
+- [ ] 5. User review on Tailscale port 3000, then commit
+
+## ACTIVE
+
 Branch: `feat/bangkit-digit-demo` — Bangkit case-study in-browser digit demo
 
 - [x] 1. Pin `model.h5` to AritmaPlay/aritmaplay-ml-api blob `417f9d3…` (sha256 `0d7f329…`) and export 20,954 float32 weights (83,816 B)

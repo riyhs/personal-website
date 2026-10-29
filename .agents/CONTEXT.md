@@ -5,12 +5,12 @@
 **Name:** personal-website | **Stack:** TanStack Start + React 19 + Tailwind v4 | **Repo:** riyaldi.dev
 
 ## State
-**Status:** Bangkit case-study digit demo built on `feat/bangkit-digit-demo`; uncommitted for review.
-**Branch:** feat/bangkit-digit-demo | **Worktree:** personal-website
-**Last completed:** In-browser Bangkit CNN demo: weights pinned to `AritmaPlay/aritmaplay-ml-api` `model/model.h5` (blob `417f9d3…`, sha256 `0d7f329…`), 20,954 float32 weights (83,816 B), Keras 3.5.0 parity fixtures, pointer canvas, lazy weight fetch, probability bars.
-**Verified:** tsc; 32 unit tests (5 parity samples < 1e-5); prod build; production weights 200 / 83,816 B; Chromium desktop (1 and 7) + mobile (1); clear resets canvas; no console errors; no horizontal overflow.
-**In progress:** None — branch uncommitted for user review.
-**Next:** Review `/projects/bangkit-ml-capstone`, confirm team permission to redistribute the weights (AritmaPlay repos have no LICENSE), then commit/PR. Remaining backlog: remark-mdx-frontmatter 6, web-vitals/rehype-highlight/remark-gfm removal (unused), TS 7 later, untrack `package-lock.json` (npm leftover from `.cta.json`, repo uses pnpm)
+**Status:** Mobile navbar fix on `fix/navbar-blur-delay-dissapear`; uncommitted for user review.
+**Branch:** fix/navbar-blur-delay-dissapear | **Worktree:** personal-website
+**Last completed:** Mobile menu nav links now collapse the bar before the router captures the `site-header` view-transition snapshot, so the tall blurred bar no longer lingers for the 400ms transition. X-button close still animates 200ms.
+**Verified:** tsc; 40 unit tests; prod build; Chromium + Firefox mobile (bar 332.8 -> 73.3 at click, transition captures the closed bar); desktop nav and project-image morph still use the named header group.
+**In progress:** None — waiting for Tailscale preview review.
+**Next:** User review on `http://johor.ison-mintaka.ts.net:3000` (or `http://100.102.71.54:3000`), then commit/PR. Backlog: remark-mdx-frontmatter 6, web-vitals/rehype-highlight/remark-gfm removal (unused), TS 7 later, untrack `package-lock.json` (npm leftover from `.cta.json`, repo uses pnpm)
 
 ## Blockers
 None.
@@ -73,6 +73,7 @@ None.
 | 2026-10-29 | Post body: loader awaits `loadPostBody`, component falls back to `React.lazy` under `<Suspense>` | Client loaders don't run during hydration; the lazy fallback keeps the server HTML until the chunk arrives (verified with a 1.5s delayed chunk: 0 blank mutations) |
 | 2026-10-29 | `LazyMotion strict` + `m`, features in `src/lib/motionFeatures.ts` | Full Motion was ~30% of the entry chunk for one menu animation; entry dropped 32 KB gz |
 | 2026-10-29 | Hero grid takes touch: tap + sideways drag, wrapper `touch-pan-y touch-pinch-zoom` | Mobile visitors saw a static grid. `pan-y` keeps vertical scroll (pointercancel releases the grid); `pinch-zoom` keeps zoom |
+| 2026-10-29 | Mobile menu closes instantly on nav-link clicks (`skipExit`); X keeps the 200ms exit | The router captures view transitions after loaders (~150ms), while Motion's 200ms menu close was still running; the `site-header` snapshot froze the partly-open bar for 400ms. Settling it in the click handler makes the captured bar 73px without losing the X animation |
 
 ---
 _Updated: 2026-10-29
