@@ -12,6 +12,10 @@ export type Project = {
     demo?: 'digit'
 }
 
+// Shared by a project's thumbnail and its case-study hero, so the router's view transition
+// morphs one into the other
+export const projectShotTransition = (slug: string) => `project-shot-${slug}`
+
 export const spotlightProjects: Project[] = [
     {
         slug: 'nutrivision',

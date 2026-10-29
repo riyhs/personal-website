@@ -8,3 +8,4 @@
 - Keep persistent project memory in local markdown files under `.agents/`.
 - Prefer minimal diffs and direct fixes over broad rewrites.
 - Preserve current codebase style unless user asks for redesign.
+- Never add a `Co-Authored-By` (or any co-author) trailer to commits.

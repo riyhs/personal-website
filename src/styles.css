@@ -1,5 +1,7 @@
 @import "tailwindcss";
-@import "@fontsource/plus-jakarta-sans/latin.css";
+/* Only the weights in use: 400 (body) and 600 (headings, `font-semibold`) */
+@import "@fontsource/plus-jakarta-sans/latin-400.css";
+@import "@fontsource/plus-jakarta-sans/latin-600.css";
 
 @custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
 
@@ -35,7 +37,6 @@
      Use `motion-safe:animate-fade-up motion-reduce:animate-fade-in`. */
   --animate-fade-in: fade-in 600ms var(--ease-out) both;
   --animate-fade-up: fade-up 600ms var(--ease-out) both;
-  --animate-page-in: fade-in 150ms var(--ease-out) both;
 
   @keyframes fade-in {
     from {
@@ -48,6 +49,44 @@
       opacity: 0;
       transform: translateY(32px);
     }
+  }
+}
+
+/* Route changes run inside a view transition (`defaultViewTransition` in router.tsx). The
+   page cross-fades quickly, and a project thumbnail morphs into its case-study hero
+   because both carry the same `view-transition-name`. */
+::view-transition-group(root),
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 150ms;
+  animation-timing-function: var(--ease-out);
+}
+
+::view-transition-group(*) {
+  animation-duration: 400ms;
+  animation-timing-function: var(--ease-out);
+}
+
+/* During a transition the header bar gets its own snapshot, stacked above every other
+   group, so a morphing project image passes under the bar instead of over it.
+   The name goes on the bar itself, the element that carries `backdrop-filter`: the spec
+   copies a captured element's backdrop-filter onto its ::view-transition-group, so the blur
+   keeps working over the transition in Chrome and Firefox. Naming the outer <header>
+   instead made it a backdrop root with nothing inside to blur. Only during a transition,
+   because a named element is always a backdrop root. */
+html:active-view-transition .site-header > div {
+  view-transition-name: site-header;
+}
+
+::view-transition-group(site-header) {
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none;
   }
 }
 
@@ -134,8 +173,8 @@
   footer,
   .dashed-rule {
     transition:
-      background-color 250ms ease,
-      border-color 250ms ease;
+      background-color 500ms ease,
+      border-color 500ms ease;
   }
 
   /* The page backdrop. `body`'s own background is propagated to the viewport canvas, and a
@@ -154,7 +193,7 @@
     z-index: -1;
     pointer-events: none;
     background-color: rgb(var(--background));
-    transition: background-color 250ms ease;
+    transition: background-color 500ms ease;
   }
 
   /* Only elements that set their own colour belong here. A child that merely inherits
@@ -170,7 +209,7 @@
   .mono-label,
   .lead-text,
   .item-text {
-    transition: color 250ms ease;
+    transition: color 500ms ease;
   }
 
   body {

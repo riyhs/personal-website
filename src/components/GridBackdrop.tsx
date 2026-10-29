@@ -13,11 +13,14 @@ import {
   cellFromPoint,
   cellPosition,
   horizontalLines,
+  rippleRings,
   verticalLines,
 } from '../lib/grid'
 
 interface GridBackdropProps {
   children: ReactNode
+  // Play the one-time touch intro (see `playRipple`)
+  introRipple?: boolean
 }
 
 interface Cell {
@@ -30,6 +33,9 @@ interface TrailCell extends Cell {
   litAt: number
   // When the pointer left it, so the fade can start after the hold
   leftAt: number | null
+  // Ripple cells fade faster than a pointer trail, so each ring clears as the next arrives
+  holdMs?: number
+  fadeMs?: number
 }
 
 interface Box {
@@ -51,9 +57,9 @@ interface Well {
 }
 
 // Cells that keep fading at the same time. A trail only stays on screen for the width of
-// the viewport (~27 columns of 48px), so this covers any trail you can actually see. Past
-// it the ring overwrites the oldest, most faded cell.
-const POOL_SIZE = 32
+// the viewport (~27 columns of 48px), and the touch intro's ripple is 37 cells, so this
+// covers both. Past it the ring overwrites the oldest, most faded cell.
+const POOL_SIZE = 40
 
 // How far the well moves toward the cursor each frame. The grid lags a touch behind the
 // pointer, which is what makes it read as something bending rather than jumping.
@@ -75,12 +81,25 @@ const HOLD_MS = 250
 const FADE_MS = 1250
 const TINT_ALPHA = 0.22
 
+// Touch intro: phones never hover, so the grid shows itself once per session with a press
+// at the centre and a ripple of cells spreading out from it. Rings light 110ms apart and
+// each fades over 700ms with no hold, so they read as a wave rather than a blob.
+const RIPPLE_RINGS = 4
+const RIPPLE_STEP_MS = 110
+const RIPPLE_FADE_MS = 700
+// How long the grid stays pressed before the well eases back out
+const RIPPLE_PRESS_MS = 280
+// Starts while the 600ms hero entrance is still settling, so the grid answers right away
+const INTRO_DELAY_MS = 400
+const INTRO_KEY = 'riyaldi.gridIntro'
+
 // Drafting grid behind every page title, drawn on a canvas so hovering can bend it like a
 // mass sitting on a rubber sheet: every line is resampled through a radial pull toward the
 // cursor. The hovered cell lights green and leaves a fading trail, and because the tint is
 // drawn as the quad between that cell's four bent corners it bends with the grid instead of
-// drifting off it.
-export function GridBackdrop({ children }: GridBackdropProps) {
+// drifting off it. Touch gets the same effect: a tap pulses the grid under the finger and a
+// sideways drag sweeps it, while vertical drags still scroll the page.
+export function GridBackdrop({ children, introRipple = false }: GridBackdropProps) {
   const backdropRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const lastRef = useRef<Cell | null>(null)
@@ -102,6 +121,8 @@ export function GridBackdrop({ children }: GridBackdropProps) {
     targetStrength: 0,
   })
   const rafRef = useRef(0)
+  const introTimerRef = useRef(0)
+  const releaseTimerRef = useRef(0)
   const reduceRef = useRef(false)
   const strokeRef = useRef('rgba(255, 255, 255, 0.05)')
   const tintRef = useRef('74, 222, 128')
@@ -144,9 +165,10 @@ export function GridBackdrop({ children }: GridBackdropProps) {
     // ease-out cubic, matching the CSS ramp the cell used to have
     const eased = 1 - (1 - enter) ** 3
     if (cell.leftAt === null) return eased
+    const holdMs = cell.holdMs ?? HOLD_MS
     const age = now - cell.leftAt
-    if (age <= HOLD_MS) return eased
-    const fade = 1 - (age - HOLD_MS) / FADE_MS
+    if (age <= holdMs) return eased
+    const fade = 1 - (age - holdMs) / (cell.fadeMs ?? FADE_MS)
     return Math.max(0, eased * Math.min(1, fade))
   }
 
@@ -155,7 +177,8 @@ export function GridBackdrop({ children }: GridBackdropProps) {
     const { x: cx, y: cy, strength } = wellRef.current
     for (let index = 0; index < POOL_SIZE; index += 1) {
       const cell = trailRef.current[index]
-      if (!cell) continue
+      // A ripple ring scheduled for later is not lit yet, and must not be freed either
+      if (!cell || now < cell.litAt) continue
       const alpha = cellAlpha(cell, now)
       if (alpha <= 0) {
         // Once invisible the slot is free; reusing it later is then not a cut-short fade
@@ -309,6 +332,52 @@ export function GridBackdrop({ children }: GridBackdropProps) {
     start()
   }
 
+  // Press the grid at the centre cell and send rings of lit cells out from it, through the
+  // same well and trail the pointer drives, so the loop still stops once it has faded
+  const playRipple = () => {
+    const { width, height } = sizeRef.current
+    if (width === 0) return
+    try {
+      sessionStorage.setItem(INTRO_KEY, '1')
+    } catch {
+      // Storage blocked: the intro may play again next visit, which is harmless
+    }
+
+    const centre = cellFromPoint(width / 2, height / 2, width)
+    const corner = cellPosition(centre.col, centre.row, width)
+    const now = performance.now()
+    const well = wellRef.current
+    well.x = well.targetX = corner.x + GRID_CELL / 2
+    well.y = well.targetY = corner.y + GRID_CELL / 2
+    well.targetStrength = BEND_STRENGTH
+
+    rippleRings(centre.col, centre.row, RIPPLE_RINGS).forEach((ring, index) => {
+      const litAt = now + index * RIPPLE_STEP_MS
+      for (const cell of ring) {
+        trailRef.current[slotRef.current] = {
+          ...cell,
+          litAt,
+          leftAt: litAt + ENTER_MS,
+          holdMs: 0,
+          fadeMs: RIPPLE_FADE_MS,
+        }
+        slotRef.current = (slotRef.current + 1) % POOL_SIZE
+      }
+    })
+
+    releaseTimerRef.current = window.setTimeout(() => {
+      wellRef.current.targetStrength = 0
+      start()
+    }, RIPPLE_PRESS_MS)
+    start()
+  }
+
+  // A real touch takes over: no pending intro, and the finger owns the well
+  const cancelIntro = () => {
+    window.clearTimeout(introTimerRef.current)
+    window.clearTimeout(releaseTimerRef.current)
+  }
+
   useEffect(() => {
     readColours()
     measure()
@@ -350,9 +419,24 @@ export function GridBackdrop({ children }: GridBackdropProps) {
     }
   }, [])
 
-  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (event.pointerType !== 'mouse') return
+  useEffect(() => {
+    if (!introRipple || reduceRef.current) return
+    if (!window.matchMedia('(hover: none) and (pointer: coarse)').matches) return
+    try {
+      if (sessionStorage.getItem(INTRO_KEY)) return
+    } catch {
+      return
+    }
+    introTimerRef.current = window.setTimeout(playRipple, INTRO_DELAY_MS)
+    return cancelIntro
+  }, [introRipple])
 
+  const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    cancelIntro()
+    handlePointerMove(event)
+  }
+
+  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
     const box = boxRef.current
     if (!box) return
 
@@ -392,11 +476,15 @@ export function GridBackdrop({ children }: GridBackdropProps) {
   }
 
   return (
+    // `pan-y` keeps vertical swipes scrolling (the browser then fires pointercancel) while a
+    // sideways drag stays with the grid; `pinch-zoom` keeps zoom working
     <div
-      className="relative"
+      className="relative touch-pan-y touch-pinch-zoom"
       onPointerEnter={measure}
+      onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
       onPointerLeave={hide}
+      onPointerCancel={hide}
     >
       <div
         ref={backdropRef}

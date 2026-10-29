@@ -8,6 +8,7 @@ import {
   cellFromPoint,
   cellPosition,
   horizontalLines,
+  rippleRings,
   verticalLines,
 } from './grid'
 
@@ -120,5 +121,30 @@ describe('verticalLines', () => {
 describe('horizontalLines', () => {
   it('runs from the top edge every cell down to the bottom', () => {
     expect(horizontalLines(384)).toEqual([0, 48, 96, 144, 192, 240, 288, 336, 384])
+  })
+})
+
+describe('rippleRings', () => {
+  it('starts with the centre cell alone', () => {
+    expect(rippleRings(0, 4, 3)[0]).toEqual([{ col: 0, row: 4 }])
+  })
+
+  it('grows ring by ring and fits the 40-cell trail pool', () => {
+    const rings = rippleRings(0, 4, 4)
+    expect(rings.map((ring) => ring.length)).toEqual([1, 8, 12, 16])
+    expect(rings.flat().length).toBeLessThanOrEqual(40)
+  })
+
+  it('places every cell at its ring distance from the centre', () => {
+    rippleRings(2, 5, 4).forEach((ring, index) => {
+      for (const cell of ring) {
+        expect(Math.round(Math.hypot(cell.col - 2, cell.row - 5))).toBe(index)
+      }
+    })
+  })
+
+  it('never repeats a cell', () => {
+    const keys = rippleRings(0, 0, 4).flat().map((cell) => `${cell.col},${cell.row}`)
+    expect(new Set(keys).size).toBe(keys.length)
   })
 })

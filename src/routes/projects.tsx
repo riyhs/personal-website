@@ -3,7 +3,7 @@ import { ArrowRight, ArrowUpRight } from 'lucide-react'
 
 import { PageHeader } from '../components/PageHeader'
 import { Section } from '../components/Section'
-import { spotlightProjects } from '../data/projects'
+import { projectShotTransition, spotlightProjects } from '../data/projects'
 
 export const Route = createFileRoute('/projects')({
   head: () => ({
@@ -70,6 +70,7 @@ function ProjectsPage() {
                   width={640}
                   height={360}
                   loading="lazy"
+                  style={{ viewTransitionName: projectShotTransition(project.slug) }}
                   className="aspect-video w-full rounded-xl border border-[rgb(var(--foreground)/0.1)] object-cover"
                 />
               </Link>
