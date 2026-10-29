@@ -14,23 +14,17 @@ export type Project = {
 
 export const spotlightProjects: Project[] = [
     {
-        slug: 'pingfest-2023',
-        title: 'P!NGFEST 2023 Platform',
+        slug: 'nutrivision',
+        title: 'NutriVision Android App',
         description:
-            'Led the web team and managed VPS infrastructure to support a national competitive programming event. Delivered 100% uptime for 70+ competing teams.',
-        year: '2023',
-        platform: 'Web',
-        role: 'Lead of Website Development',
+            'Native Android application built with Kotlin. Applied intermediate mobile development principles to create a seamless user experience.',
+        year: '2025',
+        platform: 'Android',
         thumbnail:
-            '/img/projects/Pingfest.webp',
-        stack: ['React', 'Laravel', 'DevOps'],
+            '/img/projects/NutriVision.webp',
+        stack: ['Kotlin', 'Android', 'Jetpack Compose', 'Firebase'],
         links: [
-            { label: 'Frontend GitHub', href: 'https://github.com/riyhs/pingfest-fe' },
-            { label: 'Backend GitHub', href: 'https://github.com/riyhs/pingfest-be' },
-        ],
-        highlights: [
-            'Managed VPS infrastructure ensuring 100% uptime for 70+ competing teams.',
-            'Led a team of 4 developers to align technical delivery with event goals.',
+            { label: 'GitHub', href: 'https://github.com/riyhs/nutrivision' },
         ],
     },
     {
@@ -50,17 +44,23 @@ export const spotlightProjects: Project[] = [
         ],
     },
     {
-        slug: 'nutrivision',
-        title: 'NutriVision Android App',
+        slug: 'pingfest-2023',
+        title: 'P!NGFEST 2023 Platform',
         description:
-            'Native Android application built with Kotlin. Applied intermediate mobile development principles to create a seamless user experience.',
-        year: '2025',
-        platform: 'Android',
+            'Led the web team and managed VPS infrastructure to support a national competitive programming event. Delivered 100% uptime for 70+ competing teams.',
+        year: '2023',
+        platform: 'Web',
+        role: 'Lead of Website Development',
         thumbnail:
-            '/img/projects/NutriVision.webp',
-        stack: ['Kotlin', 'Android', 'Jetpack Compose', 'Firebase'],
+            '/img/projects/Pingfest.webp',
+        stack: ['React', 'Laravel', 'DevOps'],
         links: [
-            { label: 'GitHub', href: 'https://github.com/riyhs/nutrivision' },
+            { label: 'Frontend GitHub', href: 'https://github.com/riyhs/pingfest-fe' },
+            { label: 'Backend GitHub', href: 'https://github.com/riyhs/pingfest-be' },
+        ],
+        highlights: [
+            'Managed VPS infrastructure ensuring 100% uptime for 70+ competing teams.',
+            'Led a team of 4 developers to align technical delivery with event goals.',
         ],
     },
 ]
