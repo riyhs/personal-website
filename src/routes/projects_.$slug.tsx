@@ -121,6 +121,7 @@ function ProjectDetailPage() {
               </a>
             ))}
           </div>
+        </div>
 
         {project.demo === 'digit' && <DigitDemo />}
 
