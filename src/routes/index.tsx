@@ -145,7 +145,7 @@ function HomePage() {
 
   return (
     <div className="pb-8">
-      <PageHeader label={profile.tagline} title={profile.name} lead={profile.summary}>
+      <PageHeader label={profile.tagline} title={profile.name} lead={profile.summary} introRipple>
         <p className="lead-text mt-4">{profile.recent}</p>
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <Link to="/projects" className={cn(getButtonClasses(), "px-6 text-sm")}>

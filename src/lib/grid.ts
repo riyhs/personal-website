@@ -18,6 +18,20 @@ export function cellPosition(col: number, row: number, width: number) {
   }
 }
 
+// Cells around a centre cell grouped into rings, for the intro ripple: ring k holds the
+// cells whose centres round to k cells away. Four rings are 1 + 8 + 12 + 16 = 37 cells,
+// which fits the 40-cell trail pool without overwriting a ring that is still visible.
+export function rippleRings(col: number, row: number, rings: number) {
+  const result = Array.from({ length: rings }, () => [] as Array<{ col: number; row: number }>)
+  for (let dy = -rings; dy <= rings; dy += 1) {
+    for (let dx = -rings; dx <= rings; dx += 1) {
+      const ring = Math.round(Math.hypot(dx, dy))
+      if (ring < rings) result[ring].push({ col: col + dx, row: row + dy })
+    }
+  }
+  return result
+}
+
 // Reach of the well: how far from the cursor the grid feels it. The pull is a bell curve,
 // so the sheet is flat again by three radii out and the rest of the grid never drifts.
 export const BEND_RADIUS = 150

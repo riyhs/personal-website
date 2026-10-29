@@ -16,7 +16,11 @@ Branch: `wt/mobile-grid-and-perf` (worktree `../personal-website-wt-mobile-grid-
 - [x] Verify: tsc, 28 tests, prod build (entry 145.6 -> 113.5 KB gz, motion features 17.8 KB gz lazy), 31 Chromium checks (desktop, touch emulation, delayed-chunk hydration, morph pairing forward + back, dev-mode HMR)
 - [x] User review on Tailscale preview, then commit
 - [x] Navbar blur during view transitions fixed: name the bar div (backdrop-filter copied to the group); user-verified in Firefox + Chrome
-- [ ] Not checked: real phone
+- [x] Real phone: user-tested touch grid + morph, works
+- [x] Home touch intro: centre press + 4-ring ripple at 400ms, once per session, touch-only, reduced-motion skipped
+- [x] Morph back to 400ms (blur fixed); theme swap 250 -> 500ms
+- [x] AGENTS.md: after 2 failed attempts, research official docs/specs/bug trackers before attempt 3
+- [x] Preload Jakarta 400/600 (`?url` imports in __root.tsx share the CSS hashed files; one fetch each, starts with the CSS)
 
 Previous branch: `feat/add-hero-bg-effect` — hover highlight on the hero grid backdrop (merged, PR #5)
 

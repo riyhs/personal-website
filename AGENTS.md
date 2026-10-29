@@ -75,7 +75,8 @@ For behavior changes, prefer test-first when practical. Never mark a task done w
 
 ### Failure Escalation
 
-After **2 failed attempts**: stop trying, write to `.agents/failures.md`, summarize attempts, and ask user for direction.
+After **2 failed attempts**: stop trying, write to `.agents/failures.md`, summarize attempts.
+Then **research before attempt 3**: read the official sources (specs such as drafts.csswg.org, MDN, framework docs), browser/library bug trackers (bugzilla, crbug, bugs.webkit.org, GitHub issues), web-platform-tests / wpt.fyi, and the engine or library source when docs are thin. Prove the root cause with evidence (a minimal repro, injected CSS/JS, screenshots) before touching code, then bring the user the findings, sources and an evidence-backed fix, and ask for direction.
 Format: `## [DATE] [title] | file: X | error: Y | tried: A, B | hypothesis: Z`
 
 ### Review Agent

@@ -7,6 +7,10 @@ import {
 } from "@tanstack/react-router";
 import { MotionConfig } from "motion/react";
 import { type ReactNode } from "react";
+// Same files the @font-face rules in styles.css load, so the preload and the CSS share one
+// hashed URL and one download
+import jakarta400 from "@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-400-normal.woff2?url";
+import jakarta600 from "@fontsource/plus-jakarta-sans/files/plus-jakarta-sans-latin-600-normal.woff2?url";
 
 import { AppDevtools } from "../components/AppDevtools";
 import Header from "../components/Header";
@@ -65,6 +69,10 @@ export const Route = createRootRoute({
       { rel: "icon", type: "image/png", sizes: "128x128", href: "/favicon.png" },
       { rel: "apple-touch-icon", href: "/logo192.png" },
       { rel: "manifest", href: "/manifest.json" },
+      // Fetch both weights with the HTML instead of after the CSS is parsed, so the h1 and
+      // body text swap from the fallback sooner. Fonts preload in CORS mode, hence crossOrigin.
+      { rel: "preload", href: jakarta400, as: "font", type: "font/woff2", crossOrigin: "anonymous" },
+      { rel: "preload", href: jakarta600, as: "font", type: "font/woff2", crossOrigin: "anonymous" },
     ],
   }),
 

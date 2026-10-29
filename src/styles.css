@@ -63,7 +63,7 @@
 }
 
 ::view-transition-group(*) {
-  animation-duration: 200ms;
+  animation-duration: 400ms;
   animation-timing-function: var(--ease-out);
 }
 
@@ -173,8 +173,8 @@ html:active-view-transition .site-header > div {
   footer,
   .dashed-rule {
     transition:
-      background-color 250ms ease,
-      border-color 250ms ease;
+      background-color 500ms ease,
+      border-color 500ms ease;
   }
 
   /* The page backdrop. `body`'s own background is propagated to the viewport canvas, and a
@@ -193,7 +193,7 @@ html:active-view-transition .site-header > div {
     z-index: -1;
     pointer-events: none;
     background-color: rgb(var(--background));
-    transition: background-color 250ms ease;
+    transition: background-color 500ms ease;
   }
 
   /* Only elements that set their own colour belong here. A child that merely inherits
@@ -209,7 +209,7 @@ html:active-view-transition .site-header > div {
   .mono-label,
   .lead-text,
   .item-text {
-    transition: color 250ms ease;
+    transition: color 500ms ease;
   }
 
   body {
